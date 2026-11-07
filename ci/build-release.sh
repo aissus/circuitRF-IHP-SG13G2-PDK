@@ -48,6 +48,6 @@ cp release/README.md release/CLAUDE.md release/.mcp.json "$R/"
 if ls "$R"/kit/IHP_SG13G2/models/osdi | grep -q -E 'vbic|npn13G2'; then
     echo "a VBIC-derived model is in the release" >&2; exit 1
 fi
-(cd dist && zip -qr "$n.zip" "$n" && rm -rf "$n" && sha256sum "$n.zip" > "$n.zip.sha256")
+(cd dist && zip -qrX "$n.zip" "$n" && rm -rf "$n" && sha256sum "$n.zip" > "$n.zip.sha256")
 ls -l dist
 cat kit/IHP_SG13G2/BUILD
