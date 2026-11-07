@@ -1,0 +1,29 @@
+#!/bin/bash
+# circuitrf-ihp-workspace <dir>
+# A new circuitRF workspace on the IHP SG13G2 kit: the kit's device library is
+# referenced (read-only, from the image), and the IHP technology is copied in,
+# because a workspace owns its technology. Open <dir> in circuitRF afterwards.
+# The IHP Open PDK itself is referenced too, as an imported PDK: it is what
+# File > Manage Libraries and the Library palette list. circuitRF imports it
+# when the workspace first opens, and adds its decisions (model worker,
+# corners) to the .cws then. The Provider must be the importer's own kit name,
+# the PDK folder's name: circuitRF registers the parts under the Provider and
+# the palette looks them up under the folder name, so any other name leaves
+# every part unresolved (generic symbols, nothing to simulate).
+set -e
+KIT=${IHP_KIT:-/foss/tools/circuitrf/kits/IHP_SG13G2}
+PDK=${IHP_PDK:-/foss/pdks/ihp-sg13g2}
+[ -n "$1" ] || { echo "usage: circuitrf-ihp-workspace <dir>" >&2; exit 1; }
+[ -e "$1/.cws" ] && { echo "$1 is already a workspace" >&2; exit 1; }
+mkdir -p "$1/tech"
+cp "$KIT/tech/IHP_SG13G2.ctech" "$1/tech/"
+cat > "$1/.cws" <<EOF
+{
+  "FormatVersion": 2,
+  "LibraryRefs": ["$KIT"],
+  "KnownFiles": [],
+  "DefaultTechRef": "tech/IHP_SG13G2.ctech",
+  "PdkRefs": [{"Path": "$PDK", "Provider": "$(basename "$PDK")", "TranslationVersion": 4}]
+}
+EOF
+echo "workspace $1: IHP SG13G2 technology, devices from $KIT, IHP Open PDK from $PDK"
