@@ -39,6 +39,16 @@ done
 python3 "$S/validate_ihp_kit.py" --kit "$K" | tee "$K/VALIDATION"
 circuitrf check "$K" --summary
 
+# The examples' own copy of the technology (a workspace owns its technology), and their harmonicaRF
+# documents: a .charm names its compiled DUT by absolute path, so they are made for this kit, here.
+E=$(dirname "$S")/examples
+mkdir -p "$E/tech" "$E/harmonica"
+cp "$K"/tech/*.ctech "$E/tech/"
+for d in npn13G2 npn13G2v; do for n in 1 2 4 8; do
+    python3 "$S/harmonica_ihp.py" charm "$E/harmonica/${d}_Nx${n}_50GHz.charm" --device $d --nx $n \
+        --osdi "$K/models/osdi/$d.osdi"
+done; done
+
 { echo "built $(date -Iseconds) by generator/build.sh"
   echo "PDK commit $(cat "$PDKPATH/COMMIT" 2>/dev/null || echo '?')"
   echo "circuitRF $(circuitrf --version)"

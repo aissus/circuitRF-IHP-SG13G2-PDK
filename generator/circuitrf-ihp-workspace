@@ -21,6 +21,7 @@ cat > "$1/.cws" <<EOF
 {
   "FormatVersion": 2,
   "LibraryRefs": ["$KIT"],
+  "ReferencedWorkspaces": [{"Alias": "IHP_SG13G2", "Path": "$KIT/.cws"}],
   "KnownFiles": [],
   "DefaultTechRef": "tech/IHP_SG13G2.ctech",
   "PdkRefs": [{"Path": "$PDK", "Provider": "$(basename "$PDK")", "TranslationVersion": 4}]
