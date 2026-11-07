@@ -1,0 +1,610 @@
+{
+ "FormatVersion": 2,
+ "CellName": "Resistors",
+ "GridSize": 100,
+ "GridSnap": true,
+ "AuthorGridDivisor": 20,
+ "Components": [
+  {
+   "InstanceName": "V1",
+   "Symbol": "Vdc",
+   "X": -1800,
+   "Y": 600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Vdc",
+     "Expression": "V",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND2",
+   "Symbol": "Ground",
+   "X": -1800,
+   "Y": 900,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "I_rsil",
+   "Symbol": "IProbe",
+   "X": -1000,
+   "Y": -700,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "Xrsil",
+   "Symbol": "Generic",
+   "X": -600,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "w",
+     "Expression": "10u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "l",
+     "Expression": "30u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "corner",
+     "Expression": "2",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/rsil"
+  },
+  {
+   "InstanceName": "GND6",
+   "Symbol": "Ground",
+   "X": -600,
+   "Y": 400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "GND7",
+   "Symbol": "Ground",
+   "X": -1000,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "I_rppd",
+   "Symbol": "IProbe",
+   "X": 200,
+   "Y": -700,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "Xrppd",
+   "Symbol": "Generic",
+   "X": 600,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "w",
+     "Expression": "10u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "l",
+     "Expression": "25u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "corner",
+     "Expression": "2",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/rppd"
+  },
+  {
+   "InstanceName": "GND11",
+   "Symbol": "Ground",
+   "X": 600,
+   "Y": 400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "GND12",
+   "Symbol": "Ground",
+   "X": 200,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "I_rhigh",
+   "Symbol": "IProbe",
+   "X": 1400,
+   "Y": -700,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "Xrhigh",
+   "Symbol": "Generic",
+   "X": 1800,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "w",
+     "Expression": "10u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "l",
+     "Expression": "30u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "corner",
+     "Expression": "2",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/rhigh"
+  },
+  {
+   "InstanceName": "GND16",
+   "Symbol": "Ground",
+   "X": 1800,
+   "Y": 400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "GND17",
+   "Symbol": "Ground",
+   "X": 1400,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "VAR1",
+   "Symbol": "Var",
+   "X": -1800,
+   "Y": -1400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "V",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "M1",
+   "Symbol": "Meas",
+   "X": 1800,
+   "Y": -1400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "R_rsil",
+     "Expression": "DC1.V(\"vs\")/DC1.I(\"I_rsil\")",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "R_rppd",
+     "Expression": "DC1.V(\"vs\")/DC1.I(\"I_rppd\")",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "R_rhigh",
+     "Expression": "DC1.V(\"vs\")/DC1.I(\"I_rhigh\")",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  }
+ ],
+ "Wires": [
+  {
+   "Points": [
+    [
+     -1800,
+     400
+    ],
+    [
+     -1800,
+     300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1800,
+     800
+    ],
+    [
+     -1800,
+     900
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1000,
+     -600
+    ],
+    [
+     -1100,
+     -600
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -900,
+     -600
+    ],
+    [
+     -800,
+     -600
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -600,
+     -300
+    ],
+    [
+     -600,
+     -400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -600,
+     300
+    ],
+    [
+     -600,
+     400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -900,
+     0
+    ],
+    [
+     -1000,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     200,
+     -600
+    ],
+    [
+     100,
+     -600
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     300,
+     -600
+    ],
+    [
+     400,
+     -600
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     600,
+     -300
+    ],
+    [
+     600,
+     -400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     600,
+     300
+    ],
+    [
+     600,
+     400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     300,
+     0
+    ],
+    [
+     200,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1400,
+     -600
+    ],
+    [
+     1300,
+     -600
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1500,
+     -600
+    ],
+    [
+     1600,
+     -600
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1800,
+     -300
+    ],
+    [
+     1800,
+     -400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1800,
+     300
+    ],
+    [
+     1800,
+     400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1500,
+     0
+    ],
+    [
+     1400,
+     0
+    ]
+   ]
+  }
+ ],
+ "NetLabels": [
+  {
+   "X": -1800,
+   "Y": 350,
+   "Name": "vs",
+   "OwnerWireIndex": 0,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1050,
+   "Y": -600,
+   "Name": "vs",
+   "OwnerWireIndex": 2,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -850,
+   "Y": -600,
+   "Name": "n_rsil",
+   "OwnerWireIndex": 3,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -600,
+   "Y": -350,
+   "Name": "n_rsil",
+   "OwnerWireIndex": 4,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 150,
+   "Y": -600,
+   "Name": "vs",
+   "OwnerWireIndex": 7,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 350,
+   "Y": -600,
+   "Name": "n_rppd",
+   "OwnerWireIndex": 8,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 600,
+   "Y": -350,
+   "Name": "n_rppd",
+   "OwnerWireIndex": 9,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1350,
+   "Y": -600,
+   "Name": "vs",
+   "OwnerWireIndex": 12,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1550,
+   "Y": -600,
+   "Name": "n_rhigh",
+   "OwnerWireIndex": 13,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1800,
+   "Y": -350,
+   "Name": "n_rhigh",
+   "OwnerWireIndex": 14,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  }
+ ],
+ "Dots": [],
+ "CanvasObjects": [],
+ "View": {
+  "PanX": 0,
+  "PanY": 0,
+  "Zoom": 1
+ },
+ "Analyses": [
+  {
+   "Type": "dc",
+   "Name": "DC1",
+   "Enabled": true
+  },
+  {
+   "Type": "sweep",
+   "Name": "SW1",
+   "Enabled": true,
+   "PsaVarName": "V",
+   "PsaInnerName": "DC1",
+   "PsaMode": "PointCount",
+   "PsaStart": 0.05,
+   "PsaStop": 10,
+   "PsaStepOrCount": 200,
+   "PsaKind": "Linear"
+  }
+ ]
+}

@@ -1,0 +1,488 @@
+{
+ "FormatVersion": 2,
+ "CellName": "CE_10GHz_HB",
+ "GridSize": 100,
+ "GridSnap": true,
+ "AuthorGridDivisor": 20,
+ "Components": [
+  {
+   "InstanceName": "X1",
+   "Symbol": "Generic",
+   "X": 0,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Nx",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/npn13G2"
+  },
+  {
+   "InstanceName": "GND3",
+   "Symbol": "Ground",
+   "X": 0,
+   "Y": 400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "GND4",
+   "Symbol": "Ground",
+   "X": 200,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "VAR2",
+   "Symbol": "Var",
+   "X": -2000,
+   "Y": -2000,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Pavs",
+     "Expression": "-30",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "P1",
+   "Symbol": "P1Tone",
+   "X": -1500,
+   "Y": 2000,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Freq",
+     "Expression": "10",
+     "Unit": "GHz",
+     "ShowOnSchematic": true,
+     "Dimension": "Frequency"
+    },
+    {
+     "Name": "Pavl",
+     "Expression": "Pavs",
+     "Unit": "dBm",
+     "ShowOnSchematic": true,
+     "Dimension": "Power"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "Resistance"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND6",
+   "Symbol": "Ground",
+   "X": -1500,
+   "Y": 2300,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "VB",
+   "Symbol": "Vdc",
+   "X": -800,
+   "Y": 2000,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Vdc",
+     "Expression": "0.88",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "RL",
+   "Symbol": "Resistor",
+   "X": 800,
+   "Y": 2000,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "R",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "VC",
+   "Symbol": "Vdc",
+   "X": 1500,
+   "Y": 2000,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Vdc",
+     "Expression": "1.5",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND12",
+   "Symbol": "Ground",
+   "X": 1500,
+   "Y": 2300,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "M1",
+   "Symbol": "Meas",
+   "X": 2500,
+   "Y": -2000,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Pavs_dBm",
+     "Expression": "Pavs",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Pout_dBm",
+     "Expression": "10*log10(mag(HB1.V(\"nc\",1))*mag(HB1.V(\"nc\",1))/(2*50)/1e-3)",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Gt_dB",
+     "Expression": "Pout_dBm - Pavs_dBm",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "H2_dBc",
+     "Expression": "dB(HB1.V(\"nc\",2)/HB1.V(\"nc\",1))",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "H3_dBc",
+     "Expression": "dB(HB1.V(\"nc\",3)/HB1.V(\"nc\",1))",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  }
+ ],
+ "Wires": [
+  {
+   "Points": [
+    [
+     0,
+     -300
+    ],
+    [
+     0,
+     -400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -300,
+     0
+    ],
+    [
+     -400,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     0,
+     300
+    ],
+    [
+     0,
+     400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     100,
+     0
+    ],
+    [
+     200,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1500,
+     1800
+    ],
+    [
+     -1500,
+     1700
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1500,
+     2200
+    ],
+    [
+     -1500,
+     2300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -800,
+     1800
+    ],
+    [
+     -800,
+     1700
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -800,
+     2200
+    ],
+    [
+     -800,
+     2300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     800,
+     1800
+    ],
+    [
+     800,
+     1700
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     800,
+     2200
+    ],
+    [
+     800,
+     2300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1500,
+     1800
+    ],
+    [
+     1500,
+     1700
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1500,
+     2200
+    ],
+    [
+     1500,
+     2300
+    ]
+   ]
+  }
+ ],
+ "NetLabels": [
+  {
+   "X": 0,
+   "Y": -350,
+   "Name": "nc",
+   "OwnerWireIndex": 0,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -350,
+   "Y": 0,
+   "Name": "nb",
+   "OwnerWireIndex": 1,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1500,
+   "Y": 1750,
+   "Name": "n1",
+   "OwnerWireIndex": 4,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -800,
+   "Y": 1750,
+   "Name": "nb",
+   "OwnerWireIndex": 6,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -800,
+   "Y": 2250,
+   "Name": "n1",
+   "OwnerWireIndex": 7,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 800,
+   "Y": 1750,
+   "Name": "vcc",
+   "OwnerWireIndex": 8,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 800,
+   "Y": 2250,
+   "Name": "nc",
+   "OwnerWireIndex": 9,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1500,
+   "Y": 1750,
+   "Name": "vcc",
+   "OwnerWireIndex": 10,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  }
+ ],
+ "Dots": [],
+ "CanvasObjects": [],
+ "View": {
+  "PanX": 0,
+  "PanY": 0,
+  "Zoom": 1
+ },
+ "Analyses": [
+  {
+   "Type": "hb",
+   "Name": "HB1",
+   "Enabled": true,
+   "ToneExpr": "10e9",
+   "ToneExprs": [
+    "10e9"
+   ],
+   "ToneUnits": [
+    "Hz"
+   ],
+   "NumFreqsExpr": "1",
+   "MaxMixOrderExpr": "1",
+   "MaxHarmonicExpr": "11",
+   "FFTOverSampleExpr": "1",
+   "TolExpr": "1e-8",
+   "DriveSteppingExpr": "IfNecessary",
+   "GuardHarmonicExpr": "0",
+   "LambdaExpr": "1",
+   "MaxIterExpr": "100"
+  },
+  {
+   "Type": "sweep",
+   "Name": "SW",
+   "Enabled": true,
+   "PsaVarName": "Pavs",
+   "PsaInnerName": "HB1",
+   "PsaMode": "StepSize",
+   "PsaStart": -30,
+   "PsaStop": 0,
+   "PsaStepOrCount": 2,
+   "PsaKind": "Linear"
+  }
+ ]
+}

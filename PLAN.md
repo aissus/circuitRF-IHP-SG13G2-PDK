@@ -6,6 +6,29 @@ Drafted 2026-11-05 (set aside). Revised 2026-11-07:
 - the inductor is also checked with circuitRF's planar MoM;
 - the README documents the flow.
 
+## Status (2026-11-07)
+
+Steps 0–5 and 7 are done, and step 6 (the inductor) is running; see the git log. README.md is the
+record. Where the work went differently from the plan below:
+- **The kit has a `.cws`.** A relative `File=` in a library cell resolves against the nearest `.cws`,
+  so the cells name `models/osdi/<model>.osdi`, not `../../models/...`.
+- **The examples place kit cells as `ws://IHP_SG13G2/<cell>`**, through a `ReferencedWorkspaces` alias,
+  which is circuitRF's documented form. Raw relative paths are not.
+- **The `.charm` check came out "regenerate".** An External DUT is identified by its absolute
+  `Provider`, so `build.sh` writes the 8 documents (git-ignored).
+- **The wafer is the specification's 750 µm**, not the GPL XML's 180 µm.
+- **Palace:** circuitRF's own install builds from source. The image therefore wraps the base's Palace
+  (the validated commit). The wrapper runs the binary under the launcher, because the base's scripts
+  nest `mpirun`.
+- **The inductor** is the `inductor2` PCell at its minimum opening for 5.4/4.1 µm and 2 turns (92.5 µm,
+  where the old drawing was 88 µm). It keeps the old example's Metal1 ring, which was a ring, not a plane.
+- **Planar MoM:** edge ports are always de-embedded, and on this substrate the calibration standards
+  need 84–167 GB and an isolation the two terminals cannot have. The MoM layout therefore joins the
+  terminals with a bar and drives one internal delta-gap port: differential L and Q. The test bench
+  reports differential L and Q for every solver, so all four compare.
+
+## Background
+
 The IHP SG13G2 kit for circuitRF and its example workspaces, as a repository of their own, published as
 github.com/aissus/circuitRF-IHP-SG13G2-PDK. Nothing is copied in yet. Today the kit lives in an IIC-OSIC-TOOLS-based
 sandbox:

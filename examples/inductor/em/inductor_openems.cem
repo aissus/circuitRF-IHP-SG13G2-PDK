@@ -1,0 +1,26 @@
+{
+  "FormatVersion": 1,
+  "Name": "inductor",
+  "LayoutRef": "inductor/layout/inductor.clay",
+  "Frequency": {
+    "StartExpr": "0.5",
+    "StopExpr": "50",
+    "NumPoints": 100,
+    "Mode": "PointCount",
+    "Kind": "Linear",
+    "StartUnit": "GHz",
+    "StopUnit": "GHz"
+  },
+  "DispersionCorrection": true,
+  "Solver3D": "OpenEms",
+  "Ports3D": [
+    {
+      "Port": 1,
+      "Return": "Metal1"
+    },
+    {
+      "Port": 2,
+      "Return": "Metal1"
+    }
+  ]
+}

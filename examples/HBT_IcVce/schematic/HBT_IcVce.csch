@@ -1,0 +1,451 @@
+{
+ "FormatVersion": 2,
+ "CellName": "HBT_IcVce",
+ "GridSize": 100,
+ "GridSnap": true,
+ "AuthorGridDivisor": 20,
+ "Components": [
+  {
+   "InstanceName": "X1",
+   "Symbol": "Generic",
+   "X": 0,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Nx",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/npn13G2"
+  },
+  {
+   "InstanceName": "GND3",
+   "Symbol": "Ground",
+   "X": 0,
+   "Y": 400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "GND4",
+   "Symbol": "Ground",
+   "X": 200,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "VB",
+   "Symbol": "Vdc",
+   "X": -1600,
+   "Y": 1000,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Vdc",
+     "Expression": "VBE",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND6",
+   "Symbol": "Ground",
+   "X": -1600,
+   "Y": 1300,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "IB",
+   "Symbol": "IProbe",
+   "X": -1300,
+   "Y": 500,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "VC",
+   "Symbol": "Vdc",
+   "X": 1600,
+   "Y": 1000,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Vdc",
+     "Expression": "VCE",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND10",
+   "Symbol": "Ground",
+   "X": 1600,
+   "Y": 1300,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "IC",
+   "Symbol": "IProbe",
+   "X": 1100,
+   "Y": 500,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "VAR1",
+   "Symbol": "Var",
+   "X": -1600,
+   "Y": -1400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "VBE",
+     "Expression": "0.85",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "VCE",
+     "Expression": "1.5",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "M1",
+   "Symbol": "Meas",
+   "X": 600,
+   "Y": -1400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Ic_mA",
+     "Expression": "DC1.I(\"IC\")*1e3",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Ib_uA",
+     "Expression": "DC1.I(\"IB\")*1e6",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "beta",
+     "Expression": "DC1.I(\"IC\")/DC1.I(\"IB\")",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  }
+ ],
+ "Wires": [
+  {
+   "Points": [
+    [
+     0,
+     -300
+    ],
+    [
+     0,
+     -400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -300,
+     0
+    ],
+    [
+     -400,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     0,
+     300
+    ],
+    [
+     0,
+     400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     100,
+     0
+    ],
+    [
+     200,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1600,
+     800
+    ],
+    [
+     -1600,
+     700
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1600,
+     1200
+    ],
+    [
+     -1600,
+     1300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1300,
+     600
+    ],
+    [
+     -1400,
+     600
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1200,
+     600
+    ],
+    [
+     -1100,
+     600
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1600,
+     800
+    ],
+    [
+     1600,
+     700
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1600,
+     1200
+    ],
+    [
+     1600,
+     1300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1100,
+     600
+    ],
+    [
+     1000,
+     600
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1200,
+     600
+    ],
+    [
+     1300,
+     600
+    ]
+   ]
+  }
+ ],
+ "NetLabels": [
+  {
+   "X": 0,
+   "Y": -350,
+   "Name": "nc",
+   "OwnerWireIndex": 0,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -350,
+   "Y": 0,
+   "Name": "nb",
+   "OwnerWireIndex": 1,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1600,
+   "Y": 750,
+   "Name": "sb",
+   "OwnerWireIndex": 4,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1350,
+   "Y": 600,
+   "Name": "sb",
+   "OwnerWireIndex": 6,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1150,
+   "Y": 600,
+   "Name": "nb",
+   "OwnerWireIndex": 7,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1600,
+   "Y": 750,
+   "Name": "sc",
+   "OwnerWireIndex": 8,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1050,
+   "Y": 600,
+   "Name": "sc",
+   "OwnerWireIndex": 10,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1250,
+   "Y": 600,
+   "Name": "nc",
+   "OwnerWireIndex": 11,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  }
+ ],
+ "Dots": [],
+ "CanvasObjects": [],
+ "View": {
+  "PanX": 0,
+  "PanY": 0,
+  "Zoom": 1
+ },
+ "Analyses": [
+  {
+   "Type": "dc",
+   "Name": "DC1",
+   "Enabled": true
+  },
+  {
+   "Type": "sweep",
+   "Name": "SW1",
+   "Enabled": true,
+   "PsaVarName": "VCE",
+   "PsaInnerName": "DC1",
+   "PsaMode": "PointCount",
+   "PsaStart": 0,
+   "PsaStop": 1.5,
+   "PsaStepOrCount": 301,
+   "PsaKind": "Linear"
+  },
+  {
+   "Type": "sweep",
+   "Name": "SW2",
+   "Enabled": true,
+   "PsaVarName": "VBE",
+   "PsaInnerName": "SW1",
+   "PsaMode": "List",
+   "PsaValues": [
+    0.8,
+    0.82,
+    0.84,
+    0.86,
+    0.88,
+    0.9
+   ]
+  }
+ ]
+}

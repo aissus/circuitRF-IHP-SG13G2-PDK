@@ -1,0 +1,388 @@
+{
+ "FormatVersion": 2,
+ "CellName": "HBT_Loadpull",
+ "GridSize": 100,
+ "GridSnap": true,
+ "AuthorGridDivisor": 20,
+ "Components": [
+  {
+   "InstanceName": "X1",
+   "Symbol": "Generic",
+   "X": 0,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Nx",
+     "Expression": "8",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/npn13G2"
+  },
+  {
+   "InstanceName": "GND3",
+   "Symbol": "Ground",
+   "X": 0,
+   "Y": 400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "GND4",
+   "Symbol": "Ground",
+   "X": 200,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "ST1",
+   "Symbol": "SourceTuner",
+   "X": -1000,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Z[1]",
+     "Expression": "17.1+j*35.8",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z[2]",
+     "Expression": "1e-6",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z[3]",
+     "Expression": "1e-6",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Zdefault",
+     "Expression": "1e-6",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z0",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "BiasTee",
+     "Expression": "on",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Vbias",
+     "Expression": "VBE",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "ShowBias",
+     "Expression": "true",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "LT1",
+   "Symbol": "LoadTuner",
+   "X": 1000,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Z[1]",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z[2]",
+     "Expression": "1e-6",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z[3]",
+     "Expression": "1e-6",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Zdefault",
+     "Expression": "1e-6",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z0",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "BiasTee",
+     "Expression": "on",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Vbias",
+     "Expression": "VCE",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "ShowBias",
+     "Expression": "true",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "VAR1",
+   "Symbol": "Var",
+   "X": -1600,
+   "Y": -1400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "VBE",
+     "Expression": "0.74",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "VCE",
+     "Expression": "1.6",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "RFfreq",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "M1",
+   "Symbol": "Meas",
+   "X": 600,
+   "Y": -1400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Vc_pk",
+     "Expression": "mag(LP1.V(\"nc\",1))",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Vb_pk",
+     "Expression": "mag(LP1.V(\"nb\",1))",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  }
+ ],
+ "Wires": [
+  {
+   "Points": [
+    [
+     0,
+     -300
+    ],
+    [
+     0,
+     -400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -300,
+     0
+    ],
+    [
+     -400,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     0,
+     300
+    ],
+    [
+     0,
+     400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     100,
+     0
+    ],
+    [
+     200,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -700,
+     0
+    ],
+    [
+     -600,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     700,
+     0
+    ],
+    [
+     600,
+     0
+    ]
+   ]
+  }
+ ],
+ "NetLabels": [
+  {
+   "X": 0,
+   "Y": -350,
+   "Name": "nc",
+   "OwnerWireIndex": 0,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -350,
+   "Y": 0,
+   "Name": "nb",
+   "OwnerWireIndex": 1,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -650,
+   "Y": 0,
+   "Name": "nb",
+   "OwnerWireIndex": 4,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 650,
+   "Y": 0,
+   "Name": "nc",
+   "OwnerWireIndex": 5,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  }
+ ],
+ "Dots": [],
+ "CanvasObjects": [],
+ "View": {
+  "PanX": 0,
+  "PanY": 0,
+  "Zoom": 1
+ },
+ "Analyses": [
+  {
+   "Type": "lp",
+   "Name": "LP1",
+   "Enabled": true,
+   "LpLoadTunerName": "LT1",
+   "LpSourceTunerName": "ST1",
+   "LpGridPath": "HBT_Loadpull/schematic/load_grid.gam",
+   "LpToneExpr": "RFfreq",
+   "LpToneUnit": "GHz",
+   "LpPinStartExpr": "-20",
+   "LpPinMaxExpr": "10",
+   "LpPinStepExpr": "1",
+   "LpMaxHarmonicExpr": "5",
+   "LpSweepExpr": "Load",
+   "LpTuneHarmExpr": "1",
+   "LpCompressionExpr": "1",
+   "LpGainTypeExpr": "Gt",
+   "LpTickleExpr": "-50",
+   "LpMaxIterExpr": "100",
+   "LpFftOverSampleExpr": "1",
+   "LpTolExpr": "1e-6",
+   "LpDriveSteppingExpr": "IfNecessary",
+   "LpGuardHarmonicExpr": "0"
+  }
+ ]
+}

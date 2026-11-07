@@ -4,8 +4,8 @@ kit/
 *.sif
 .home/
 # circuitRF's per-machine and per-run files.
-results/*
-!results/*.cdd
+**/results/*
+!**/results/*.cdd
 .generated-cells/
 .cwsuser
 # Made by generator/build.sh for the kit it builds.

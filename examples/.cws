@@ -1,0 +1,22 @@
+{
+  "FormatVersion": 2,
+  "LibraryRefs": [
+    "../kit/IHP_SG13G2"
+  ],
+  "ReferencedWorkspaces": [
+    {
+      "Alias": "IHP_SG13G2",
+      "Path": "../kit/IHP_SG13G2/.cws"
+    }
+  ],
+  "KnownFiles": [],
+  "DefaultTechRef": "tech/IHP_SG13G2.ctech",
+  "PythonInterpreter": "python3",
+  "PdkRefs": [
+    {
+      "Path": "/foss/pdks/ihp-sg13g2",
+      "Provider": "ihp-sg13g2",
+      "TranslationVersion": 4
+    }
+  ]
+}

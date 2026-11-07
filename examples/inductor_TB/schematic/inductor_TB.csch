@@ -1,0 +1,511 @@
+{
+ "FormatVersion": 2,
+ "CellName": "inductor_TB",
+ "GridSize": 100,
+ "GridSnap": true,
+ "AuthorGridDivisor": 20,
+ "Components": [
+  {
+   "InstanceName": "S_mom",
+   "Symbol": "SnP",
+   "X": 0,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "NumPorts",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "File",
+     "Expression": "results/inductor_mom.s1p",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "P1",
+   "Symbol": "TermG",
+   "X": -700,
+   "Y": 400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "S_palace",
+   "Symbol": "SnP",
+   "X": 0,
+   "Y": 1200,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "NumPorts",
+     "Expression": "2",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "File",
+     "Expression": "results/inductor.palace.s2p",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "P3",
+   "Symbol": "TermG",
+   "X": -700,
+   "Y": 1600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "2",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "P4",
+   "Symbol": "TermG",
+   "X": 700,
+   "Y": 1600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "3",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "S_emerge",
+   "Symbol": "SnP",
+   "X": 0,
+   "Y": 2400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "NumPorts",
+     "Expression": "2",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "File",
+     "Expression": "results/inductor.emerge.s2p",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "P7",
+   "Symbol": "TermG",
+   "X": -700,
+   "Y": 2800,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "4",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "P8",
+   "Symbol": "TermG",
+   "X": 700,
+   "Y": 2800,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "5",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "M1",
+   "Symbol": "Meas",
+   "X": 1600,
+   "Y": -1400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "L_mom_pH",
+     "Expression": "imag((50*(1+SP1.S(1,1))/(1-SP1.S(1,1))))/(2*pi*freq)*1e12",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Q_mom",
+     "Expression": "imag((50*(1+SP1.S(1,1))/(1-SP1.S(1,1))))/real((50*(1+SP1.S(1,1))/(1-SP1.S(1,1))))",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "L_palace_pH",
+     "Expression": "imag((2*50*(1-SP1.S(2,2)*SP1.S(3,3)+SP1.S(2,3)*SP1.S(3,2)-SP1.S(2,3)-SP1.S(3,2))/((1-SP1.S(2,2))*(1-SP1.S(3,3))-SP1.S(2,3)*SP1.S(3,2))))/(2*pi*freq)*1e12",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Q_palace",
+     "Expression": "imag((2*50*(1-SP1.S(2,2)*SP1.S(3,3)+SP1.S(2,3)*SP1.S(3,2)-SP1.S(2,3)-SP1.S(3,2))/((1-SP1.S(2,2))*(1-SP1.S(3,3))-SP1.S(2,3)*SP1.S(3,2))))/real((2*50*(1-SP1.S(2,2)*SP1.S(3,3)+SP1.S(2,3)*SP1.S(3,2)-SP1.S(2,3)-SP1.S(3,2))/((1-SP1.S(2,2))*(1-SP1.S(3,3))-SP1.S(2,3)*SP1.S(3,2))))",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "L_emerge_pH",
+     "Expression": "imag((2*50*(1-SP1.S(4,4)*SP1.S(5,5)+SP1.S(4,5)*SP1.S(5,4)-SP1.S(4,5)-SP1.S(5,4))/((1-SP1.S(4,4))*(1-SP1.S(5,5))-SP1.S(4,5)*SP1.S(5,4))))/(2*pi*freq)*1e12",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Q_emerge",
+     "Expression": "imag((2*50*(1-SP1.S(4,4)*SP1.S(5,5)+SP1.S(4,5)*SP1.S(5,4)-SP1.S(4,5)-SP1.S(5,4))/((1-SP1.S(4,4))*(1-SP1.S(5,5))-SP1.S(4,5)*SP1.S(5,4))))/real((2*50*(1-SP1.S(4,4)*SP1.S(5,5)+SP1.S(4,5)*SP1.S(5,4)-SP1.S(4,5)-SP1.S(5,4))/((1-SP1.S(4,4))*(1-SP1.S(5,5))-SP1.S(4,5)*SP1.S(5,4))))",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  }
+ ],
+ "Wires": [
+  {
+   "Points": [
+    [
+     -200,
+     0
+    ],
+    [
+     -300,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -700,
+     200
+    ],
+    [
+     -700,
+     100
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -200,
+     1200
+    ],
+    [
+     -300,
+     1200
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     200,
+     1200
+    ],
+    [
+     300,
+     1200
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -700,
+     1400
+    ],
+    [
+     -700,
+     1300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     700,
+     1400
+    ],
+    [
+     700,
+     1300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -200,
+     2400
+    ],
+    [
+     -300,
+     2400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     200,
+     2400
+    ],
+    [
+     300,
+     2400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -700,
+     2600
+    ],
+    [
+     -700,
+     2500
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     700,
+     2600
+    ],
+    [
+     700,
+     2500
+    ]
+   ]
+  }
+ ],
+ "NetLabels": [
+  {
+   "X": -250,
+   "Y": 0,
+   "Name": "mom_1",
+   "OwnerWireIndex": 0,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -700,
+   "Y": 150,
+   "Name": "mom_1",
+   "OwnerWireIndex": 1,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -250,
+   "Y": 1200,
+   "Name": "palace_1",
+   "OwnerWireIndex": 2,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 250,
+   "Y": 1200,
+   "Name": "palace_2",
+   "OwnerWireIndex": 3,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -700,
+   "Y": 1350,
+   "Name": "palace_1",
+   "OwnerWireIndex": 4,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 700,
+   "Y": 1350,
+   "Name": "palace_2",
+   "OwnerWireIndex": 5,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -250,
+   "Y": 2400,
+   "Name": "emerge_1",
+   "OwnerWireIndex": 6,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 250,
+   "Y": 2400,
+   "Name": "emerge_2",
+   "OwnerWireIndex": 7,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -700,
+   "Y": 2550,
+   "Name": "emerge_1",
+   "OwnerWireIndex": 8,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 700,
+   "Y": 2550,
+   "Name": "emerge_2",
+   "OwnerWireIndex": 9,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  }
+ ],
+ "Dots": [],
+ "CanvasObjects": [],
+ "View": {
+  "PanX": 0,
+  "PanY": 0,
+  "Zoom": 1
+ },
+ "Analyses": [
+  {
+   "Type": "sp",
+   "Name": "SP1",
+   "Enabled": true,
+   "Sweeps": [
+    {
+     "StartExpr": "0.5",
+     "StopExpr": "50",
+     "StartUnit": "GHz",
+     "StopUnit": "GHz",
+     "Mode": "PointCount",
+     "NumPoints": 100,
+     "Kind": "Linear"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+  "FormatVersion": 1,
+  "Name": "inductor_mom",
+  "LayoutRef": "inductor/layout/inductor_mom.clay",
+  "Frequency": {
+    "StartExpr": "0.5",
+    "StopExpr": "50",
+    "NumPoints": 100,
+    "Mode": "PointCount",
+    "Kind": "Linear",
+    "StartUnit": "GHz",
+    "StopUnit": "GHz"
+  },
+  "DispersionCorrection": true
+}

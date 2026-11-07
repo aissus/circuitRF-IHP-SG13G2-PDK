@@ -1,0 +1,799 @@
+{
+ "FormatVersion": 2,
+ "CellName": "HBT_Ic",
+ "GridSize": 100,
+ "GridSnap": true,
+ "AuthorGridDivisor": 20,
+ "Components": [
+  {
+   "InstanceName": "X1",
+   "Symbol": "Generic",
+   "X": 0,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Nx",
+     "Expression": "Nx",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/npn13G2"
+  },
+  {
+   "InstanceName": "GND3",
+   "Symbol": "Ground",
+   "X": 0,
+   "Y": 400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "GND4",
+   "Symbol": "Ground",
+   "X": 200,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "P1",
+   "Symbol": "TermG",
+   "X": -1600,
+   "Y": 1300,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "CblkB",
+   "Symbol": "Capacitor",
+   "X": -1300,
+   "Y": 600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "C",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "LfeedB",
+   "Symbol": "Inductor",
+   "X": -1900,
+   "Y": 600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "L",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "IB",
+   "Symbol": "IProbe",
+   "X": -1900,
+   "Y": -400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "VB",
+   "Symbol": "Vdc",
+   "X": -2500,
+   "Y": 600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Vdc",
+     "Expression": "VBE",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND13",
+   "Symbol": "Ground",
+   "X": -2500,
+   "Y": 900,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "P2",
+   "Symbol": "TermG",
+   "X": 1600,
+   "Y": 1300,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "2",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "CblkC",
+   "Symbol": "Capacitor",
+   "X": 1300,
+   "Y": 600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "C",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "LfeedC",
+   "Symbol": "Inductor",
+   "X": 1900,
+   "Y": 600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "L",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "IC",
+   "Symbol": "IProbe",
+   "X": 1900,
+   "Y": -400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "VC",
+   "Symbol": "Vdc",
+   "X": 2500,
+   "Y": 600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Vdc",
+     "Expression": "VCE",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND22",
+   "Symbol": "Ground",
+   "X": 2500,
+   "Y": 900,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "VAR1",
+   "Symbol": "Var",
+   "X": -1600,
+   "Y": -1600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "VBE",
+     "Expression": "0.85",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "VCE",
+     "Expression": "1.5",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "f0",
+     "Expression": "20",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Nx",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  },
+  {
+   "InstanceName": "M1",
+   "Symbol": "Meas",
+   "X": 600,
+   "Y": -1600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Ic_mA",
+     "Expression": "DC1.I(\"IC\")*1e3",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Jc_mA",
+     "Expression": "Ic_mA/Nx",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ]
+  }
+ ],
+ "Wires": [
+  {
+   "Points": [
+    [
+     0,
+     -300
+    ],
+    [
+     0,
+     -400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -300,
+     0
+    ],
+    [
+     -400,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     0,
+     300
+    ],
+    [
+     0,
+     400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     100,
+     0
+    ],
+    [
+     200,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1600,
+     1100
+    ],
+    [
+     -1600,
+     1000
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1300,
+     400
+    ],
+    [
+     -1300,
+     300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1300,
+     800
+    ],
+    [
+     -1300,
+     900
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1900,
+     400
+    ],
+    [
+     -1900,
+     300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1900,
+     800
+    ],
+    [
+     -1900,
+     900
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1900,
+     -300
+    ],
+    [
+     -2000,
+     -300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1800,
+     -300
+    ],
+    [
+     -1700,
+     -300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -2500,
+     400
+    ],
+    [
+     -2500,
+     300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -2500,
+     800
+    ],
+    [
+     -2500,
+     900
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1600,
+     1100
+    ],
+    [
+     1600,
+     1000
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1300,
+     400
+    ],
+    [
+     1300,
+     300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1300,
+     800
+    ],
+    [
+     1300,
+     900
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1900,
+     400
+    ],
+    [
+     1900,
+     300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1900,
+     800
+    ],
+    [
+     1900,
+     900
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1900,
+     -300
+    ],
+    [
+     1800,
+     -300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     2000,
+     -300
+    ],
+    [
+     2100,
+     -300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     2500,
+     400
+    ],
+    [
+     2500,
+     300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     2500,
+     800
+    ],
+    [
+     2500,
+     900
+    ]
+   ]
+  }
+ ],
+ "NetLabels": [
+  {
+   "X": 0,
+   "Y": -350,
+   "Name": "nc",
+   "OwnerWireIndex": 0,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -350,
+   "Y": 0,
+   "Name": "nb",
+   "OwnerWireIndex": 1,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1600,
+   "Y": 1050,
+   "Name": "pB",
+   "OwnerWireIndex": 4,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1300,
+   "Y": 350,
+   "Name": "pB",
+   "OwnerWireIndex": 5,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1300,
+   "Y": 850,
+   "Name": "nb",
+   "OwnerWireIndex": 6,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1900,
+   "Y": 350,
+   "Name": "sB",
+   "OwnerWireIndex": 7,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1900,
+   "Y": 850,
+   "Name": "nb",
+   "OwnerWireIndex": 8,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1950,
+   "Y": -300,
+   "Name": "vB",
+   "OwnerWireIndex": 9,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1750,
+   "Y": -300,
+   "Name": "sB",
+   "OwnerWireIndex": 10,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -2500,
+   "Y": 350,
+   "Name": "vB",
+   "OwnerWireIndex": 11,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1600,
+   "Y": 1050,
+   "Name": "pC",
+   "OwnerWireIndex": 13,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1300,
+   "Y": 350,
+   "Name": "pC",
+   "OwnerWireIndex": 14,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1300,
+   "Y": 850,
+   "Name": "nc",
+   "OwnerWireIndex": 15,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1900,
+   "Y": 350,
+   "Name": "sC",
+   "OwnerWireIndex": 16,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1900,
+   "Y": 850,
+   "Name": "nc",
+   "OwnerWireIndex": 17,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1850,
+   "Y": -300,
+   "Name": "vC",
+   "OwnerWireIndex": 18,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 2050,
+   "Y": -300,
+   "Name": "sC",
+   "OwnerWireIndex": 19,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 2500,
+   "Y": 350,
+   "Name": "vC",
+   "OwnerWireIndex": 20,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  }
+ ],
+ "Dots": [],
+ "CanvasObjects": [],
+ "View": {
+  "PanX": 0,
+  "PanY": 0,
+  "Zoom": 1
+ },
+ "Analyses": [
+  {
+   "Type": "dc",
+   "Name": "DC1",
+   "Enabled": true
+  },
+  {
+   "Type": "sweep",
+   "Name": "SW1",
+   "Enabled": true,
+   "PsaVarName": "VBE",
+   "PsaInnerName": "DC1",
+   "PsaMode": "StepSize",
+   "PsaStart": 0.8,
+   "PsaStop": 0.98,
+   "PsaStepOrCount": 0.005,
+   "PsaKind": "Linear"
+  },
+  {
+   "Type": "sweep",
+   "Name": "SW0",
+   "Enabled": true,
+   "PsaVarName": "Nx",
+   "PsaInnerName": "SW1",
+   "PsaMode": "List",
+   "PsaValues": [
+    1,
+    2,
+    4,
+    8,
+    10
+   ]
+  }
+ ]
+}
