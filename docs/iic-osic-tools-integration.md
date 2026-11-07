@@ -119,7 +119,7 @@ Step 3b today rebuilds the kit whenever the image is newer than the kit. Propose
 # 3b. The IHP SG13G2 kit for circuitRF, compiled and validated by circuitRF-IHP-SG13G2-PDK's release;
 #     run.sh mounts kits/ at /foss/tools/circuitrf/kits. To change release: set both lines, delete
 #     kits/IHP_SG13G2, re-run.
-KIT_TAG=v1.0.0                              # the release to use
+KIT_TAG=v0.1.0                              # the release to use
 KIT_SHA256=<the hash in that release's .sha256>
 mkdir -p kits designs   # run.sh mounts both
 if step kits/IHP_SG13G2; then
@@ -144,8 +144,8 @@ grep -qx "PDK commit $(cat PDKs/ihp-sg13g2/COMMIT)" kits/IHP_SG13G2/BUILD ||
 
 - **Pin the hash, don't download the `.sha256`.** A `.sha256` fetched from the same release only shows
   that the download is complete. A pinned hash also shows that it is the archive you checked.
-- **The archive's version is the tag itself.** `ci/build-release.sh` names it from `git describe`, so it
-  is `circuitRF-IHP-SG13G2-v1.0.0.zip`, with the `v`.
+- **The archive's version is the release's.** The workflow numbers each push to `main` `v0.<n>.0` and names
+  the archive with it: `circuitRF-IHP-SG13G2-v0.1.0.zip`, with the `v`.
 - **The release does not depend on the image build.** It no longer has to be redone when the image is
   rebuilt. Only the PDK commit ties the two together, and the `grep` above checks it.
 

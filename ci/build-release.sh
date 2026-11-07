@@ -3,8 +3,8 @@
 #     ./kit.sh ci/build-release.sh                                   (here, in kit.sif)
 #     docker run ... <the base> --skip ci/build-release.sh           (.github/workflows/release.yml)
 # Writes dist/circuitRF-IHP-SG13G2-<version>.zip, the kit with its example workspace ready to unpack and
-# use (release/README.md says how), and its .sha256. <version> is the tag on HEAD, else git describe;
-# KIT_VERSION overrides it.
+# use (release/README.md says how), and its .sha256. <version> is KIT_VERSION (the release workflow sets
+# the next v0.<n>.0), else the tag on HEAD, else git describe.
 
 # The base sets PATH, PDKPATH and the tools' variables in its profile. The profile reads unset
 # variables, so it runs before set -u.

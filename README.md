@@ -301,7 +301,8 @@ The example workspace and its results are described in [examples/README.md](exam
 ## Releases
 
 Pushes and pull requests build and validate the kit in the IIC-OSIC-TOOLS image
-(`.github/workflows/release.yml`). A `v*` tag publishes the release archive with its checksum. The
+(`.github/workflows/release.yml`). Every push to `main` that passes is published as the next release,
+numbered `v0.1.0`, `v0.2.0`, ... in sequence, with the archive and its checksum. The
 figures on these pages are regenerated with `./kit.sh docs/make-figures.sh`.
 
 ## Using the Kit in IIC-OSIC-TOOLS-Based Images
