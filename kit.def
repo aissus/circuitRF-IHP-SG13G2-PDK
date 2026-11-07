@@ -11,6 +11,7 @@ From: hpretl/iic-osic-tools:2026.09
     # forever on one that never answers, which hangs MPI programs (Xyce, Palace).
     export HWLOC_COMPONENTS=-gl
     export CRF_VERILOGA_COMPILER=/foss/tools/bin/openvaf
+    export CIRCUITRF_PALACE=/opt/circuitrf-palace
 
 %post
     set -eux
@@ -21,3 +22,24 @@ From: hpretl/iic-osic-tools:2026.09
     ln -s /opt/circuitRF-1.7.3/app-1.7.3/circuitRF /usr/local/bin/circuitrf
     # Fails the build if the runtime is short of a library.
     circuitrf --version
+
+    # The base's Palace, for circuitRF's 3D runs. circuitRF runs only the Palace commit it validated and
+    # knows it by the hash --version prints; the base built that commit from its tag, so its Palace prints
+    # the tag instead. The wrapper reports the hash the base built it from (another commit is still
+    # refused). A solve (-np N --launcher L config.json) goes to the base's run_palace, at most PALACE_NP
+    # ranks (default 16): circuitRF asks for one per core, more than a shared machine or a job should take.
+    cat > /opt/circuitrf-palace <<'EOF'
+#!/bin/bash
+P=/foss/tools/bin/palace
+case " $* " in *" --version "*)
+    h=$(awk '$1 == "palace" {print substr($2, 1, 7)}' /foss/tools/palace/SOURCES)
+    "$P" "$@" | sed "s/^Palace version: v[0-9.]*$/Palace version: $h/"
+    exit "${PIPESTATUS[0]}";;
+esac
+if [ "$1" = -np ] && [ "$3" = --launcher ] && [ $# -eq 5 ]; then
+    n=$2; [ "$n" -gt "${PALACE_NP:-16}" ] && n=${PALACE_NP:-16}
+    exec /foss/tools/palace/bin/run_palace -np "$n" "$5"
+fi
+exec "$P" "$@"
+EOF
+    chmod +x /opt/circuitrf-palace
