@@ -1,0 +1,75 @@
+# Builds and validates the kit in the base image on every push and pull request, and publishes it
+# as a release when a v* tag is pushed. ci/build-release.sh does the work, the same as locally:
+#     ./kit.sh ci/build-release.sh
+name: release
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  kit:
+    runs-on: ubuntu-latest
+    # A hung MPI run would otherwise hold the runner for six hours.
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # git describe names the archive
+
+      # The base image is many GB; the runner's preinstalled toolchains are not needed.
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          docker image prune -af
+          df -h
+
+      # The image kit.def builds on. Its entrypoint starts a desktop unless given --skip; either way it
+      # first gives the uid a user name (OpenMPI, under Xyce, asks for one) and sources the tools'
+      # profile. The uid is the checkout's owner, so the build can write there and git trusts the repo.
+      - name: Build and validate the kit
+        run: |
+          docker run --rm -u "$(id -u):$(id -g)" -v "$PWD:/repo" -w /repo \
+            "$(awk '$1 == "From:" {print $2}' kit.def)" --skip ci/build-release.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kit
+          path: |
+            dist/
+            kit/IHP_SG13G2/VALIDATION
+          if-no-files-found: error
+
+      - name: Publish the release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          f=$RUNNER_TEMP/notes.md
+          cat > "$f" <<EOF
+          The circuitRF device kit for the IHP SG13G2 open PDK: \`IHP_SG13G2/\`, as \`generator/build.sh\`
+          builds it from the PDK and validates it against the PDK's own models in ngspice and Xyce, with
+          LICENSE and NOTICE beside it. The \`.sha256\` checks the archive.
+
+          Needs **circuitRF 1.7.3 or newer** (earlier versions crash on VBIC).
+
+          $(sed 's/^/    /' kit/IHP_SG13G2/BUILD)
+
+          **Use.** Unpack it anywhere: the cells name their models relative to the kit, so the folder
+          moves as a whole. Reference \`IHP_SG13G2/.cws\` from a workspace, or make a new workspace on
+          it with this repository's \`generator/circuitrf-ihp-workspace\` (IHP_PDK names the PDK if it
+          is not at /foss/pdks/ihp-sg13g2):
+
+              IHP_KIT=/path/to/IHP_SG13G2 generator/circuitrf-ihp-workspace my_project
+
+          **Licensing.** The kit derives from the IHP Open PDK (Apache-2.0); see NOTICE.
+          \`models/osdi/vbic_1p3_5t.osdi\`, \`vbic_1p3_bce.osdi\` and \`npn13G2*.osdi\` are compiled with
+          OpenVAF from the \`vbic_1p3.va\` that VACASK (https://codeberg.org/arpadbuermen/VACASK, an
+          AGPL-3.0 project) distributes; that file itself states no license.
+          EOF
+          gh release create "$GITHUB_REF_NAME" dist/* --title "IHP SG13G2 kit $GITHUB_REF_NAME" --notes-file "$f"

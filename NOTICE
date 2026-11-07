@@ -12,10 +12,14 @@ from the PDK:
 - the geometry of its inductor2 KLayout PCell (sg13g2_pycell_lib), which draws the example
   inductor.
 
-The built kit (kit/, not part of this repository) also holds compiled models:
+The built kit (kit/, not part of this repository; the release archives carry it) also holds
+compiled models:
 - R3 (CMC), the PDK's r3_cmc.osdi. The PDK's r3_cmc.va is licensed under the Apache License,
   Version 2.0, and derives from the Si2 CMC model under the Educational Community License,
   Version 2.0.
-- VBIC 1.3, compiled with OpenVAF from the vbic_1p3.va that VACASK
-  (https://codeberg.org/arpadbuermen/VACASK) distributes. That file states no license, so this
-  repository holds only the scripts that compile it, never the compiled models.
+- VBIC 1.3 (models/osdi/vbic_1p3_5t.osdi, vbic_1p3_bce.osdi, npn13G2*.osdi), compiled with
+  OpenVAF from the vbic_1p3.va that VACASK (https://codeberg.org/arpadbuermen/VACASK, licensed
+  under the GNU Affero General Public License, Version 3) distributes. That file states no
+  license, so this repository holds only the scripts that compile it, never the compiled models.
+  The release archives, built by .github/workflows/release.yml, carry them as compiled from that
+  source.

@@ -1,5 +1,7 @@
 # Build output: generator/build.sh writes it; the VBIC-derived .osdi in it are not to be committed.
 kit/
+# The release archives ci/build-release.sh packs from it.
+dist/
 # The image (kit.def builds it) and the container's home directory.
 *.sif
 .home/
@@ -8,6 +10,9 @@ kit/
 !**/results/*.cdd
 .generated-cells/
 .cwsuser
+# circuitRF's open-workspace lock (user, host, process) and its write probe.
+.crf-open.json
+.crf-write-probe-*
 # Made by generator/build.sh for the kit it builds.
 examples/tech/
 examples/harmonica/
