@@ -26,8 +26,9 @@ From: hpretl/iic-osic-tools:2026.09
     # The base's Palace, for circuitRF's 3D runs. circuitRF runs only the Palace commit it validated and
     # knows it by the hash --version prints; the base built that commit from its tag, so its Palace prints
     # the tag instead. The wrapper reports the hash the base built it from (another commit is still
-    # refused). A solve (-np N --launcher L config.json) goes to the base's run_palace, at most PALACE_NP
-    # ranks (default 16): circuitRF asks for one per core, more than a shared machine or a job should take.
+    # refused). A solve (-np N --launcher L config.json) runs the Palace binary under that launcher, at most
+    # PALACE_NP ranks (default 16): circuitRF asks for one per core, more than a shared machine or a job
+    # should take. Not through the base's run_palace or palace scripts: those start mpirun inside mpirun.
     cat > /opt/circuitrf-palace <<'EOF'
 #!/bin/bash
 P=/foss/tools/bin/palace
@@ -38,7 +39,7 @@ case " $* " in *" --version "*)
 esac
 if [ "$1" = -np ] && [ "$3" = --launcher ] && [ $# -eq 5 ]; then
     n=$2; [ "$n" -gt "${PALACE_NP:-16}" ] && n=${PALACE_NP:-16}
-    exec /foss/tools/palace/bin/run_palace -np "$n" "$5"
+    exec "$4" -n "$n" /foss/tools/bin/palace-x86_64.bin "$5"
 fi
 exec "$P" "$@"
 EOF
