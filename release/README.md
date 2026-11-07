@@ -14,7 +14,7 @@ the PDK commit, the circuitRF version and the validation result.
 ## Contents
 
 ```text
-kit/IHP_SG13G2/       the kit: cells, technology (tech/IHP_SG13G2.ctech), compiled R3 model
+kit/IHP_SG13G2/       the kit: cells, technology (tech/IHP_SG13G2.ctech), compiled R3 and PSP 103 models
 examples/             an example workspace on the kit (open examples/.cws)
 generator/            the generator; build-vbic.sh compiles the VBIC models
 .claude/, CLAUDE.md   instructions and a skill for AI coding agents
@@ -27,8 +27,10 @@ LICENSE, NOTICE       Apache-2.0, as the IHP PDK
 | `npn13G2`, `npn13G2l`, `npn13G2v` | SiGe HBTs | Nx, (le), corner, T, dtemp, selft |
 | `rsil`, `rppd`, `rhigh` | poly resistors | w, l, (b), m, corner, T, trise |
 | `cap_cmim` | MIM capacitor | w, l, corner, T |
+| `sg13_lv_nmos`, `sg13_lv_pmos` | 1.2 V MOSFETs | w, l, ng, m, corner, T, trise, pre_layout |
+| `sg13_hv_nmos`, `sg13_hv_pmos` | 3.3 V MOSFETs | w, l, ng, m, corner, T, trise, pre_layout |
 
-The corner parameter is 0 for typ, 1 for bcs and 2 for wcs.
+The corner parameter is 0 for typ, 1 for bcs and 2 for wcs (MOSFETs: tt, ff, ss).
 
 ## Getting started
 
@@ -48,7 +50,12 @@ The corner parameter is 0 for typ, 1 for bcs and 2 for wcs.
    generator/circuitrf-ihp-workspace my_project
    ```
 
-The resistors, the MIM capacitor and the technology work without step 2.
+The resistors, the MIM capacitor, the MOSFETs and the technology work without step 2.
+
+IHP's KLayout PCells (38 devices; `kit/IHP_SG13G2/PCELLS`) draw in circuitRF's layout editor when the IHP
+PDK is at `$PDKPATH` and Python 3.10 or newer is on PATH. circuitRF asks once before it runs them
+(headless: `--trust-kit examples/ihp-sg13g2-pcells`). A workspace of your own gets its declaration from
+`generator/circuitrf-ihp-workspace`.
 
 ## License
 

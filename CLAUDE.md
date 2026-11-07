@@ -11,6 +11,7 @@ To design or simulate with the kit, use the skill in `.claude/skills/ihp-sg13g2-
 | `generator/` | `build.sh` runs the whole build: `ihp2va.py`, `ihp2crf.py` (cells, technology, the kit's `.cws`), `qucs2csym.py` (symbols), `build-vbic.sh` (VBIC 1.3 to OSDI, and harmonicaRF's devices through `harmonica_ihp.py`), `validate_ihp_kit.py`. `circuitrf-ihp-workspace` starts a workspace on the kit. |
 | `kit/IHP_SG13G2/` | Build output, git-ignored: the cells, `tech/IHP_SG13G2.ctech`, `models/`, `VALIDATION`, `BUILD`. Never edit it; change the generator and rebuild. |
 | `examples/` | One circuitRF workspace on the kit (`examples/.cws` references `../kit/IHP_SG13G2`). `tech/`, `harmonica/` and `results/*` (except `*.cdd`) are written by the build and the runs. |
+| `generator/` (PCells, overview) | `ihp_pcells.py` (the kit's PCell entry, copied to `kit/IHP_SG13G2/pcells/`), `check_ihp_pcells.py` (each PCell against KLayout), `qucs2csch.py` (the Qucs-S gallery as `examples/Kit_cells`), `qucs_cells.json` (what works, with notes). |
 | `docs/` | `make-figures.sh`, `white.ccolor`, `images/` (the pages use `images/white/`). |
 | `ci/build-release.sh`, `.github/workflows/release.yml` | The release zip, built and validated in the base image. |
 | `release/` | The `README.md`, `CLAUDE.md` and `.mcp.json` placed at the top of the release zip. |
@@ -30,10 +31,11 @@ OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.7.3.
 
 ## Checks
 
-- `./kit.sh generator/build.sh` (about 1 min) must end with `kit built`, with `120/120 within tolerance` in
-  `kit/IHP_SG13G2/VALIDATION` and 0 errors from `circuitrf check`. A failed build restores the previous kit.
-- `./kit.sh circuitrf check examples --summary` must report 0 errors. The 4 warnings are expected: `Kit_cells`
-  and `inductor/schematic` declare no analysis, and the technology states no DRC rules (two layouts).
+- `./kit.sh generator/build.sh` (about 1 min) must end with `kit built`, with `143/143 within tolerance` in
+  `kit/IHP_SG13G2/VALIDATION`, `all identical` at the end of `PCELLS`, and 0 errors from `circuitrf check`. A failed build restores the previous kit.
+- `./kit.sh circuitrf check examples --summary` must report 0 errors. The 5 warnings are expected: `Kit_cells`
+  and `inductor/schematic` declare no analysis, and the technology states no DRC rules (three layouts).
+  On a fresh clone, before a build, add `--trust-kit examples/ihp-sg13g2-pcells`.
 - After changing a bench, run it with the commands in `examples/README.md`. If a picture changes, regenerate
   the figures with `./kit.sh docs/make-figures.sh`.
 - Before committing, search the diff for absolute paths, user names and host names.
@@ -42,6 +44,10 @@ OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.7.3.
 
 - Benches place kit cells as `ws://IHP_SG13G2/<cell>`, through the `ReferencedWorkspaces` alias in the `.cws`.
   Never use a raw relative `CellRef`.
+- A workspace declares the kit's PCells in `ihp-sg13g2-pcells/pcell-generators.json`, with a relative `entry`
+  (the kit's `pcells/kit_entry.py`) and no `kitRoot`. circuitRF keeps that folder and never rewrites it.
+- A kit cell's status and note live in `generator/qucs_cells.json`. Update it when a cell is added or fixed;
+  the build prints it on `examples/Kit_cells`.
 - Use relative paths only. The kit is relocatable because its cells name `models/osdi/<model>.osdi` relative to
   the kit's own `.cws`. `.cem` `LayoutRef` and load-pull grid paths are workspace-relative. The one machine path
   in a user-facing file is `PdkRefs` `/foss/pdks/ihp-sg13g2` in `examples/.cws`. The image's `/foss/...` paths
@@ -64,7 +70,8 @@ OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.7.3.
   devices), and any copy or patched copy of VACASK's `vbic_1p3.va`. The source has no license header and VACASK
   is AGPL-3.0. `generator/build-vbic.sh` compiles these files wherever the kit is used. `kit/` is git-ignored,
   and `ci/build-release.sh` strips them from the release and fails if one is left.
-- These files are fine to ship: `r3_cmc.osdi` (the PDK's own R3 CMC build) and `models/ihp/*.va` (PDK parameter
+- These files are fine to ship: `r3_cmc.osdi` (the PDK's own R3 CMC build), `psp103.osdi` (the PDK's PSP 103
+  build; NOTICE carries its CMC statement, which a binary release must reproduce) and `models/ihp/*.va` (PDK parameter
   values, not model code).
 - No GPL-3.0 material. The PDK's `libs.tech/palace` is GPL-3.0. The EM stackup comes from the Apache-2.0 ITF and
   process specification.

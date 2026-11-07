@@ -20,34 +20,51 @@ rm -rf "$K".prev* 2>/dev/null || true
 trap 'echo "kit build FAILED; the previous kit is kept" >&2; rm -rf "$K"; [ -e "$P" ] && mv "$P" "$K"' ERR
 
 mkdir -p "$K/models/osdi" "$K/models/ihp"
-# The compact models the cells run: CMC R3, the PDK's own build; VBIC 1.3, compiled here by
+# The compact models the cells run: CMC R3 and PSP 103, the PDK's own builds; VBIC 1.3, compiled here by
 # build-vbic.sh (with harmonicaRF's devices), as every user of a released kit compiles it.
-cp "$PDKPATH/libs.tech/ngspice/osdi/r3_cmc.osdi" "$K/models/osdi/"
+cp "$PDKPATH"/libs.tech/ngspice/osdi/{r3_cmc,psp103}.osdi "$K/models/osdi/"
 for d in npn13G2 npn13G2l npn13G2v; do for n in 1 2 4 8; do
     python3 "$S/ihp2va.py" "$M/sg13g2_hbt_mod.lib" $d --nx $n \
         --cornerlib "$M/cornerHBT.lib" -o "$K/models/ihp/${d}_nx$n.va"
 done; done
 python3 "$S/ihp2crf.py" --pdk "$PDKPATH" --out "$K"
 python3 "$S/qucs2csym.py" --kit "$K"
+# IHP's own KLayout PCells, offered by the kit through circuitRF's CNI bridge (the PDK is found at run time)
+mkdir -p "$K/pcells" && cp "$S/ihp_pcells.py" "$K/pcells/kit_entry.py"
+printf '{\n  "schemaVersion": 1,\n  "entry": "kit_entry.py"\n}\n' > "$K/pcells/pcell-generators.json"
 "$S/build-vbic.sh" "$K"
 # against the PDK's own models in ngspice and Xyce, then as circuitRF reads it
 python3 "$S/validate_ihp_kit.py" --kit "$K" | tee "$K/VALIDATION"
 circuitrf check "$K" --summary
+# each PCell drawn by circuitRF against the same cell drawn by KLayout
+python3 "$S/check_ihp_pcells.py" --kit "$K" | tee "$K/PCELLS"
 
 # The examples' own copy of the technology (a workspace owns its technology), and their harmonicaRF
 # documents: a .charm names its compiled DUT by absolute path, so they are made for this kit, here.
 E=$(dirname "$S")/examples
-mkdir -p "$E/tech" "$E/harmonica"
+mkdir -p "$E/tech" "$E/harmonica" "$E/ihp-sg13g2-pcells"
 cp "$K"/tech/*.ctech "$E/tech/"
+# Their declaration of the kit's PCells. circuitRF looks for one only in a workspace and the folders
+# right under it; this one takes the folder circuitRF would declare the PdkRef's own PCells in, so the
+# GUI keeps it rather than writing a second, unpatched one.
+printf '{\n  "schemaVersion": 1,\n  "entry": "../../kit/IHP_SG13G2/pcells/kit_entry.py"\n}\n' \
+    > "$E/ihp-sg13g2-pcells/pcell-generators.json"
+# and the cells HBT_layout places, generated into the git-ignored .generated-cells/, where a check or an
+# open that may not run the kit's scripts finds them
+g=$(mktemp --suffix=.gds) && circuitrf convert "$E/HBT_layout/layout/HBT_layout.clay" -o "$g" \
+    --trust-kit "$E/ihp-sg13g2-pcells" >/dev/null && rm -f "$g"
 for d in npn13G2 npn13G2v; do for n in 1 2 4 8; do
     python3 "$S/harmonica_ihp.py" charm "$E/harmonica/${d}_Nx${n}_50GHz.charm" --device $d --nx $n \
         --osdi "$K/models/osdi/$d.osdi"
 done; done
+# The kit's overview: the PDK's Qucs-S symbol gallery with the kit's cells, and what works (qucs_cells.json)
+python3 "$S/qucs2csch.py" "$PDKPATH/libs.tech/qucs-s/examples/symbols.sch" "$E/Kit_cells/schematic/Kit_cells.csch" --kit "$K"
 
 { echo "built $(date -Iseconds) by generator/build.sh"
   echo "PDK commit $(cat "$PDKPATH/COMMIT" 2>/dev/null || echo '?')"
   echo "circuitRF $(circuitrf --version)"
-  echo "validation: $(tail -1 "$K/VALIDATION")"; } > "$K/BUILD"
+  echo "validation: $(tail -1 "$K/VALIDATION")"
+  echo "PCells: $(tail -1 "$K/PCELLS")"; } > "$K/BUILD"
 trap - ERR
 rm -rf "$P" 2>/dev/null || true
 echo "kit built: $K"

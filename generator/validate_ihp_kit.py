@@ -142,12 +142,41 @@ def run(kit, ws):
         ref = ngspice([f'* {cell}', lib('res', corner), 'V1 n1 0 0.1', f'X1 n1 0 0 {cell} {inst}',
                        '.control', 'op', 'print -i(V1)', '.endc'])
         check(f'{cell} {inst} {CNAME[corner]}  R', got, 0.1 / ref['-i(v1)'].real, 0.01, rows)
-    # ---- MIM capacitor, C at 1 GHz from S11
-    for p in ({'w': 7e-6, 'l': 7e-6}, {'w': 20e-6, 'l': 30e-6}, {'w': 20e-6, 'l': 30e-6, 'corner': 2}):
+    # ---- MOSFETs: Id in saturation and in triode
+    mos_cases = [('sg13_lv_nmos', {'w': 1e-6, 'l': 0.13e-6, 'ng': 1}), ('sg13_lv_nmos', {'w': 10e-6, 'l': 0.13e-6, 'ng': 4}),
+                 ('sg13_lv_nmos', {'w': 1e-6, 'l': 0.13e-6, 'ng': 1, 'corner': 1}),
+                 ('sg13_lv_nmos', {'w': 1e-6, 'l': 0.13e-6, 'ng': 1, 'corner': 2}),
+                 ('sg13_lv_pmos', {'w': 1e-6, 'l': 0.13e-6, 'ng': 1}), ('sg13_lv_pmos', {'w': 4e-6, 'l': 0.5e-6, 'ng': 2, 'corner': 2}),
+                 ('sg13_hv_nmos', {'w': 1e-6, 'l': 0.45e-6, 'ng': 1}), ('sg13_hv_nmos', {'w': 4e-6, 'l': 0.45e-6, 'ng': 2, 'corner': 1}),
+                 ('sg13_hv_pmos', {'w': 1e-6, 'l': 0.4e-6, 'ng': 1}), ('sg13_hv_pmos', {'w': 4e-6, 'l': 0.4e-6, 'ng': 2, 'corner': 2})]
+    for cell, p in mos_cases:
+        sg, vdd, fam = (-1 if 'pmos' in cell else 1), (1.2 if '_lv_' in cell else 3.3), cell[5:7]
+        corner = p.get('corner', 0)
+        inst = ' '.join(f'{k}={v}' for k, v in p.items() if k != 'corner')
+        for vgs, vds in ((vdd / 2, vdd), (vdd, 0.1)):
+            def ex(s, vgs=vgs, vds=vds):
+                vsource(s, 1000, 'ng', sg * vgs, 'IG'); vsource(s, 2000, 'nd', sg * vds, 'ID')
+            b = bench(ws, kit, cell, p, {'d': 'nd', 'g': 'ng', 's': '0', 'b': '0'},
+                      [{"Type": "dc", "Name": "DC1", "Enabled": True}], ex)
+            got = currents(crf('dc', b))['ID']
+            ref = ngspice([f'* {cell}', f'.lib cornerMOS{fam}.lib mos_{("tt", "ff", "ss")[corner]}',
+                           f'VG g 0 {sg * vgs}', f'VD d 0 {sg * vds}', f'X1 d g 0 0 {cell} {inst}',
+                           '.control', 'op', 'print -i(VD)', '.endc'])
+            check(f'{cell} {inst} {("tt", "ff", "ss")[corner]} VGS={vgs:g} VDS={vds:g}  Id', got,
+                  ref['-i(vd)'].real, 0.01, rows, 1e-9)
+    # ---- C at 1 GHz from S11: the MIM capacitor, and the MOS drain (its junction and overlap
+    # capacitance, from the subckt's geometry formulas, for odd and even ng)
+    caps = [('cap_cmim', p, {'PLUS': 'n1', 'MINUS': '0'}, lib('cap', p.get('corner', 0)))
+            for p in ({'w': 7e-6, 'l': 7e-6}, {'w': 20e-6, 'l': 30e-6}, {'w': 20e-6, 'l': 30e-6, 'corner': 2})]
+    caps += [(c, p, {'d': 'n1', 'g': '0', 's': '0', 'b': '0'}, f'.lib cornerMOS{c[5:7]}.lib mos_tt')
+             for c, p in (('sg13_lv_nmos', {'w': 10e-6, 'l': 0.13e-6, 'ng': 1}),
+                          ('sg13_lv_nmos', {'w': 10e-6, 'l': 0.13e-6, 'ng': 4}),
+                          ('sg13_hv_pmos', {'w': 10e-6, 'l': 0.4e-6, 'ng': 3}))]
+    for cell, p, nets, libline in caps:
         def ex(s):
             s.comp('P1', 'TermG', 1000, 2000, [par('Num', '1', True), par('Z', '50', True)])
             s.stub(1000, 1800, 0, -100, 'n1'); s.stub(1000, 2200, 0, 100, '0')
-        b = bench(ws, kit, 'cap_cmim', p, {'PLUS': 'n1', 'MINUS': '0'},
+        b = bench(ws, kit, cell, p, nets,
                   [{"Type": "sp", "Name": "SP1", "Enabled": True,
                     "Sweeps": [{"StartExpr": "1", "StopExpr": "1", "NumPoints": 1, "Mode": "PointCount",
                                 "Kind": "Linear", "StartUnit": "GHz", "StopUnit": "GHz"}]}], ex)
@@ -162,10 +191,10 @@ def run(kit, ws):
         got = y.imag / (2 * math.pi * f)
         corner = p.get('corner', 0)
         inst = ' '.join(f'{k}={v}' for k, v in p.items() if k != 'corner')
-        ref = ngspice(['* cmim', lib('cap', corner), 'V1 n1 0 dc 0 ac 1', f'X1 n1 0 cap_cmim {inst}',
+        ref = ngspice([f'* {cell}', libline, 'V1 n1 0 dc 0 ac 1', f'X1 {" ".join(nets.values())} {cell} {inst}',
                        '.control', 'ac lin 1 1e9 1e9', 'print i(V1)', '.endc'])
         cref = -ref['i(v1)'].imag / (2 * math.pi * 1e9)
-        check(f'cap_cmim {inst} {CNAME[corner]}  C', got, cref, 0.01, rows)
+        check(f'{cell} {inst} {libline.split()[-1]}  C', got, cref, 0.01, rows)
     hb(kit, ws, rows)
     return rows
 

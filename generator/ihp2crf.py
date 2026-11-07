@@ -8,6 +8,7 @@ One cell per device, parameterised like the PDK subcircuit it comes from:
   npn13G2, npn13G2l, npn13G2v   Nx (and le), corner, T, dtemp, selft
   rsil, rppd, rhigh             w, l (and b), m, corner, T, trise
   cap_cmim                      w, l, corner, T
+  sg13_{lv,hv}_{nmos,pmos}      w, l, ng, m, corner, T, trise, pre_layout
 
 Every model parameter is written as the PDK's own expression, translated to
 circuitRF syntax, so the cell scales with its parameters exactly as the PDK
@@ -96,7 +97,7 @@ def corner_section(lines, section):
 
 # ---------------------------------------------------------------- translation
 
-SI = {'t': 1e12, 'g': 1e9, 'meg': 1e6, 'k': 1e3, 'm': 1e-3, 'u': 1e-6, 'n': 1e-9, 'p': 1e-12, 'f': 1e-15}
+SI = {'t': 12, 'g': 9, 'meg': 6, 'k': 3, 'm': -3, 'u': -6, 'n': -9, 'p': -12, 'f': -15}   # suffix -> decimal exponent
 
 
 def _replace_call(expr, fname, fn):
@@ -125,7 +126,7 @@ def translate(expr, names):
     e = expr.strip().strip("'")
     e = _replace_call(e, 'agauss', lambda a: a[0])          # mismatch off: nominal value
     e = re.sub(r'(?<![\w.])(\d+\.?\d*(?:[eE][-+]?\d+)?)(meg|[tgkmunpf])(?![\w])',
-               lambda m: repr(float(m.group(1)) * SI[m.group(2).lower()]), e, flags=re.I)
+               lambda m: repr(float('%se%d' % (m.group(1), SI[m.group(2).lower()]))), e, flags=re.I)   # 0.34u: 3.4e-07
     e = e.replace('**', '^')
     # A comparison used as a number, as in (postsim>0)*w: circuitRF wants if(...)
     e = re.sub(r'\(([^()?:]*(?:>=|<=|==|!=|>|<)[^()?:]*)\)(?=\s*\*)', r'if(\1,1,0)', e)
@@ -217,6 +218,11 @@ def symbol(path, kind, ports):
         zig = [(0, -100), (30, -80), (-30, -40), (30, 0), (-30, 40), (30, 80), (0, 100)]
         prims = [L(0, -200, 0, -100), L(0, 100, 0, 200)] + \
                 [L(a[0], a[1], b[0], b[1]) for a, b in zip(zig, zig[1:])] + [L(200, 0, 60, 0), T('bn', 70, -20)]
+    elif kind == 'mos':        # d top, g left, s bottom, b right
+        pos = {'d': (0, -200), 'g': (-200, 0), 's': (0, 200), 'b': (200, 0)}
+        prims = [L(-200, 0, -60, 0), L(-60, -80, -60, 80), L(-30, -80, -30, 80), L(-30, -60, 0, -60),
+                 L(0, -60, 0, -200), L(-30, 60, 0, 60), L(0, 60, 0, 200), L(-30, 0, 200, 0),
+                 T('d', 10, -170), T('s', 10, 170), T('g', -190, -20), T('b', 120, -20)]
     else:                      # capacitor: PLUS top, MINUS bottom
         pos = {'PLUS': (0, -200), 'MINUS': (0, 200)}
         prims = [L(0, -200, 0, -20), L(-60, -20, 60, -20), L(-60, 20, 60, 20), L(0, 20, 0, 200), T('+', 20, -70)]
@@ -247,9 +253,9 @@ def write_cell(lib, name, ports, cell_params, sheet, kind, doc):
 CORNERS = ('typ', 'bcs', 'wcs')
 
 
-def corner_vars(cornerlib, prefix, wanted):
+def corner_vars(cornerlib, prefix, wanted, sections=CORNERS):
     """name -> circuitRF expression selecting the corner's value; wanted: lowercase names."""
-    secs = [corner_section(cornerlib, '%s_%s' % (prefix, c)) for c in CORNERS]
+    secs = [corner_section(cornerlib, '%s_%s' % (prefix, c)) for c in sections]
     out = {}
     for name in secs[0]:
         if name.lower() not in wanted:
@@ -355,6 +361,58 @@ def cap_cell(lib, lines, cornerlib, name='cap_cmim'):
                DOCS['cap_cmim'])
 
 
+# The PDK's MOS subckt (rfmode 0, as = 0) computes the junction areas and perimeters from w, ng, z1 and z2,
+# one formula for odd ng and one for even; circuitRF's expressions have no floor, so cos(pi*ng) tells them apart.
+WG, ODD = 'max(w/ng,wmin)', 'cos(pi*ng)<0'
+MOS_GEO = [('asx', f'{ODD}?{WG}*(z1+((ng-1)/2)*z2):{WG}*(2*z1+max(0,(ng-2)/2)*z2)'),
+           ('adx', f'{ODD}?{WG}*(z1+((ng-1)/2)*z2):{WG}*z2/2*ng'),
+           ('psx', f'{ODD}?2*({WG}*((ng-1)/2+1)+z1+(ng-1)/2*z2):2*({WG}*(2+max(ng-2,0)/2)+2*z1+max(ng-2,0)/2*z2)'),
+           ('pdx', f'{ODD}?2*({WG}*((ng-1)/2+1)+z1+(ng-1)/2*z2):({WG}+z2)*ng')]
+
+
+def mos_cell(lib, osdi_dir, mod, parm, cornerlib, name):
+    """A PDK MOSFET (sg13g2_mos*_mod.lib): its PSP 103 card on the PDK's psp103.osdi, the subckt's geometry."""
+    hdr = next(l for l in mod if l.lower().startswith('.subckt %s ' % name))
+    ports, sp = [t for t in hdr.split()[2:] if '=' not in t], dict(assignments(hdr))
+    _, card = model_card(parm, name.replace('sg13_', 'sg13g2_') + '_psp')
+    wanted = {w.lower() for _, v in card for w in re.findall(r'[A-Za-z_]\w*', v)}
+    cvars = corner_vars(cornerlib, 'mos', wanted, ('tt', 'ff', 'ss'))
+    names = {n.lower(): v for l in mod if l.lower().startswith('.param') for n, v in assignments(l[6:])}
+    names.update({n.lower(): n for n in list(cvars) + ['w', 'l', 'ng', 'm', 'pre_layout', 'corner']})
+    tr = lambda e: translate(e, names)
+    sheet = Sheet(name)
+    terminals(sheet, ports, -1400, -300)
+    var = [(n, tr(v)) for n, v in cvars.items()] + [(n, tr(sp[n])) for n in ('z1', 'z2', 'wmin')] + MOS_GEO
+    sheet.comp('VAR1', 'Var', -1400, -1400, [par(n, v) for n, v in var])
+    # circuitRF names PSP's parameters as the module does, in capitals; level only picks ngspice's model.
+    params = [('Model', 'PSP103VA')] + [(k.upper(), tr(v)) for k, v in card if k.lower() != 'level']
+    params += [('W', 'w'), ('L', 'l'), ('NF', 'ng'), ('MULT', 'm'), ('AS', 'asx'), ('AD', 'adx'), ('PS', 'psx'),
+               ('PD', 'pdx'), ('DTA', 'trise'), ('NGCON', '2'), ('DELVTO', '0'), ('FACTUO', '1'), ('Temp', 'T')]
+    verilog_a(sheet, 0, 0, os.path.join(osdi_dir, 'psp103.osdi'), ports, params)
+    user = [('w', tr(sp['w']), True), ('l', tr(sp['l']), True), ('ng', sp['ng'], True), ('m', sp['m'], False),
+            ('corner', '0', False), ('T', '27', False), ('trise', sp['trise'], False),
+            ('pre_layout', sp['pre_layout'], False)]
+    write_cell(lib, name, ports, user, sheet, 'mos', MOS_DOC.format(name=name))
+
+
+MOS_DOC = """# {name}
+
+IHP SG13G2 {name} as in the PDK (`sg13g2_mos*_mod.lib`, rfmode 0): PSP 103.6
+(the PDK's psp103.osdi) with the PDK's card and corner factors, source and
+drain junctions from w, ng and the subckt's z1, z2.
+
+| Parameter | Meaning |
+|---|---|
+| w, l | total gate width and length, m |
+| ng | gate fingers |
+| m | parallel devices |
+| corner | 0 tt, 1 ff, 2 ss (cornerMOS*.lib) |
+| T | ambient temperature, degC (PDK default 27) |
+| trise | temperature offset, K |
+| pre_layout | 1 pre-layout (PDK default), 0 post-layout |
+
+Terminals: d, g, s, b. Generated by ihp2crf.py; do not edit, regenerate.
+"""
 HBT_DOC = """# {name}
 
 IHP SG13G2 {name} as in the PDK (`sg13g2_hbt_mod.lib`): VBIC 1.3 (OSDI,
@@ -529,8 +587,10 @@ IHP_SG13G2) and gets its own copy of the technology.
 | rppd | p+ poly resistor | w, l, b, m, corner, T, trise |
 | rhigh | high-ohmic poly resistor | w, l, b, m, corner, T, trise |
 | cap_cmim | MIM capacitor | w, l, corner, T |
+| sg13_lv_nmos, sg13_lv_pmos | 1.2 V MOSFETs | w, l, ng, m, corner, T, trise, pre_layout |
+| sg13_hv_nmos, sg13_hv_pmos | 3.3 V MOSFETs | w, l, ng, m, corner, T, trise, pre_layout |
 
-corner: 0 typ, 1 bcs, 2 wcs. T in degC (27 is the PDK's nominal; circuitRF's
+corner: 0 typ, 1 bcs, 2 wcs (MOSFETs: 0 tt, 1 ff, 2 ss). T in degC (27 is the PDK's nominal; circuitRF's
 own default would be 26.85). Lengths in metres, as in the PDK.
 
 Symbols are IHP's Qucs-S ones (qucs2csym.py, from the PDK's qucs-s/user_lib).
@@ -544,6 +604,23 @@ network built in, and every VBIC parameter set inside from the PDK's own
 expressions. Their only parameters are Nx (and le on npn13G2l/v), corner and
 temp. Ready-to-pull documents are in the repository's examples/harmonica; make
 others with `generator/harmonica_ihp.py charm <out> --device npn13G2v --nx 4 ...`.
+
+**Layout.** `pcells/` offers IHP's own KLayout PCells (`sg13g2_pycell_lib`:
+HBTs, MOS, resistors, MIM, inductors, diodes, ESD, pads, seal ring, ...) as
+circuitRF parametric cells, through circuitRF's CNI bridge. `PCELLS` lists
+each one, drawn by circuitRF and compared with KLayout's own drawing. The PDK
+is found when the cells are drawn: `$PDKPATH`, else `$PDK_ROOT/ihp-sg13g2`.
+Without it the kit still loads and simulates, and its PCells draw as
+placeholders. circuitRF reads a PCell declaration only in a workspace and the
+folders directly under it, so a workspace using the kit holds one:
+`ihp-sg13g2-pcells/pcell-generators.json`, whose `entry` is this kit's
+`pcells/kit_entry.py`, as a relative path. circuitRF runs the scripts once you
+allow them (it asks; headless, `--trust-kit <that folder>`). The PDK declares
+most parameters as text: write lengths as `0.9u` or `9e-07` and counts such as
+`ng` and `b` as `2`. A bare number in a text field is ignored, and the cell
+keeps its default. The kit's own cells have no layout view (circuitRF 1.7.3
+ties a generator only to imported kit parts, not to library cells), so place
+the PCell with the cell's values.
 
 `tech/IHP_SG13G2.ctech`: all 378 KLayout layers with their GDS numbers, and
 an EM stackup from the PDK's ITF (metal thickness and sheet resistance, vias)
@@ -602,6 +679,11 @@ def main():
 
     cap = logical_lines(read(os.path.join(m, 'capacitors_mod.lib')))
     cap_cell(a.out, cap, logical_lines(read(os.path.join(m, 'cornerCAP.lib'))))
+    for v in ('lv', 'hv'):
+        lib = [logical_lines(read(os.path.join(m, f))) for f in
+               ('sg13g2_mos%s_mod.lib' % v, 'sg13g2_mos%s_parm.lib' % v, 'cornerMOS%s.lib' % v)]
+        for t in ('nmos', 'pmos'):
+            mos_cell(a.out, a.osdi, *lib, 'sg13_%s_%s' % (v, t))
     make_tech(a.pdk, os.path.join(a.out, 'tech', 'IHP_SG13G2.ctech'))
     commit = open(os.path.join(a.pdk, 'COMMIT')).read().strip() if os.path.exists(os.path.join(a.pdk, 'COMMIT')) else '?'
     open(os.path.join(a.out, 'README.md'), 'w').write(KIT_DOC.format(commit=commit))

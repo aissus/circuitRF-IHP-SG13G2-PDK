@@ -21,7 +21,8 @@ Open `examples/.cws` with File ▸ Open Workspace in circuitRF 1.7.3 or newer, o
 | `CE_10GHz_HB` | npn13G2 common emitter at 10 GHz: an HB drive sweep, with Pout, Gt, H2 and H3 measured | |
 | `inductor` | a two-turn TopMetal2 inductor from IHP's PCell: its layout, its 3D view, and one EM setup per solver | IHP's `inductor2` PCell |
 | `inductor_TB` | the inductor's series L and Q from every EM run, side by side | |
-| `Kit_cells` | every kit cell placed once with its default parameters: the overview picture in the top-level README | |
+| `Kit_cells` | every kit cell, placed as in the PDK's Qucs-S symbol gallery, with the status of every Qucs-S component | Qucs-S `symbols.sch` |
+| `HBT_layout` | IHP's npn13G2 PCell at Nx = 1, 4 and 8, with a 3D view on the SG13G2 stack | IHP KLayout PCells |
 | `harmonica/` | harmonicaRF documents: npn13G2 and npn13G2v at Nx = 1, 2, 4, 8, at 50 GHz (written by the build) | |
 
 ## Running them

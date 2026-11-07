@@ -314,7 +314,7 @@ To make this path the setup script's default, keep the old "rebuild when the ima
 ./run.sh circuitrf --version                 # 1.7.3
 ./run.sh circuitrf solver list               # Palace 0.18.1 (0dc74cd) validated; EMerge, openEMS, Gmsh found
 K=/foss/tools/circuitrf/kits/IHP_SG13G2
-./run.sh bash -c "python3 $K/tools/validate_ihp_kit.py --kit $K | diff - $K/VALIDATION"   # 120/120, no diff
+./run.sh bash -c "python3 $K/tools/validate_ihp_kit.py --kit $K | diff - $K/VALIDATION"   # 143/143, no diff
 ./run.sh circuitrf check $K --summary
 ```
 

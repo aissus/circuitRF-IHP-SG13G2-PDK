@@ -29,4 +29,7 @@ cat > "$1/.cws" <<EOF
   "PdkRefs": [{"Path": "$PDK", "Provider": "$(basename "$PDK")", "TranslationVersion": 4}]
 }
 EOF
+# Its declaration of the kit's PCells, in the folder circuitRF would otherwise fill for the PdkRef
+D="$1/$(basename "$PDK")-pcells"; mkdir -p "$D"
+printf '{\n  "schemaVersion": 1,\n  "entry": "%s"\n}\n' "$(realpath --relative-to="$D" "$KIT/pcells/kit_entry.py")" > "$D/pcell-generators.json"
 echo "workspace $1: IHP SG13G2 technology, devices from $REL, IHP Open PDK from $PDK"

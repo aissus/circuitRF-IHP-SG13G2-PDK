@@ -1,0 +1,23 @@
+{
+	"FormatVersion": 1,
+	"DbuPerMicron": 1000,
+	"DisplayUnit": "Um",
+	"SnapDbu": 5,
+	"TechRef": "../../tech/IHP_SG13G2.ctech",
+	"Objects": [],
+	"Instances": [
+		{
+			"Name": "U1",
+			"CellRef": "..",
+			"View": "Layout"
+		}
+	],
+	"Look": {
+		"ShowEdges": true,
+		"ShowGrid": true,
+		"ShowOverlays": true,
+		"ShowPorts": true,
+		"ShowBoundaries": true,
+		"ShowImages": true
+	}
+}

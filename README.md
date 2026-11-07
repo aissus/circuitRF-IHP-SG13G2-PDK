@@ -22,8 +22,8 @@ together with the generator that builds it from the PDK and an example workspace
 circuitRF can import the IHP Open PDK directly, but the PDK's bipolar transistors are written for
 ngspice's built-in VBIC model, which circuitRF does not have. This kit provides each device as a
 parameterised circuitRF cell that evaluates the PDK's own model expressions with compiled Verilog-A
-models (VBIC 1.3 for the HBTs, R3 (CMC) for the resistors), with IHP's Qucs-S symbols. Every build is
-validated against the PDK's models in ngspice and Xyce (120 comparisons).
+models (VBIC 1.3 for the HBTs, PSP 103 for the MOSFETs, R3 (CMC) for the resistors), with IHP's Qucs-S
+symbols. Every build is validated against the PDK's models in ngspice and Xyce (143 comparisons).
 
 | Cell | Device | Parameters |
 |---|---|---|
@@ -32,11 +32,14 @@ validated against the PDK's models in ngspice and Xyce (120 comparisons).
 | `npn13G2v` | SiGe HBT, high breakdown | Nx, le, corner, T, dtemp, selft |
 | `rsil`, `rppd`, `rhigh` | poly resistors | w, l, (b), m, corner, T, trise |
 | `cap_cmim` | MIM capacitor | w, l, corner, T |
+| `sg13_lv_nmos`, `sg13_lv_pmos` | 1.2 V MOSFETs | w, l, ng, m, corner, T, trise, pre_layout |
+| `sg13_hv_nmos`, `sg13_hv_pmos` | 3.3 V MOSFETs | w, l, ng, m, corner, T, trise, pre_layout |
 
-The corner parameter is 0 for typical, 1 for best case and 2 for worst case. The kit further provides:
+The corner parameter is 0 for typical, 1 for best case and 2 for worst case (MOSFETs: tt, ff, ss). The kit further provides:
 
 - **Technology** (`tech/IHP_SG13G2.ctech`): the PDK's layer table and an EM stackup for circuitRF's
   planar method-of-moments solver and its 3D solvers (Palace, EMerge, openEMS).
+- **Layout (PCells)**: IHP's own KLayout PCells, all 38 devices, as circuitRF parametric layout cells.
 - **harmonicaRF devices**: the three HBTs compiled as single devices for harmonicaRF, circuitRF's
   interactive harmonic load-pull.
 - **Example workspace**: device characterisation benches (I-V, fT/fmax, load-pull, harmonic balance) and
@@ -47,6 +50,74 @@ The corner parameter is 0 for typical, 1 for best case and 2 for worst case. The
 <p align="center">
   <img src="docs/images/white/Kit_cells.png" alt="The kit's cells" width="85%"><br>
   <em>The kit's cells with their default parameters (<code>examples/Kit_cells</code>).</em>
+</p>
+
+Every component of the PDK's Qucs-S library, and whether the kit has it (`generator/qucs_cells.json`,
+also printed on the overview). Validation counts the comparisons with the PDK's models that pass.
+
+| Qucs-S component | Works | Note | Validation |
+|---|---|---|---|
+| `cap_cmim` | yes | MIM capacitor: area and fringe C, series R | 3/3 |
+| `npn13G2` | yes | SiGe HBT: VBIC 1.3 with the PDK's scaling; DC and HB | 68/68 |
+| `npn13G2l` | yes | SiGe HBT, long emitter: VBIC 1.3 | 16/16 |
+| `npn13G2v` | yes | SiGe HBT, high voltage: VBIC 1.3 | 24/24 |
+| `rhigh` | yes | high-ohmic poly resistor: CMC R3 | 3/3 |
+| `rppd` | yes | poly resistor: CMC R3 | 3/3 |
+| `rsil` | yes | silicided poly resistor: CMC R3 (the PDK's r3_cmc.osdi) | 3/3 |
+| `sg13_hv_nmos` | yes | 3.3 V NMOS: PSP 103.6 | 4/4 |
+| `sg13_hv_pmos` | yes | 3.3 V PMOS: PSP 103.6 | 5/5 |
+| `sg13_lv_nmos` | yes | 1.2 V NMOS: PSP 103.6 (the PDK's psp103.osdi) | 10/10 |
+| `sg13_lv_pmos` | yes | 1.2 V PMOS: PSP 103.6 | 4/4 |
+| `cap_rfcmim` | no | RF MIM (skin L/R, oxide, substrate network): not ported yet | - |
+| `dantenna` | no | antenna diode (ngspice diode cards): not ported yet | - |
+| `diodevdd_2kv` | no | ESD diode to VDD (ngspice diode cards): not ported yet | - |
+| `diodevdd_4kv` | no | ESD diode to VDD (ngspice diode cards): not ported yet | - |
+| `diodevss_2kv` | no | ESD diode to VSS (ngspice diode cards): not ported yet | - |
+| `diodevss_4kv` | no | ESD diode to VSS (ngspice diode cards): not ported yet | - |
+| `dpantenna` | no | p+ antenna diode (ngspice diode cards): not ported yet | - |
+| `idiodevdd_2kv` | no | ESD diode to VDD, inverted: not ported yet | - |
+| `idiodevdd_4kv` | no | ESD diode to VDD, inverted: not ported yet | - |
+| `idiodevss_2kv` | no | ESD diode to VSS, inverted: not ported yet | - |
+| `idiodevss_4kv` | no | ESD diode to VSS, inverted: not ported yet | - |
+| `isolbox` | no | isolation box, two ngspice diodes: not ported yet | - |
+| `nmoscl_2` | no | ESD clamp NMOS (PSP 103): not ported yet | - |
+| `nmoscl_4` | no | ESD clamp NMOS (PSP 103): not ported yet | - |
+| `ntap1` | no | n-well tap, a plain resistor in the PDK: not ported yet | - |
+| `pnpMPA` | no | vertical PNP (ngspice Gummel-Poon): not ported yet | - |
+| `ptap1` | no | p-substrate tap, a plain resistor in the PDK: not ported yet | - |
+| `schottky_nbl1` | no | Schottky diode with parasitic PNP: not ported yet | - |
+| `svaricap` | no | MOS varicap (mosvar.osdi, bias-dependent well R): not ported yet | - |
+
+### Layout: IHP's PCells
+
+The kit offers IHP's own KLayout PCells (`sg13g2_pycell_lib`) as circuitRF parametric layout cells, through
+circuitRF's CNI bridge. The build draws each one in circuitRF and compares it, layer by layer, with KLayout's own
+drawing of the same cell (`kit/IHP_SG13G2/PCELLS`): all 38 device generators draw, and every cell KLayout also
+has is identical (50 of 50 comparisons, defaults and 12 parameter sets).
+
+| Group | PCells |
+|---|---|
+| HBTs, BJT | npn13G2, npn13G2L, npn13G2V, pnpMPA |
+| MOS | nmos, pmos, nmosHV, pmosHV, rfnmos, rfpmos, rfnmosHV, rfpmosHV, moscap_n, moscap_p, SVaricap |
+| Resistors | rsil, rppd, rhigh |
+| Capacitors | cmim, rfcmim, cmomf, cmomi |
+| Inductors | inductor2, inductor3 |
+| Diodes, ESD, taps | dantenna, dpantenna, schottky, schottky_nbl1, esd, ntap1, ptap1, isolbox, guard_ring |
+| Other | bondpad, sealring, via_stack, chipText, NoFillerStack |
+
+The PCells need the IHP PDK at `$PDKPATH` (or `$PDK_ROOT/ihp-sg13g2`) and Python 3.10 or newer; circuitRF runs
+them once you allow the kit (headless: `--trust-kit <workspace>/ihp-sg13g2-pcells`). Most parameters are text:
+write lengths as `0.9u` or `9e-07`. circuitRF 1.7.3 links a PCell only to imported kit parts, so the schematic
+cells have no layout view of their own: place the PCell with the cell's values.
+
+<p align="center">
+  <img src="docs/images/gui/hbt_layout_window.png" alt="npn13G2 PCells in circuitRF's layout editor" width="85%"><br>
+  <em>IHP's npn13G2 PCell at Nx = 1, 4 and 8 in circuitRF's layout editor (<code>examples/HBT_layout</code>).</em>
+</p>
+
+<p align="center">
+  <img src="docs/images/gui/hbt_3d_window.png" alt="The same transistors in circuitRF's 3D view" width="85%"><br>
+  <em>The same transistors on the SG13G2 stack in circuitRF's 3D view.</em>
 </p>
 
 <p align="center">
@@ -74,6 +145,10 @@ The corner parameter is 0 for typical, 1 for best case and 2 for worst case. The
 │  ├─ ihp2crf.py                      cells, technology and the kit's .cws
 │  ├─ ihp2va.py                       VBIC parameter files per HBT and Nx
 │  ├─ qucs2csym.py                    symbols from the PDK's Qucs-S library
+│  ├─ qucs2csch.py                    the kit overview from the PDK's Qucs-S symbol gallery
+│  ├─ qucs_cells.json                 every Qucs-S component: works or not, with a note
+│  ├─ ihp_pcells.py                   the kit's PCell entry: IHP's KLayout PCells in circuitRF
+│  ├─ check_ihp_pcells.py             each PCell drawn by circuitRF against KLayout
 │  ├─ harmonica_ihp.py                harmonicaRF devices and documents
 │  ├─ validate_ihp_kit.py             validation against ngspice and Xyce
 │  ├─ va2cnl.py                       a parameter file as .cnl instance parameters
@@ -160,13 +235,15 @@ version and the validation result.
 
 | Step | Reads | Writes |
 |---|---|---|
-| R3 model | the PDK's `r3_cmc.osdi` | `models/osdi/` |
+| R3 and PSP 103 models | the PDK's `r3_cmc.osdi` and `psp103.osdi` | `models/osdi/` |
 | `ihp2va.py` | `sg13g2_hbt_mod.lib`, `cornerHBT.lib` | `models/ihp/<hbt>_nx<N>.va`: VBIC parameter files |
 | `ihp2crf.py` | the PDK's model and corner libraries, `sg13g2.lyp`, the ITF | one cell per device; `tech/IHP_SG13G2.ctech`; the kit's `.cws` and `README.md` |
 | `qucs2csym.py` | the PDK's Qucs-S `user_lib` | each cell's symbol, pins in the PDK's terminal order |
 | `build-vbic.sh` | VBIC 1.3 Verilog-A source; the PDK's HBT library | `vbic_1p3_5t.osdi`; harmonicaRF's `vbic_1p3_bce.osdi` and `npn13G2{,l,v}.osdi` |
 | `validate_ihp_kit.py` | the kit, ngspice, Xyce | `VALIDATION` |
 | `circuitrf check` | the kit | stops the build on an error |
+| `ihp_pcells.py`, `check_ihp_pcells.py` | IHP's KLayout PCells; KLayout | `pcells/`: the kit's PCell entry; `PCELLS`: each PCell against KLayout |
+| `qucs2csch.py` | the PDK's Qucs-S `symbols.sch`, `qucs_cells.json` | `examples/Kit_cells`: the gallery with the kit's cells and the status table |
 
 ## EM Stackup
 

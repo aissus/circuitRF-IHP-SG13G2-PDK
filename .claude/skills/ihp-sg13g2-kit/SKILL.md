@@ -1,6 +1,6 @@
 ---
 name: ihp-sg13g2-kit
-description: Design and simulate circuits on IHP SG13G2 (130 nm SiGe BiCMOS) in circuitRF with the circuitRF-IHP-SG13G2 kit. Covers the SG13G2 HBTs (npn13G2, npn13G2l, npn13G2v), poly resistors (rsil, rppd, rhigh), MIM capacitors (cap_cmim), on-chip inductors and EM on the SG13G2 stackup. Use it to set up a workspace on the kit, place kit cells in a schematic or netlist, choose analyses (DC/I-V, S-parameters, fT/fmax, harmonic balance, load-pull) or EM solvers, drive circuitRF's MCP tools, or fix an HBT run that fails for a missing VBIC model.
+description: Design and simulate circuits on IHP SG13G2 (130 nm SiGe BiCMOS) in circuitRF with the circuitRF-IHP-SG13G2 kit. Covers the SG13G2 HBTs (npn13G2, npn13G2l, npn13G2v), MOSFETs (sg13_lv_nmos, sg13_lv_pmos, sg13_hv_nmos, sg13_hv_pmos), poly resistors (rsil, rppd, rhigh), MIM capacitors (cap_cmim), on-chip inductors and EM on the SG13G2 stackup. Use it to set up a workspace on the kit, place kit cells in a schematic or netlist, choose analyses (DC/I-V, S-parameters, fT/fmax, harmonic balance, load-pull) or EM solvers, drive circuitRF's MCP tools, or fix an HBT run that fails for a missing VBIC model.
 ---
 
 # IHP SG13G2 kit for circuitRF
@@ -47,6 +47,12 @@ nominal). `dtemp` and `trise` are offsets in K. `corner` is 0 typ, 1 bcs, 2 wcs.
 | `rppd` | 1 2 bn | same, plus b=0 (bends) | 260 Ω/□ typ. w, l ≥ 0.5 µm. |
 | `rhigh` | 1 2 bn | w=0.5e-6 l=0.96e-6, plus b=0 | 1360 Ω/□ typ. w ≥ 0.5 µm, l ≥ 0.96 µm. |
 | `cap_cmim` | PLUS MINUS | w=7e-6 l=7e-6 corner=0 T=27 | 1.5 fF/µm² + 40 aF/µm of perimeter, 55 mΩ in series. w, l ≥ 1.14 µm. 7×7 µm gives 74.6 fF. |
+| `sg13_lv_nmos`, `sg13_lv_pmos` | d g s b | w=3.5e-7 l=3.4e-7 (pmos 2.8e-7) ng=1 m=1 corner=0 T=27 trise=0 pre_layout=1 | PSP 103.6. w is the total width over ng fingers. 1.2 V devices; corner 0 tt, 1 ff, 2 ss. A PMOS takes negative VGS, VDS. |
+| `sg13_hv_nmos`, `sg13_hv_pmos` | d g s b | same | PSP 103.6, 3.3 V devices (thick oxide). |
+
+The PDK's other Qucs-S components (diodes, ESD devices, varicap, cap_rfcmim, taps, pnpMPA, schottky_nbl1, isolbox, nmoscl) are not kit cells: `generator/qucs_cells.json` says what each one is and why. Do not reference them with `ws://IHP_SG13G2/...`.
+
+Layout: the kit offers IHP's own KLayout PCells (38 devices: HBTs, MOS, resistors, MIM/MOM, inductors, diodes, ESD, pads, seal ring) as circuitRF parametric cells; `kit/IHP_SG13G2/PCELLS` lists each one, compared with KLayout's drawing. They need the IHP PDK (`$PDKPATH`) and Python 3.10 or newer, and run once the kit is allowed (headless: `--trust-kit <workspace>/ihp-sg13g2-pcells`; the workspace's `ihp-sg13g2-pcells/pcell-generators.json` names the kit's `pcells/kit_entry.py`). Most parameters are text: lengths as `0.9u` or `9e-07`; a bare number in a text field is ignored and the default kept. `examples/HBT_layout` places npn13G2 at Nx 1, 4 and 8: `circuitrf render examples/HBT_layout/layout/HBT_layout.clay -o hbt.png --trust-kit examples/ihp-sg13g2-pcells`. The schematic cells have no layout view; place the PCell with the cell's values.
 
 Notes:
 - **Ranges and limits:** the HBTs are valid from −40 to 125 °C. Nothing enforces the PDK ranges, so keep the
@@ -97,6 +103,7 @@ Notes:
   - HBTs: c (0,−300), b (−300,0), e (0,300), bn (100,0).
   - Resistors: 1 (0,−300), 2 (0,300), bn (−300,0).
   - `cap_cmim`: PLUS (0,−300), MINUS (0,300).
+  - MOSFETs: d (0,−300), g (−300,0), s (0,300), b (200,0).
 - **Wires:** a wire must have a point exactly on each pin it connects.
 - **Other parts:** `reference components <TYPE>` gives a primitive's pins (Vdc: + (0,−200), − (0,200); Resistor:
   (0,−200), (0,200); TermG: (0,−200); Ground: (0,0); IProbe: np (0,100), nm (100,100)).
@@ -166,7 +173,7 @@ Other rules:
   `netlist --to-schematic` refuses a `.cnl` that defines cells.
 - **Prefer a .csch:** use one whenever a kit cell is involved.
 - **If a netlist is required:**
-  1. Run `netlist` on a schematic that places the cell. `examples/Kit_cells` places all seven.
+  1. Run `netlist` on a schematic that places the cell. `examples/Kit_cells` places every kit cell.
   2. Paste its `define <cell> ... end <cell>` block into your `.cnl`.
   3. Rewrite the `File="..."` on its `VerilogA:` line, which extraction writes absolute, relative to the `.cnl`'s
      folder. For example, from `<dir>/` beside `kit/`: `File="../kit/IHP_SG13G2/models/osdi/vbic_1p3_5t.osdi"`.

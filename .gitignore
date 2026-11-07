@@ -18,3 +18,4 @@ dist/
 # Made by generator/build.sh for the kit it builds.
 examples/tech/
 examples/harmonica/
+__pycache__/

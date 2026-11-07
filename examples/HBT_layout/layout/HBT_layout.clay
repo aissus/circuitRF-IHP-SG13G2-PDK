@@ -1,0 +1,67 @@
+{
+	"FormatVersion": 1,
+	"DbuPerMicron": 1000,
+	"DisplayUnit": "Um",
+	"SnapDbu": 5,
+	"AngleMode": "AnyAngle",
+	"TechRef": "../../tech/IHP_SG13G2.ctech",
+	"PCellSnapshots": {
+		"npn13G2_50532e4684a8": {
+			"GeneratorId": "npn13G2",
+			"Parameters": {
+				"Nx": 1
+			}
+		},
+		"npn13G2_f33474293b6b": {
+			"GeneratorId": "npn13G2",
+			"Parameters": {
+				"Nx": 4
+			}
+		},
+		"npn13G2_3436932dfd40": {
+			"GeneratorId": "npn13G2",
+			"Parameters": {
+				"Nx": 8
+			}
+		}
+	},
+	"Shapes": [],
+	"Instances": [
+		{
+			"CellRef": "../../.generated-cells/npn13G2_50532e4684a8",
+			"X": 0,
+			"Y": 0,
+			"Rot": "R0",
+			"MirrorX": false,
+			"Mag": 1,
+			"Rows": 1,
+			"Cols": 1,
+			"PitchX": 0,
+			"PitchY": 0
+		},
+		{
+			"CellRef": "../../.generated-cells/npn13G2_f33474293b6b",
+			"X": 0,
+			"Y": 12000,
+			"Rot": "R0",
+			"MirrorX": false,
+			"Mag": 1,
+			"Rows": 1,
+			"Cols": 1,
+			"PitchX": 0,
+			"PitchY": 0
+		},
+		{
+			"CellRef": "../../.generated-cells/npn13G2_3436932dfd40",
+			"X": 0,
+			"Y": 24000,
+			"Rot": "R0",
+			"MirrorX": false,
+			"Mag": 1,
+			"Rows": 1,
+			"Cols": 1,
+			"PitchX": 0,
+			"PitchY": 0
+		}
+	]
+}

@@ -1,15 +1,287 @@
 {
- "FormatVersion": 2,
  "CellName": "Kit_cells",
+ "FormatVersion": 2,
  "GridSize": 100,
  "GridSnap": true,
  "AuthorGridDivisor": 20,
  "Components": [
   {
-   "InstanceName": "npn13G2",
+   "InstanceName": "sg13_lv_nmos1",
    "Symbol": "Generic",
-   "X": 0,
-   "Y": 0,
+   "X": 1600,
+   "Y": 2700,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "w",
+     "Expression": "0.35u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "l",
+     "Expression": "0.34u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "ng",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "m",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "corner",
+     "Expression": "0",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "T",
+     "Expression": "27",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "trise",
+     "Expression": "0.346e-6",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "pre_layout",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/sg13_lv_nmos"
+  },
+  {
+   "InstanceName": "sg13_hv_nmos1",
+   "Symbol": "Generic",
+   "X": 3800,
+   "Y": 2700,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "w",
+     "Expression": "1.0u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "l",
+     "Expression": "0.45u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "ng",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "m",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "corner",
+     "Expression": "0",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "T",
+     "Expression": "27",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "trise",
+     "Expression": "0.346e-6",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "pre_layout",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/sg13_hv_nmos"
+  },
+  {
+   "InstanceName": "sg13_lv_pmos1",
+   "Symbol": "Generic",
+   "X": 1600,
+   "Y": 4100,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "w",
+     "Expression": "0.35u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "l",
+     "Expression": "0.34u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "ng",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "m",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "corner",
+     "Expression": "0",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "T",
+     "Expression": "27",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "trise",
+     "Expression": "0.346e-6",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "pre_layout",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/sg13_lv_pmos"
+  },
+  {
+   "InstanceName": "sg13_hv_pmos1",
+   "Symbol": "Generic",
+   "X": 3800,
+   "Y": 4100,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "w",
+     "Expression": "1.0u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "l",
+     "Expression": "0.45u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "ng",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "m",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "corner",
+     "Expression": "0",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "T",
+     "Expression": "27",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "trise",
+     "Expression": "0.346e-6",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "pre_layout",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/sg13_hv_pmos"
+  },
+  {
+   "InstanceName": "npn13G1",
+   "Symbol": "Generic",
+   "X": 1600,
+   "Y": 5600,
    "Rotation": "R0",
    "MirrorX": false,
    "Disable": "None",
@@ -25,38 +297,38 @@
      "Name": "corner",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "T",
      "Expression": "27",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "dtemp",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "selft",
      "Expression": "1",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     }
    ],
    "CellRef": "ws://IHP_SG13G2/npn13G2"
   },
   {
-   "InstanceName": "npn13G2l",
+   "InstanceName": "npn13G2l1",
    "Symbol": "Generic",
-   "X": 1300,
-   "Y": 0,
+   "X": 2800,
+   "Y": 5600,
    "Rotation": "R0",
    "MirrorX": false,
    "Disable": "None",
@@ -72,33 +344,33 @@
      "Name": "corner",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "T",
      "Expression": "27",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "dtemp",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "selft",
      "Expression": "1",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "le",
-     "Expression": "2.50e-6",
+     "Expression": "1e-06",
      "Unit": "",
      "ShowOnSchematic": true,
      "Dimension": "None"
@@ -107,10 +379,10 @@
    "CellRef": "ws://IHP_SG13G2/npn13G2l"
   },
   {
-   "InstanceName": "npn13G2v",
+   "InstanceName": "npn13G2v1",
    "Symbol": "Generic",
-   "X": 2600,
-   "Y": 0,
+   "X": 4000,
+   "Y": 5600,
    "Rotation": "R0",
    "MirrorX": false,
    "Disable": "None",
@@ -126,33 +398,33 @@
      "Name": "corner",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "T",
      "Expression": "27",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "dtemp",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "selft",
      "Expression": "1",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "le",
-     "Expression": "2.50e-6",
+     "Expression": "2.5e-06",
      "Unit": "",
      "ShowOnSchematic": true,
      "Dimension": "None"
@@ -161,24 +433,24 @@
    "CellRef": "ws://IHP_SG13G2/npn13G2v"
   },
   {
-   "InstanceName": "cap_cmim",
+   "InstanceName": "cap_cmim1",
    "Symbol": "Generic",
-   "X": 3900,
-   "Y": 0,
+   "X": 3800,
+   "Y": 1500,
    "Rotation": "R0",
    "MirrorX": false,
    "Disable": "None",
    "Parameters": [
     {
      "Name": "w",
-     "Expression": "7e-06",
+     "Expression": "7.0u",
      "Unit": "",
      "ShowOnSchematic": true,
      "Dimension": "None"
     },
     {
      "Name": "l",
-     "Expression": "7e-06",
+     "Expression": "7.0u",
      "Unit": "",
      "ShowOnSchematic": true,
      "Dimension": "None"
@@ -187,38 +459,38 @@
      "Name": "corner",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "T",
      "Expression": "27",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     }
    ],
    "CellRef": "ws://IHP_SG13G2/cap_cmim"
   },
   {
-   "InstanceName": "rsil",
+   "InstanceName": "rppd1",
    "Symbol": "Generic",
-   "X": 0,
-   "Y": 1700,
+   "X": 9600,
+   "Y": 1400,
    "Rotation": "R0",
    "MirrorX": false,
    "Disable": "None",
    "Parameters": [
     {
      "Name": "w",
-     "Expression": "0.5e-6",
+     "Expression": "1.0u",
      "Unit": "",
      "ShowOnSchematic": true,
      "Dimension": "None"
     },
     {
      "Name": "l",
-     "Expression": "0.5e-6",
+     "Expression": "0.5u",
      "Unit": "",
      "ShowOnSchematic": true,
      "Dimension": "None"
@@ -234,106 +506,52 @@
      "Name": "corner",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "T",
      "Expression": "27",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "trise",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
-     "Dimension": "None"
-    }
-   ],
-   "CellRef": "ws://IHP_SG13G2/rsil"
-  },
-  {
-   "InstanceName": "rppd",
-   "Symbol": "Generic",
-   "X": 1300,
-   "Y": 1700,
-   "Rotation": "R0",
-   "MirrorX": false,
-   "Disable": "None",
-   "Parameters": [
-    {
-     "Name": "w",
-     "Expression": "0.5e-6",
-     "Unit": "",
-     "ShowOnSchematic": true,
-     "Dimension": "None"
-    },
-    {
-     "Name": "l",
-     "Expression": "0.5e-6",
-     "Unit": "",
-     "ShowOnSchematic": true,
-     "Dimension": "None"
-    },
-    {
-     "Name": "m",
-     "Expression": "1",
-     "Unit": "",
-     "ShowOnSchematic": true,
-     "Dimension": "None"
-    },
-    {
-     "Name": "corner",
-     "Expression": "0",
-     "Unit": "",
-     "ShowOnSchematic": true,
-     "Dimension": "None"
-    },
-    {
-     "Name": "T",
-     "Expression": "27",
-     "Unit": "",
-     "ShowOnSchematic": true,
-     "Dimension": "None"
-    },
-    {
-     "Name": "trise",
-     "Expression": "0",
-     "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "b",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     }
    ],
    "CellRef": "ws://IHP_SG13G2/rppd"
   },
   {
-   "InstanceName": "rhigh",
+   "InstanceName": "rhigh1",
    "Symbol": "Generic",
-   "X": 2600,
-   "Y": 1700,
+   "X": 10780,
+   "Y": 1400,
    "Rotation": "R0",
    "MirrorX": false,
    "Disable": "None",
    "Parameters": [
     {
      "Name": "w",
-     "Expression": "0.5e-6",
+     "Expression": "1.0u",
      "Unit": "",
      "ShowOnSchematic": true,
      "Dimension": "None"
     },
     {
      "Name": "l",
-     "Expression": "0.96e-6",
+     "Expression": "0.5u",
      "Unit": "",
      "ShowOnSchematic": true,
      "Dimension": "None"
@@ -349,38 +567,159 @@
      "Name": "corner",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "T",
      "Expression": "27",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "trise",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     },
     {
      "Name": "b",
      "Expression": "0",
      "Unit": "",
-     "ShowOnSchematic": true,
+     "ShowOnSchematic": false,
      "Dimension": "None"
     }
    ],
    "CellRef": "ws://IHP_SG13G2/rhigh"
+  },
+  {
+   "InstanceName": "rsil1",
+   "Symbol": "Generic",
+   "X": 12180,
+   "Y": 1400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "w",
+     "Expression": "1.0u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "l",
+     "Expression": "0.5u",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "m",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "corner",
+     "Expression": "0",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "T",
+     "Expression": "27",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    },
+    {
+     "Name": "trise",
+     "Expression": "0",
+     "Unit": "",
+     "ShowOnSchematic": false,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/rsil"
   }
  ],
  "Wires": [],
  "NetLabels": [],
  "Dots": [],
- "CanvasObjects": [],
+ "CanvasObjects": [
+  {
+   "Kind": "Text",
+   "X": 13680,
+   "Y": 1100,
+   "Text": "component",
+   "FontSize": 150,
+   "FontStyle": "Bold",
+   "Align": "Left",
+   "VAlign": "Top",
+   "ColorRole": "SymbolText"
+  },
+  {
+   "Kind": "Text",
+   "X": 13680,
+   "Y": 1325.0,
+   "Text": "cap_cmim\nnpn13G2\nnpn13G2l\nnpn13G2v\nrhigh\nrppd\nrsil\nsg13_hv_nmos\nsg13_hv_pmos\nsg13_lv_nmos\nsg13_lv_pmos\ncap_rfcmim\ndantenna\ndiodevdd_2kv\ndiodevdd_4kv\ndiodevss_2kv\ndiodevss_4kv\ndpantenna\nidiodevdd_2kv\nidiodevdd_4kv\nidiodevss_2kv\nidiodevss_4kv\nisolbox\nnmoscl_2\nnmoscl_4\nntap1\nptap1",
+   "FontSize": 150,
+   "FontStyle": "Regular",
+   "Align": "Left",
+   "VAlign": "Top",
+   "ColorRole": "SymbolText"
+  },
+  {
+   "Kind": "Text",
+   "X": 15111.0,
+   "Y": 1100,
+   "Text": "works",
+   "FontSize": 150,
+   "FontStyle": "Bold",
+   "Align": "Left",
+   "VAlign": "Top",
+   "ColorRole": "SymbolText"
+  },
+  {
+   "Kind": "Text",
+   "X": 15111.0,
+   "Y": 1325.0,
+   "Text": "yes\nyes\nyes\nyes\nyes\nyes\nyes\nyes\nyes\nyes\nyes\nno\nno\nno\nno\nno\nno\nno\nno\nno\nno\nno\nno\nno\nno\nno\nno",
+   "FontSize": 150,
+   "FontStyle": "Regular",
+   "Align": "Left",
+   "VAlign": "Top",
+   "ColorRole": "SymbolText"
+  },
+  {
+   "Kind": "Text",
+   "X": 15846.0,
+   "Y": 1100,
+   "Text": "note",
+   "FontSize": 150,
+   "FontStyle": "Bold",
+   "Align": "Left",
+   "VAlign": "Top",
+   "ColorRole": "SymbolText"
+  },
+  {
+   "Kind": "Text",
+   "X": 15846.0,
+   "Y": 1325.0,
+   "Text": "MIM capacitor: area and fringe C, series R\nSiGe HBT: VBIC 1.3 with the PDK's scaling; DC and HB\nSiGe HBT, long emitter: VBIC 1.3\nSiGe HBT, high voltage: VBIC 1.3\nhigh-ohmic poly resistor: CMC R3\npoly resistor: CMC R3\nsilicided poly resistor: CMC R3 (the PDK's r3_cmc.osdi)\n3.3 V NMOS: PSP 103.6\n3.3 V PMOS: PSP 103.6\n1.2 V NMOS: PSP 103.6 (the PDK's psp103.osdi)\n1.2 V PMOS: PSP 103.6\nRF MIM (skin L/R, oxide, substrate network): not ported yet\nantenna diode (ngspice diode cards): not ported yet\nESD diode to VDD (ngspice diode cards): not ported yet\nESD diode to VDD (ngspice diode cards): not ported yet\nESD diode to VSS (ngspice diode cards): not ported yet\nESD diode to VSS (ngspice diode cards): not ported yet\np+ antenna diode (ngspice diode cards): not ported yet\nESD diode to VDD, inverted: not ported yet\nESD diode to VDD, inverted: not ported yet\nESD diode to VSS, inverted: not ported yet\nESD diode to VSS, inverted: not ported yet\nisolation box, two ngspice diodes: not ported yet\nESD clamp NMOS (PSP 103): not ported yet\nESD clamp NMOS (PSP 103): not ported yet\nn-well tap, a plain resistor in the PDK: not ported yet\np-substrate tap, a plain resistor in the PDK: not ported yet",
+   "FontSize": 150,
+   "FontStyle": "Regular",
+   "Align": "Left",
+   "VAlign": "Top",
+   "ColorRole": "SymbolText"
+  }
+ ],
  "View": {
   "PanX": 0,
   "PanY": 0,
