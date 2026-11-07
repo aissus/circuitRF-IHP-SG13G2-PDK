@@ -13,6 +13,8 @@ dist/
 # circuitRF's open-workspace lock (user, host, process) and its write probe.
 .crf-open.json
 .crf-write-probe-*
+# circuitRF's MCP server's scratch folder.
+.circuitrf-scratch/
 # Made by generator/build.sh for the kit it builds.
 examples/tech/
 examples/harmonica/

@@ -52,24 +52,21 @@ jobs:
         run: |
           f=$RUNNER_TEMP/notes.md
           cat > "$f" <<EOF
-          The circuitRF device kit for the IHP SG13G2 open PDK: \`IHP_SG13G2/\`, as \`generator/build.sh\`
-          builds it from the PDK and validates it against the PDK's own models in ngspice and Xyce, with
-          LICENSE and NOTICE beside it. The \`.sha256\` checks the archive.
+          The IHP SG13G2 device kit for circuitRF, with an example workspace and the files AI coding agents
+          use (\`CLAUDE.md\`, a skill, \`.mcp.json\` for circuitRF's MCP server). Built from the IHP Open PDK
+          and validated against the PDK's own models in ngspice and Xyce. The \`.sha256\` checks the archive.
 
-          Needs **circuitRF 1.7.3 or newer** (earlier versions crash on VBIC).
+          Requires **circuitRF 1.7.3 or newer**, and **OpenVAF** once, to compile the VBIC models.
 
           $(sed 's/^/    /' kit/IHP_SG13G2/BUILD)
 
-          **Use.** Unpack it anywhere: the cells name their models relative to the kit, so the folder
-          moves as a whole. Reference \`IHP_SG13G2/.cws\` from a workspace, or make a new workspace on
-          it with this repository's \`generator/circuitrf-ihp-workspace\` (IHP_PDK names the PDK if it
-          is not at /foss/pdks/ihp-sg13g2):
+          **Use.** Unpack the zip anywhere, then:
 
-              IHP_KIT=/path/to/IHP_SG13G2 generator/circuitrf-ihp-workspace my_project
+              generator/build-vbic.sh                       # once: the HBTs' VBIC models, with OpenVAF
+              circuitrf examples/.cws                       # the example workspace
+              generator/circuitrf-ihp-workspace my_project  # a workspace of your own
 
-          **Licensing.** The kit derives from the IHP Open PDK (Apache-2.0); see NOTICE.
-          \`models/osdi/vbic_1p3_5t.osdi\`, \`vbic_1p3_bce.osdi\` and \`npn13G2*.osdi\` are compiled with
-          OpenVAF from the \`vbic_1p3.va\` that VACASK (https://codeberg.org/arpadbuermen/VACASK, an
-          AGPL-3.0 project) distributes; that file itself states no license.
+          **License.** Apache-2.0, as the IHP Open PDK; see LICENSE and NOTICE. The VBIC models are not
+          distributed: \`generator/build-vbic.sh\` compiles them from VBIC 1.3's public Verilog-A source.
           EOF
-          gh release create "$GITHUB_REF_NAME" dist/* --title "IHP SG13G2 kit $GITHUB_REF_NAME" --notes-file "$f"
+          gh release create "$GITHUB_REF_NAME" dist/* --title "IHP SG13G2 kit for circuitRF $GITHUB_REF_NAME" --notes-file "$f"

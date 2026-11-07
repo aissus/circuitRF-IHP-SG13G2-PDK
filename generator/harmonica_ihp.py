@@ -23,7 +23,8 @@ network (Rsub || Csub from the substrate node to ground) built in.
 import argparse, json, math, os, re, shutil, subprocess, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VBIC_SRC = '/foss/tools/vacask/src/vacask/devices/vbic'
+VBIC_SRC = os.environ.get('VBIC_SRC', '/foss/tools/vacask/src/vacask/devices/vbic')   # build-vbic.sh sets it
+OPENVAF = os.environ.get('OPENVAF', 'openvaf')
 OSDI = os.path.join(HERE, '..', 'kit', 'IHP_SG13G2', 'models', 'osdi')
 
 
@@ -45,7 +46,7 @@ def build_osdi(out):
             assert src.count(a) == 1, a
             src = src.replace(a, b)
         open(os.path.join(t, 'vbic_bce.va'), 'w').write(src)
-        subprocess.run(['openvaf', 'vbic_bce.va', '-o', os.path.abspath(out)], cwd=t, check=True)
+        subprocess.run([OPENVAF, 'vbic_bce.va', '-o', os.path.abspath(out)], cwd=t, check=True)
 
 
 def _va(expr):
@@ -176,7 +177,7 @@ def build_nx_osdi(device, out):
         src = re.sub(r'localparam (real|integer) (\w+)\s*=\s*([^;]+);', var, src)
         src = src.replace('analog begin : analogBlock\n', 'analog begin : analogBlock\n' + '\n'.join(sets) + '\n', 1)
         open(os.path.join(t, f'{device}.va'), 'w').write(src)
-        subprocess.run(['openvaf', f'{device}.va', '-o', os.path.abspath(out)], cwd=t, check=True)
+        subprocess.run([OPENVAF, f'{device}.va', '-o', os.path.abspath(out)], cwd=t, check=True)
         print(f'{out}: module {device}(b,c,e), parameters {", ".join(user)}, corner, temp')
 
 

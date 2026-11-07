@@ -8,9 +8,10 @@ of an Apptainer image with circuitRF added: its recipe (`*.def`), its setup scri
 launcher (`run.sh`). That image builds its own copy of this kit, from an older copy of `generator/`.
 
 This plan moves that image to the kit as this repository releases it: compiled and validated by
-`.github/workflows/release.yml`, and published as `circuitRF-IHP-SG13G2-kit-<tag>.tar.gz`. The archive
-holds `IHP_SG13G2/`, `LICENSE` and `NOTICE`, and comes with a `.sha256`. The image then no longer
-builds the kit.
+`.github/workflows/release.yml`, and published as `circuitRF-IHP-SG13G2-<tag>.zip` with a `.sha256`. The
+archive holds one folder with `kit/IHP_SG13G2/`, the example workspace, `generator/`, `LICENSE` and
+`NOTICE`. The release is Apache-2.0 throughout, so it does not carry the VBIC models: the image compiles
+them once, with its own OpenVAF (`generator/build-vbic.sh`). The image then no longer builds the kit.
 
 ## Where things stand
 
@@ -123,16 +124,19 @@ KIT_SHA256=<the hash in that release's .sha256>
 mkdir -p kits designs   # run.sh mounts both
 if step kits/IHP_SG13G2; then
     R=https://github.com/aissus/circuitRF-IHP-SG13G2-PDK
-    f=circuitRF-IHP-SG13G2-kit-$KIT_TAG.tar.gz
+    n=circuitRF-IHP-SG13G2-$KIT_TAG
     T=$(mktemp -d)
-    curl -fsSL -o "$T/$f" "$R/releases/download/$KIT_TAG/$f"
-    echo "$KIT_SHA256  $T/$f" | sha256sum -c -
-    # The generator at the same tag becomes the kit's tools/, where the image's
+    curl -fsSL -o "$T/$n.zip" "$R/releases/download/$KIT_TAG/$n.zip"
+    echo "$KIT_SHA256  $T/$n.zip" | sha256sum -c -
+    unzip -q "$T/$n.zip" -d "$T"
+    mv "$T/$n/kit/IHP_SG13G2" kits/
+    # The release's generator/ becomes the kit's tools/, where the image's
     # /foss/tools/circuitrf/tools and circuitrf-ihp-workspace links point.
-    git clone -q --depth 1 --branch "$KIT_TAG" "$R" "$T/src"
-    tar -xzf "$T/$f" -C kits                # IHP_SG13G2/, LICENSE, NOTICE
-    cp -r "$T/src/generator" kits/IHP_SG13G2/tools
+    cp -r "$T/$n/generator" kits/IHP_SG13G2/tools
     rm -rf "$T"
+    # The VBIC models are not distributed: compile them with the image's OpenVAF, and with its PDK
+    # also harmonicaRF's devices.
+    ./run.sh /foss/tools/circuitrf/kits/IHP_SG13G2/tools/build-vbic.sh /foss/tools/circuitrf/kits/IHP_SG13G2
 fi
 grep -qx "PDK commit $(cat PDKs/ihp-sg13g2/COMMIT)" kits/IHP_SG13G2/BUILD ||
     { echo "kits/IHP_SG13G2 was built from another PDK than the image's (see its BUILD)" >&2; exit 1; }
@@ -141,7 +145,7 @@ grep -qx "PDK commit $(cat PDKs/ihp-sg13g2/COMMIT)" kits/IHP_SG13G2/BUILD ||
 - **Pin the hash, don't download the `.sha256`.** A `.sha256` fetched from the same release only shows
   that the download is complete. A pinned hash also shows that it is the archive you checked.
 - **The archive's version is the tag itself.** `ci/build-release.sh` names it from `git describe`, so it
-  is `…-kit-v1.0.0.tar.gz`, with the `v`.
+  is `circuitRF-IHP-SG13G2-v1.0.0.zip`, with the `v`.
 - **The release does not depend on the image build.** It no longer has to be redone when the image is
   rebuilt. Only the PDK commit ties the two together, and the `grep` above checks it.
 
@@ -170,7 +174,7 @@ What still needs the path is everything that points at the kit from outside:
   `/foss/tools/circuitrf/kits/IHP_SG13G2/…`, most of them generated `.cnl` netlists that name the
   kit's `.osdi` files. List them with `grep -rlI /foss/tools/circuitrf/kits designs/`.
 - **The recipe's two links into the kit:** `/foss/tools/circuitrf/tools` → `kits/IHP_SG13G2/tools`, and
-  `models/osdi/vbic_1p3_bce.osdi`. The release has that file, and the setup step above restores `tools/`.
+  `models/osdi/vbic_1p3_bce.osdi`. The setup step above restores `tools/`, and `build-vbic.sh` makes that file.
 - **Existing `.charm` documents.**
 
 So `run.sh` stays as it is. Relocatability still buys several things:
@@ -353,19 +357,13 @@ mkdir designs/kit-check/examples/tech && cp kits/IHP_SG13G2/tech/IHP_SG13G2.ctec
   between 1.6.0 and 1.7.3 show up only by rerunning the designs that matter.
 - **harmonicaRF `.charm`:** a document identifies its DUT by the `.osdi`'s absolute path. Existing
   documents name `/foss/tools/circuitrf/kits/IHP_SG13G2/models/osdi/<device>.osdi`. They work while the
-  kit stays there, and the release has the same file names. The release carries no `.charm`. Make new
+  kit stays there, and `build-vbic.sh` writes the same file names. The release carries no `.charm`. Make new
   ones with `tools/harmonica_ihp.py charm <out> --device … --osdi $K/models/osdi/<device>.osdi`, and
   always pass `--osdi`, because the default looks for `../kit/`.
-- **The compiled VBIC models in the release** are an open question.
-  - `vbic_1p3_5t.osdi`, `vbic_1p3_bce.osdi` and `npn13G2{,l,v}.osdi` are compiled from VACASK's
-    `vbic_1p3.va`. That file states no license, and VACASK is AGPL-3.0.
-  - The repository does not commit these files for that reason. A release asset distributes them all
-    the same, with the note in NOTICE and the README.
-  - Settle it before the first `v*` tag: ask VACASK's author, or leave the VBIC `.osdi` files out of the
-    archive and compile them in the image, as the alternative path does.
-- **`tools/` is not in the release,** so the setup step clones the repository to get `generator/`. If the
-  archive carried `generator/` as `IHP_SG13G2/tools/`, that clone would go away. This is a choice for
-  `ci/build-release.sh`.
+- **The VBIC models** (`vbic_1p3_5t.osdi`, and for harmonicaRF `vbic_1p3_bce.osdi` and `npn13G2{,l,v}.osdi`)
+  are compiled in the image by `build-vbic.sh` from VBIC 1.3's Verilog-A source, which IIC-OSIC-TOOLS
+  carries at the commit the script pins. The kit's validation uses the same script, so the models match
+  the validated ones. Rerun it after an image rebuild that changes OpenVAF.
 - **A PDK bump** means a new kit release built on the new base (`kit.def`'s `From:` and `COMMIT` check),
   or the alternative path. Until then, the `BUILD` check stops the setup script.
 - **Not run:** none of the above was executed in that image. The Palace and EMerge conclusions come from

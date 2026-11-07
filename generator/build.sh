@@ -20,21 +20,16 @@ rm -rf "$K".prev* 2>/dev/null || true
 trap 'echo "kit build FAILED; the previous kit is kept" >&2; rm -rf "$K"; [ -e "$P" ] && mv "$P" "$K"' ERR
 
 mkdir -p "$K/models/osdi" "$K/models/ihp"
-# The compact models the cells run: CMC R3 from the PDK, VBIC 1.3 from VACASK,
-# both compiled by this image's OpenVAF.
-cp "$PDKPATH/libs.tech/ngspice/osdi/r3_cmc.osdi" /foss/tools/vacask/lib/vacask/mod/vbic_1p3_5t.osdi "$K/models/osdi/"
+# The compact models the cells run: CMC R3, the PDK's own build; VBIC 1.3, compiled here by
+# build-vbic.sh (with harmonicaRF's devices), as every user of a released kit compiles it.
+cp "$PDKPATH/libs.tech/ngspice/osdi/r3_cmc.osdi" "$K/models/osdi/"
 for d in npn13G2 npn13G2l npn13G2v; do for n in 1 2 4 8; do
     python3 "$S/ihp2va.py" "$M/sg13g2_hbt_mod.lib" $d --nx $n \
         --cornerlib "$M/cornerHBT.lib" -o "$K/models/ihp/${d}_nx$n.va"
 done; done
 python3 "$S/ihp2crf.py" --pdk "$PDKPATH" --out "$K"
 python3 "$S/qucs2csym.py" --kit "$K"
-python3 "$S/harmonica_ihp.py" osdi "$K/models/osdi/vbic_1p3_bce.osdi"
-# harmonicaRF's devices: VBIC compiled per HBT with the PDK's scaling inside, so the only
-# parameters are Nx (le), corner and temp (the documents are in examples/harmonica)
-for d in npn13G2 npn13G2l npn13G2v; do
-    python3 "$S/harmonica_ihp.py" nx-osdi $d "$K/models/osdi/$d.osdi"
-done
+"$S/build-vbic.sh" "$K"
 # against the PDK's own models in ngspice and Xyce, then as circuitRF reads it
 python3 "$S/validate_ihp_kit.py" --kit "$K" | tee "$K/VALIDATION"
 circuitrf check "$K" --summary

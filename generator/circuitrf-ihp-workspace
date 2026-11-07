@@ -17,14 +17,16 @@ PDK=${IHP_PDK:-/foss/pdks/ihp-sg13g2}
 [ -e "$1/.cws" ] && { echo "$1 is already a workspace" >&2; exit 1; }
 mkdir -p "$1/tech"
 cp "$KIT/tech/IHP_SG13G2.ctech" "$1/tech/"
+# The kit is named relative to the workspace, so the two can move or be shared together.
+REL=$(realpath --relative-to="$1" "$KIT")
 cat > "$1/.cws" <<EOF
 {
   "FormatVersion": 2,
-  "LibraryRefs": ["$KIT"],
-  "ReferencedWorkspaces": [{"Alias": "IHP_SG13G2", "Path": "$KIT/.cws"}],
+  "LibraryRefs": ["$REL"],
+  "ReferencedWorkspaces": [{"Alias": "IHP_SG13G2", "Path": "$REL/.cws"}],
   "KnownFiles": [],
   "DefaultTechRef": "tech/IHP_SG13G2.ctech",
   "PdkRefs": [{"Path": "$PDK", "Provider": "$(basename "$PDK")", "TranslationVersion": 4}]
 }
 EOF
-echo "workspace $1: IHP SG13G2 technology, devices from $KIT, IHP Open PDK from $PDK"
+echo "workspace $1: IHP SG13G2 technology, devices from $REL, IHP Open PDK from $PDK"

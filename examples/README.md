@@ -1,11 +1,14 @@
 # Example workspace
 
-Test benches on the IHP SG13G2 kit. This folder is one circuitRF workspace. Build the kit first
-(`./kit.sh generator/build.sh`, from the repository's top folder): the benches place its cells, and
-the build also writes this workspace's copy of the technology (`tech/`) and its harmonicaRF documents
-(`harmonica/`).
+Test benches on the IHP SG13G2 kit. This folder is one circuitRF workspace; its benches place the cells
+of `../kit/IHP_SG13G2`.
 
-Open it with `./kit.sh circuitrf examples/.cws`, or File ▸ Open Workspace in any circuitRF ≥ 1.7.3.
+- **From a release:** run `generator/build-vbic.sh` once, for the HBTs' VBIC model.
+- **From the repository:** build the kit with `./kit.sh generator/build.sh`. The build also writes this
+  workspace's copy of the technology (`tech/`) and its harmonicaRF documents (`harmonica/`).
+
+Open `examples/.cws` with File ▸ Open Workspace in circuitRF 1.7.3 or newer, or with
+`./kit.sh circuitrf examples/.cws` in the repository.
 
 | Bench | What it shows | Ported from |
 |---|---|---|
@@ -36,9 +39,8 @@ From the repository's top folder:
   circuitrf lp HBT_Loadpull/schematic/HBT_Loadpull.csch -o results/HBT_Loadpull.npy'
 ```
 
-The longest run, the load-pull, takes about 20 s. Sweeps run through `hb -a <sweep>` whatever the inner
-analysis is: the `dc` and `sparam` verbs run a single point, or a single frequency sweep. In the GUI, press
-Simulate on a bench as usual.
+The longest run, the load-pull, takes about 20 s. Each verb runs the whole parametric sweep that
+wraps its analysis, and `-a <sweep>` names the sweep. In the GUI, press Simulate on a bench as usual.
 
 Each bench's data display (`results/<bench>.cdd`) reads the `.npy` its run writes. Every plot autoscales,
 and a marker reads the curves where it matters:

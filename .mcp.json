@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "circuitrf": {
+      "type": "stdio",
+      "command": "./kit.sh",
+      "args": ["circuitrf", "serve", "--root", "examples"]
+    }
+  }
+}
