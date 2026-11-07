@@ -1,0 +1,23 @@
+# The image the kit is built and checked in:
+#     apptainer build --fakeroot kit.sif kit.def
+# The base already holds what the generator calls: ngspice, Xyce, OpenVAF, VACASK's VBIC
+# and the IHP SG13G2 PDK. This adds circuitRF from its release.
+
+Bootstrap: docker
+From: hpretl/iic-osic-tools:2026.09
+
+%environment
+    # hwloc's GL plugin opens every X display on the host looking for GPUs and can block
+    # forever on one that never answers, which hangs MPI programs (Xyce, Palace).
+    export HWLOC_COMPONENTS=-gl
+    export CRF_VERILOGA_COMPILER=/foss/tools/bin/openvaf
+
+%post
+    set -eux
+    # The kit is generated from, and validated against, this PDK commit.
+    test "$(cat /foss/pdks/ihp-sg13g2/COMMIT)" = c271a7e97a7bab201c1d0a399215969d2ee19573
+    curl -fsSL https://github.com/potatobeanradio/circuitRF/releases/download/1.7.3/circuitRF-1.7.3-linux-x64.tar.gz \
+        | tar -xz -C /opt
+    ln -s /opt/circuitRF-1.7.3/app-1.7.3/circuitRF /usr/local/bin/circuitrf
+    # Fails the build if the runtime is short of a library.
+    circuitrf --version

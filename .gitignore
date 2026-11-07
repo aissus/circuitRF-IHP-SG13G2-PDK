@@ -1,0 +1,9 @@
+# Build output: generator/build.sh writes it; the VBIC-derived .osdi in it are not to be committed.
+kit/
+# The image (kit.def builds it) and the container's home directory.
+*.sif
+.home/
+# circuitRF's per-machine and per-run files.
+results/
+.generated-cells/
+.cwsuser
