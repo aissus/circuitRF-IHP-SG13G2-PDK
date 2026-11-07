@@ -125,8 +125,8 @@
          "Style": "Medium",
          "MaximumFractionDigits": 4,
          "MarkerKind": "Polyline",
-         "InfoBoxX": 480,
-         "InfoBoxY": 190,
+         "InfoBoxX": 780,
+         "InfoBoxY": 40,
          "PositionStaticX": 0.94,
          "PositionStaticY": 353.6,
          "SnappedToCurve": true
@@ -910,8 +910,8 @@
          "SnappedToCurve": true,
          "PositionStaticX": 2.8,
          "PositionStaticY": 353.6,
-         "InfoBoxX": 560,
-         "InfoBoxY": 780
+         "InfoBoxX": 780,
+         "InfoBoxY": 590
         }
        ],
        "ExcludeFromAutoscale": false,

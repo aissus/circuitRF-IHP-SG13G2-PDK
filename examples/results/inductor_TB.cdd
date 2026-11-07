@@ -225,7 +225,7 @@
         "MarkerType": "Circle"
        },
        "Markers": [],
-       "ExcludeFromAutoscale": true,
+       "ExcludeFromAutoscale": false,
        "WsProbe": null,
        "ContourTrace": null,
        "SummaryColumn": null

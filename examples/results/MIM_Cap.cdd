@@ -179,7 +179,7 @@
      "Axes": {
       "AutoscaleX": true,
       "AutoscaleY": true,
-      "AutoscaleRightY": false,
+      "AutoscaleRightY": true,
       "AutoscaleMag": true,
       "WindowX": 0,
       "WindowY": 6,

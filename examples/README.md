@@ -42,8 +42,8 @@ From the repository's top folder:
 The longest run, the load-pull, takes about 20 s. Each verb runs the whole parametric sweep that
 wraps its analysis, and `-a <sweep>` names the sweep. In the GUI, press Simulate on a bench as usual.
 
-Each bench's data display (`results/<bench>.cdd`) reads the `.npy` its run writes. Every plot autoscales,
-and a marker reads the curves where it matters:
+Each bench's data display (`results/<bench>.cdd`) reads the `.npy` its run writes. Every axis of every
+plot autoscales to all its traces, and a marker reads the curves where it matters:
 
 | Display | Marker m1 |
 |---|---|
@@ -53,8 +53,8 @@ and a marker reads the curves where it matters:
 | `HBT_fT_fmax` | every Nx at VBE = 0.94 V (the peak), and m2 at the peak Jc |
 | `inductor_TB` | L and Q of every solver at 10 GHz |
 
-The inductor's EMerge L trace is left out of the autoscale: it goes through resonance near 40 GHz and
-would set the scale. The pictures below are these displays, from `docs/make-figures.sh`, on white.
+The inductor's L plot shows EMerge's self-resonance near 40 GHz in full. The three resistors share
+one axis. The pictures below are these displays, from `docs/make-figures.sh`, on white.
 
 Against the same benches run on circuitRF 1.6.0 with the kit's previous build:
 - **Six benches are identical** in every number: everything except the load-pull.

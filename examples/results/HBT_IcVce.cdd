@@ -116,8 +116,8 @@
          "Style": "Medium",
          "MaximumFractionDigits": 4,
          "MarkerKind": "Polyline",
-         "InfoBoxX": 230,
-         "InfoBoxY": 45,
+         "InfoBoxX": 540,
+         "InfoBoxY": 30,
          "PositionStaticX": 1.0,
          "PositionStaticY": 0,
          "SnappedToCurve": true
