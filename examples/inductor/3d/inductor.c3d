@@ -1,0 +1,180 @@
+{
+	"FormatVersion": 1,
+	"DbuPerMicron": 1000,
+	"DisplayUnit": "Um",
+	"SnapDbu": 0,
+	"TechRef": "../../tech/IHP_SG13G2.ctech",
+	"Objects": [],
+	"Instances": [
+		{
+			"Name": "U1",
+			"CellRef": "..",
+			"View": "Layout"
+		}
+	],
+	"Ports": [
+		{
+			"Number": 1,
+			"Name": "P1",
+			"Kind": "Lumped",
+			"Plane": "XZ",
+			"Offset": -1000,
+			"Rect": {
+				"Min": [-7450, 755790],
+				"Size": [5400, 5390]
+			},
+			"Z0": "50",
+			"FromLayout": {
+				"Instance": "U1",
+				"Port": 1
+			}
+		},
+		{
+			"Number": 2,
+			"Name": "P2",
+			"Kind": "Lumped",
+			"Plane": "XZ",
+			"Offset": -1000,
+			"Rect": {
+				"Min": [2050, 755790],
+				"Size": [5400, 5390]
+			},
+			"Z0": "50",
+			"FromLayout": {
+				"Instance": "U1",
+				"Port": 2
+			}
+		}
+	],
+	"Look": {
+		"ShowEdges": true,
+		"ShowGrid": true,
+		"ShowOverlays": true,
+		"ShowPorts": true,
+		"ShowBoundaries": true,
+		"ShowImages": true
+	},
+	"Setups": [
+		{
+			"FormatVersion": 1,
+			"Name": "inductor",
+			"Frequency": {
+				"StartExpr": "0.5",
+				"StopExpr": "50",
+				"StepExpr": "",
+				"NumPoints": 100,
+				"Mode": "PointCount",
+				"Kind": "Linear",
+				"StartUnit": "GHz",
+				"StopUnit": "GHz",
+				"StepUnit": "Hz"
+			},
+			"Port1Z0Real": 50,
+			"Port1Z0Imag": 0,
+			"Port2Z0Real": 50,
+			"Port2Z0Imag": 0,
+			"Mesh": {
+				"MinCellsAcrossWidth": 6,
+				"EdgeCells": 3,
+				"EdgeFractionOfWidth": 0.03,
+				"EdgeGrowthRatio": 1.7,
+				"TruncationHeights": 20,
+				"TruncationTailCells": 12
+			},
+			"DispersionCorrection": true,
+			"Solver3D": "Emerge",
+			"Ports3D": [
+				{
+					"Port": 1,
+					"Return": "Metal1"
+				},
+				{
+					"Port": 2,
+					"Return": "Metal1"
+				}
+			]
+		},
+		{
+			"FormatVersion": 1,
+			"Name": "inductor 2",
+			"Frequency": {
+				"StartExpr": "0.5",
+				"StopExpr": "50",
+				"StepExpr": "",
+				"NumPoints": 100,
+				"Mode": "PointCount",
+				"Kind": "Linear",
+				"StartUnit": "GHz",
+				"StopUnit": "GHz",
+				"StepUnit": "Hz"
+			},
+			"Port1Z0Real": 50,
+			"Port1Z0Imag": 0,
+			"Port2Z0Real": 50,
+			"Port2Z0Imag": 0,
+			"Mesh": {
+				"MinCellsAcrossWidth": 6,
+				"EdgeCells": 3,
+				"EdgeFractionOfWidth": 0.03,
+				"EdgeGrowthRatio": 1.7,
+				"TruncationHeights": 20,
+				"TruncationTailCells": 12
+			},
+			"DispersionCorrection": true,
+			"Solver3D": "OpenEms",
+			"Ports3D": [
+				{
+					"Port": 1,
+					"Return": "Metal1"
+				},
+				{
+					"Port": 2,
+					"Return": "Metal1"
+				}
+			]
+		},
+		{
+			"FormatVersion": 1,
+			"Name": "inductor 3",
+			"Frequency": {
+				"StartExpr": "0.5",
+				"StopExpr": "50",
+				"StepExpr": "",
+				"NumPoints": 100,
+				"Mode": "PointCount",
+				"Kind": "Linear",
+				"StartUnit": "GHz",
+				"StopUnit": "GHz",
+				"StepUnit": "Hz"
+			},
+			"Port1Z0Real": 50,
+			"Port1Z0Imag": 0,
+			"Port2Z0Real": 50,
+			"Port2Z0Imag": 0,
+			"Mesh": {
+				"MinCellsAcrossWidth": 6,
+				"EdgeCells": 3,
+				"EdgeFractionOfWidth": 0.03,
+				"EdgeGrowthRatio": 1.7,
+				"TruncationHeights": 20,
+				"TruncationTailCells": 12
+			},
+			"DispersionCorrection": true,
+			"Solver3D": "Palace",
+			"Palace": {
+				"Quality": "Draft",
+				"ElementOrder": 2
+			},
+			"Ports3D": [
+				{
+					"Port": 1,
+					"Return": "Metal1"
+				},
+				{
+					"Port": 2,
+					"Return": "Metal1"
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,31 @@
+{
+  "format_version": 1,
+  "name": "White",
+  "light": {
+    "Schematic.Background": {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "Layout.Background": {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "Stackup.Background": {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "Harmonica.Background": {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    }
+  },
+  "dark": {}
+}

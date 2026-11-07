@@ -99,7 +99,22 @@
         "MarkerColorIndex": 12,
         "MarkerType": "Circle"
        },
-       "Markers": [],
+       "Markers": [
+        {
+         "Name": "m1",
+         "Index": 1,
+         "IsMulti": true,
+         "ShowInfoBox": true,
+         "Style": "Medium",
+         "MaximumFractionDigits": 4,
+         "MarkerKind": "Polyline",
+         "InfoBoxX": 100,
+         "InfoBoxY": 50,
+         "PositionStaticX": 10.0,
+         "PositionStaticY": 582.5373236623197,
+         "SnappedToCurve": true
+        }
+       ],
        "ExcludeFromAutoscale": false,
        "WsProbe": null,
        "ContourTrace": null,
@@ -210,7 +225,7 @@
         "MarkerType": "Circle"
        },
        "Markers": [],
-       "ExcludeFromAutoscale": false,
+       "ExcludeFromAutoscale": true,
        "WsProbe": null,
        "ContourTrace": null,
        "SummaryColumn": null
@@ -218,7 +233,7 @@
      ],
      "Axes": {
       "AutoscaleX": true,
-      "AutoscaleY": false,
+      "AutoscaleY": true,
       "AutoscaleRightY": true,
       "AutoscaleMag": true,
       "WindowX": 0,
@@ -321,7 +336,22 @@
         "MarkerColorIndex": 12,
         "MarkerType": "Circle"
        },
-       "Markers": [],
+       "Markers": [
+        {
+         "Name": "m1",
+         "Index": 1,
+         "IsMulti": true,
+         "ShowInfoBox": true,
+         "Style": "Medium",
+         "MaximumFractionDigits": 4,
+         "MarkerKind": "Polyline",
+         "InfoBoxX": 780,
+         "InfoBoxY": 50,
+         "PositionStaticX": 10.0,
+         "PositionStaticY": 8.663951761002032,
+         "SnappedToCurve": true
+        }
+       ],
        "ExcludeFromAutoscale": false,
        "WsProbe": null,
        "ContourTrace": null,
@@ -440,7 +470,7 @@
      ],
      "Axes": {
       "AutoscaleX": true,
-      "AutoscaleY": false,
+      "AutoscaleY": true,
       "AutoscaleRightY": true,
       "AutoscaleMag": true,
       "WindowX": 0,

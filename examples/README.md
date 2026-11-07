@@ -16,8 +16,9 @@ Open it with `./kit.sh circuitrf examples/.cws`, or File ▸ Open Workspace in a
 | `HBT_Ic` | the same bias network and Nx × VBE grid at DC: Ic, and Jc = Ic/Nx, the x-axis of the Jc plot | |
 | `HBT_Loadpull` | npn13G2 (Nx=8) load-pull at 50 GHz: Pout and PAE contours at 1 dB compression | |
 | `CE_10GHz_HB` | npn13G2 common emitter at 10 GHz: an HB drive sweep, with Pout, Gt, H2 and H3 measured | |
-| `inductor` | a two-turn TopMetal2 inductor from IHP's PCell: its layout, and one EM setup per solver | IHP's `inductor2` PCell |
+| `inductor` | a two-turn TopMetal2 inductor from IHP's PCell: its layout, its 3D view, and one EM setup per solver | IHP's `inductor2` PCell |
 | `inductor_TB` | the inductor's series L and Q from every EM run, side by side | |
+| `Kit_cells` | every kit cell placed once with its default parameters: the overview picture in the top-level README | |
 | `harmonica/` | harmonicaRF documents: npn13G2 and npn13G2v at Nx = 1, 2, 4, 8, at 50 GHz (written by the build) | |
 
 ## Running them
@@ -39,8 +40,19 @@ The longest run, the load-pull, takes about 20 s. Sweeps run through `hb -a <swe
 analysis is: the `dc` and `sparam` verbs run a single point, or a single frequency sweep. In the GUI, press
 Simulate on a bench as usual.
 
-Each bench's data display (`results/<bench>.cdd`) reads the `.npy` its run writes. The pictures below
-are those displays, from `circuitrf render results/<bench>.cdd -o <picture>.png`.
+Each bench's data display (`results/<bench>.cdd`) reads the `.npy` its run writes. Every plot autoscales,
+and a marker reads the curves where it matters:
+
+| Display | Marker m1 |
+|---|---|
+| `HBT_IcVce` | Ic at VCE = 1 V |
+| `Resistors` | each resistor's V/I at 5 V |
+| `MIM_Cap` | C and Q at 1 GHz |
+| `HBT_fT_fmax` | every Nx at VBE = 0.94 V (the peak), and m2 at the peak Jc |
+| `inductor_TB` | L and Q of every solver at 10 GHz |
+
+The inductor's EMerge L trace is left out of the autoscale: it goes through resonance near 40 GHz and
+would set the scale. The pictures below are these displays, from `docs/make-figures.sh`, on white.
 
 Against the same benches run on circuitRF 1.6.0 with the kit's previous build:
 - **Six benches are identical** in every number: everything except the load-pull.
@@ -92,14 +104,14 @@ The display has two plots, with fT solid and fmax dashed, one colour per Nx:
 
 Markers m1 and m2 read every trace at the same x. Drag one and all ten values in its box follow.
 
-![fT and fmax](../docs/images/HBT_fT_fmax.png)
+![fT and fmax](../docs/images/white/HBT_fT_fmax.png)
 
 ## The other benches
 
-![HBT output curves](../docs/images/HBT_IcVce.png)
-![Resistors](../docs/images/Resistors.png)
-![MIM capacitor](../docs/images/MIM_Cap.png)
-![Load-pull](../docs/images/HBT_Loadpull.png)
+![HBT output curves](../docs/images/white/HBT_IcVce.png)
+![Resistors](../docs/images/white/Resistors.png)
+![MIM capacitor](../docs/images/white/MIM_Cap.png)
+![Load-pull](../docs/images/white/HBT_Loadpull.png)
 
 In `HBT_Loadpull`, VBE = 0.74 V biases the HBT close to class B, so its gain rises with drive before it
 compresses. At 50 Ω, Gt goes from −8 dB at −20 dBm to +6 dB at −2 dBm. Keep that in mind when reading the
@@ -144,7 +156,7 @@ It writes two layouts:
 | `inductor.clay` | the 3D solvers (Palace, EMerge, openEMS) | one lumped port on each terminal, down to a 20 µm Metal1 ring 22 µm clear of the coil |
 | `inductor_mom.clay` | circuitRF's planar MoM | a TopMetal1 bar joins the two terminals, and one internal delta-gap port cuts it in the middle |
 
-![The inductor, for the 3D solvers](../docs/images/inductor.png)
+![The inductor, for the 3D solvers](../docs/images/white/inductor.png)
 
 **Why the planar MoM gets its own layout.** The planar kernel returns every port to the
 technology's ground, which here is the backside, 750 µm below. It also de-embeds an edge port by
@@ -154,7 +166,7 @@ apart can never be. (circuitRF says both, and refuses the run.) A delta-gap port
 cut with metal on both sides. So the MoM measures the coil differentially, terminal to terminal, and
 the bar adds a few pH of its own.
 
-![The inductor, for the planar MoM](../docs/images/inductor_mom.png)
+![The inductor, for the planar MoM](../docs/images/white/inductor_mom.png)
 
 `inductor_TB` compares the runs on that same footing. Each 3D run's 2-port gives its differential
 impedance, and the MoM's 1-port is that impedance directly:
@@ -178,7 +190,7 @@ shared machine):
 | circuitRF planar MoM | 583 pH, Q 2.1 | 583 pH, Q 8.7 | 601 pH, Q 13.0 | 646 pH, Q 15.6 | 727 pH, Q 16.1 | 2 h, 13,211 unknowns |
 | EMerge (circuitRF's default mesh) | 337 pH, Q 1.5 | 338 pH, Q 5.4 | 411 pH, Q 7.1 | 679 pH, Q 5.3 | past resonance | 28 s, 5,616 tetrahedra |
 
-![Differential L and Q](../docs/images/inductor_TB.png)
+![Differential L and Q](../docs/images/white/inductor_TB.png)
 
 How to read it:
 - **The MoM and the 3D runs do not solve quite the same structure.** The 3D layout has the Metal1 ring,

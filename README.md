@@ -24,6 +24,8 @@ The corner parameter is 0 for typ, 1 for bcs and 2 for wcs. The kit also has:
 - **harmonicaRF devices**: the three HBTs compiled whole for harmonicaRF, circuitRF's interactive
   load-pull.
 
+![The kit's cells with their default parameters, as placed in examples/Kit_cells](docs/images/white/Kit_cells.png)
+
 ## Requirements
 
 - **Apptainer**, and about 6 GB of disk for the image.
@@ -109,6 +111,11 @@ moved copy validates the same.
 A workspace owns its copy of the technology, so a thinned die is a change to that copy's
 Substrate row.
 
+The stackup as circuitRF's technology editor draws it (Stackup tab; not to scale, so the thin layers
+can be read):
+
+![The EM stackup in circuitRF's technology editor](docs/images/gui/stackup.png)
+
 ## What is checked
 
 `validate_ihp_kit.py` places each cell in a test bench, the way the GUI does, and runs it in
@@ -129,10 +136,57 @@ Where the kit and the PDK differ, the cause is VBIC itself:
 
 The kit is the same on circuitRF 1.7.3 as it was on 1.6.0: all 120 rows are identical.
 
+On every HBT bench, circuitRF notes that the thermal node reaches its reference "only through
+1.14E+04 °C/W, which is not a thermal resistance — real values are a few hundred °C/W at most". That
+rule of thumb fits parts on a board. A minimum-size SiGe HBT really does have a thermal resistance of
+that order, and the value is the PDK's own, so the note can be ignored for these cells.
+
 ## Examples
 
 `examples/` is one circuitRF workspace. Its benches, the commands that run them, and what each
 one shows are in [examples/README.md](examples/README.md).
+
+The example inductor (IHP's `inductor2` PCell) in circuitRF's 3D view, on its stack. The passivation
+and the oxide above the coil are hidden; the oxide between the metals, ILD0, Activ, EPI and the
+substrate are shown:
+
+![The inductor in circuitRF's 3D view](docs/images/gui/inductor_3d_window.png)
+
+The same model from the front, zoomed to the back end: the TopMetal2 coil, TopVia2, the TopMetal1
+underpass and leads, the lumped ports down to Metal1, the layers below Metal1 and the silicon:
+
+![The back end of the stack in circuitRF's 3D view, edge-on](docs/images/gui/inductor_3d_stack_window.png)
+
+## Figures
+
+`docs/make-figures.sh` regenerates every picture circuitRF exports for these pages, in two versions:
+- `docs/images/<name>.png`, as circuitRF exports it (data displays have a transparent background);
+- `docs/images/white/<name>.png`, on white, which the pages use so they read in a dark theme too.
+
+```bash
+./kit.sh docs/make-figures.sh      # after generator/build.sh; it runs the circuit benches first
+```
+
+Data displays get white with `--background opaque`. Layouts and schematics take a theme, and
+`docs/white.ccolor` is circuitRF's theme with white canvases.
+
+The pictures of circuitRF's window (`docs/images/gui/`) are screenshots of circuitRF 1.7.3 from
+`kit.sif`, run on a virtual X display (Xvfb) with Mesa's software rendering, so they need no GPU. The
+Messages pane, which shows the machine's paths, was closed before taking them.
+
+## Releases
+
+Pushing a tag `v*` runs `.github/workflows/release.yml`. The workflow builds the kit in the same base
+image, validates it, and attaches `circuitRF-IHP-SG13G2-kit-<tag>.tar.gz` to a GitHub release, with
+its checksum. The archive is the built `IHP_SG13G2/` folder: unpack it anywhere and reference it from
+a workspace (see Quick start). Pushes and pull requests run the same build as a check and keep the
+archive as a workflow artifact.
+
+## Using the kit in an IIC-OSIC-TOOLS-based image
+
+[docs/iic-osic-tools-integration.md](docs/iic-osic-tools-integration.md) is the plan for taking the
+released kit into an image built from the same IIC-OSIC-TOOLS Docker image (`hpretl/iic-osic-tools`) (circuitRF ≥ 1.7.3, the already-compiled kit, the Palace
+wrapper).
 
 ## Updating
 
@@ -140,10 +194,29 @@ one shows are in [examples/README.md](examples/README.md).
 - **The PDK:** change the base image tag and the `COMMIT` check in `kit.def`, then rebuild both.
   `validate_ihp_kit.py` says whether the kit still matches.
 
+## Acknowledgements
+
+- The [IHP Open PDK](https://github.com/IHP-GmbH/IHP-Open-PDK) authors: the models, the layer table, the
+  ITF, the process specification, the Qucs-S symbols (Mike Brinson) and the inductor PCell this kit is
+  generated from.
+- [circuitRF](https://github.com/potatobeanradio/circuitRF), which the kit is for, and whose maintainer
+  merged the two fixes the kit needed (released in 1.7.3).
+- [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) (the `hpretl/iic-osic-tools` Docker image, from
+  JKU's Institute for Integrated Circuits), the image the kit is built in.
+- [VACASK](https://codeberg.org/arpadbuermen/VACASK) for the VBIC 1.3 Verilog-A source, and
+  OpenVAF (the image's OpenVAF-reloaded) for compiling it.
+
+**Use of AI.** This repository was developed with an AI coding agent, Claude Code (Anthropic), running
+Claude Opus 5.5, directed and reviewed by the maintainer. The agent's work covered the generator changes,
+the image, the EM stackup, the examples, the validation and EM runs, the figures and these documents.
+Commits it made carry a `Co-Authored-By: Claude Opus 5.5` trailer. The numbers in these pages come from
+runs of the code in this repository, and are recorded in the commit messages.
+
 ## License
 
 Apache-2.0, as the IHP PDK; see [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 This repository holds the generator and the examples, not the compiled models. The VBIC-derived
 `.osdi` files are built from VACASK's VBIC source, which carries no license header (VACASK is
-AGPL-3.0), so they exist only in a built `kit/`, which is not committed.
+AGPL-3.0), so they exist only in a built `kit/`, which is not committed, and in the release archives,
+which carry the built kit with that note (see NOTICE).
