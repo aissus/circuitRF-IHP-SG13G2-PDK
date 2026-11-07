@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check the IHP SG13G2 circuitRF kit against the PDK's own models in ngspice.
 
-    python3 validate_ihp_kit.py [--kit /foss/tools/circuitrf/kits/IHP_SG13G2]
+    python3 validate_ihp_kit.py [--kit kit/IHP_SG13G2]
 
 Each test places a kit cell in a schematic bench (the way the GUI does: a cell
 reference into the library) and runs it with the circuitRF CLI; the same device
@@ -59,7 +59,7 @@ def vsource(s, x, net, volts, probe):
 
 
 def crf(verb, path, *args):
-    r = subprocess.run(['circuitrf', 'cli', verb, path, *args], capture_output=True, text=True)
+    r = subprocess.run(['circuitrf', verb, path, *args], capture_output=True, text=True)
     if r.returncode:
         raise RuntimeError(r.stdout[-600:] + r.stderr[-600:])
     return r.stdout
@@ -248,7 +248,7 @@ measure V1im = imag(HB1.V("nc",1))
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--kit', default='/foss/tools/circuitrf/kits/IHP_SG13G2')
+    ap.add_argument('--kit', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'kit', 'IHP_SG13G2'))
     a = ap.parse_args()
     with tempfile.TemporaryDirectory() as ws:
         json.dump({"FormatVersion": 2, "LibraryRefs": [a.kit], "KnownFiles": []}, open(f'{ws}/.cws', 'w'))

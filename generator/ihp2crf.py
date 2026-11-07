@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build a circuitRF device library (cells) from the IHP SG13G2 PDK's ngspice models.
 
-    python3 ihp2crf.py --pdk $PDKPATH --osdi /foss/tools/circuitrf/kits/IHP_SG13G2/models/osdi --out <libdir>
+    python3 ihp2crf.py --pdk $PDKPATH --out <libdir>
 
 One cell per device, parameterised like the PDK subcircuit it comes from:
 
@@ -472,12 +472,13 @@ KIT_DOC = """# IHP SG13G2 kit for circuitRF
 
 Generated from the IHP SG13G2 PDK (commit {commit}) by `ihp2crf.py`; checked
 against the PDK's own models in ngspice and Xyce by `validate_ihp_kit.py`.
-Both are in `tools/`, a copy of the circuitrf-kit/ folder that built this kit
-(`build.sh` there redoes all of it). Do not edit; regenerate.
+Both are in `generator/` of github.com/aissus/circuitRF-IHP-SG13G2-PDK, the
+repository this kit is built in (`./kit.sh generator/build.sh` redoes all of
+it). Do not edit; regenerate.
 
 Start a project on it:
 
-    circuitrf-ihp-workspace my_project      # then open my_project in circuitRF
+    generator/circuitrf-ihp-workspace my_project      # then open my_project in circuitRF
 
 The workspace references this folder as a library (Workspace > Libraries >
 IHP_SG13G2) and gets its own copy of the technology.
@@ -504,8 +505,8 @@ are also compiled whole: `models/osdi/npn13G2.osdi`, `npn13G2l.osdi` and
 connects as gate, drain, source), thermal node internal, the PDK substrate
 network built in, and every VBIC parameter set inside from the PDK's own
 expressions. Their only parameters are Nx (and le on npn13G2l/v), corner and
-temp. Ready-to-pull documents are in designs/IHP_kit_examples/harmonica; make
-others with `harmonica_ihp.py charm <out> --device npn13G2v --nx 4 ...`.
+temp. Ready-to-pull documents are in the repository's examples/harmonica; make
+others with `generator/harmonica_ihp.py charm <out> --device npn13G2v --nx 4 ...`.
 
 `tech/IHP_SG13G2.ctech`: all 378 KLayout layers with their GDS numbers, and
 the 200 um EM stackup of the PDK's gds2palace workflow (Passive, TopMetal2
@@ -524,7 +525,9 @@ currents. Harmonic balance, npn13G2 at 10 GHz into compression: within
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--pdk', default=os.environ.get('PDKPATH'))
-    ap.add_argument('--osdi', default='/foss/tools/circuitrf/kits/IHP_SG13G2/models/osdi')
+    # As the cells name their models. circuitRF resolves a relative reference in a library cell against the
+    # library's root, the folder holding its .cws (written below), so the kit can be moved or copied whole.
+    ap.add_argument('--osdi', default='models/osdi')
     ap.add_argument('--out', required=True)
     a = ap.parse_args()
     m = os.path.join(a.pdk, 'libs.tech', 'ngspice', 'models')
@@ -563,6 +566,10 @@ def main():
     make_tech(a.pdk, os.path.join(a.out, 'tech', 'IHP_SG13G2.ctech'))
     commit = open(os.path.join(a.pdk, 'COMMIT')).read().strip() if os.path.exists(os.path.join(a.pdk, 'COMMIT')) else '?'
     open(os.path.join(a.out, 'README.md'), 'w').write(KIT_DOC.format(commit=commit))
+    # The kit is a library workspace: a workspace's LibraryRefs names it, and its .cws makes it the root its
+    # cells' relative model paths resolve against.
+    json.dump({'FormatVersion': 2, 'LibraryRefs': [], 'KnownFiles': [], 'DefaultTechRef': 'tech/IHP_SG13G2.ctech'},
+              open(os.path.join(a.out, '.cws'), 'w'), indent=2)
     print('cells and tech/IHP_SG13G2.ctech written to', a.out)
 
 

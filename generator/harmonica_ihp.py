@@ -24,7 +24,7 @@ import argparse, json, math, os, re, shutil, subprocess, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 VBIC_SRC = '/foss/tools/vacask/src/vacask/devices/vbic'
-OSDI = '/foss/tools/circuitrf/kits/IHP_SG13G2/models/osdi'
+OSDI = os.path.join(HERE, '..', 'kit', 'IHP_SG13G2', 'models', 'osdi')
 
 
 def build_osdi(out):

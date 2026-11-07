@@ -1,7 +1,7 @@
 #!/bin/bash
 # circuitrf-ihp-workspace <dir>
 # A new circuitRF workspace on the IHP SG13G2 kit: the kit's device library is
-# referenced (read-only, from the image), and the IHP technology is copied in,
+# referenced (from this repository's kit/), and the IHP technology is copied in,
 # because a workspace owns its technology. Open <dir> in circuitRF afterwards.
 # The IHP Open PDK itself is referenced too, as an imported PDK: it is what
 # File > Manage Libraries and the Library palette list. circuitRF imports it
@@ -11,7 +11,7 @@
 # the palette looks them up under the folder name, so any other name leaves
 # every part unresolved (generic symbols, nothing to simulate).
 set -e
-KIT=${IHP_KIT:-/foss/tools/circuitrf/kits/IHP_SG13G2}
+KIT=${IHP_KIT:-$(cd "$(dirname "$(readlink -f "$0")")/../kit/IHP_SG13G2" && pwd)}
 PDK=${IHP_PDK:-/foss/pdks/ihp-sg13g2}
 [ -n "$1" ] || { echo "usage: circuitrf-ihp-workspace <dir>" >&2; exit 1; }
 [ -e "$1/.cws" ] && { echo "$1 is already a workspace" >&2; exit 1; }
