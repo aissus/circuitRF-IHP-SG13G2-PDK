@@ -117,7 +117,7 @@ Markers m1 and m2 read every trace at the same x. Drag one and all ten values in
 ![Load-pull](../docs/images/white/HBT_Loadpull.png)
 
 In `HBT_Loadpull`, VBE = 0.74 V biases the HBT close to class B, so its gain rises with drive before it
-compresses. At 50 Ω, Gt goes from −8 dB at −20 dBm to +6 dB at −2 dBm. Keep that in mind when reading the
+compresses. At 50 Ω, Gt goes from −2.7 dB at −20 dBm to +11.2 dB at −2 dBm. Keep that in mind when reading the
 1 dB compression contours, or raise VBE for a class-A bench.
 
 ### harmonicaRF
