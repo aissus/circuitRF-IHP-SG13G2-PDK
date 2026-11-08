@@ -22,7 +22,7 @@ lib = os.path.join(pdk, 'libs.tech', 'klayout', 'python')
 
 if os.path.isdir(os.path.join(lib, 'sg13g2_pycell_lib')):
     sys.path.insert(0, lib)
-    # Names the PDK's cells import that circuitRF 1.7.3's cni does not have. Aliases of its own
+    # Names the PDK's cells import that circuitRF 1.7.4's cni does not have. Aliases of its own
     # classes and a placeholder constant, no geometry: device_base_code (every resistor, MIM, MOS,
     # inductor and antenna) imports cni.rect and cni.text, cmomi/cmomf pass USE_DEFAULT to a
     # RangeConstraint, and chipText reads a polygon's points back.
@@ -38,7 +38,7 @@ if os.path.isdir(os.path.join(lib, 'sg13g2_pycell_lib')):
     if not hasattr(dlo.Polygon, 'getPoints'):
         dlo.Polygon.getPoints = lambda self, *_: self.points
     # Three behaviours of the API the cells are written against (pycell4klayout-api) that circuitRF
-    # 1.7.3's cni does differently; each checked against KLayout's own drawing (check_ihp_pcells.py).
+    # 1.7.4's cni does differently; each checked against KLayout's own drawing (check_ihp_pcells.py).
     # 1. The operands stay drawn; a cell deletes the ones it does not want (npn13G2L/V keep their
     #    Activ.mask rectangles this way).
     # 2. A result fed into another boolean keeps its holes. The host unions the rings it is given, so

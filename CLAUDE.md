@@ -15,12 +15,12 @@ To design or simulate with the kit, use the skill in `.claude/skills/ihp-sg13g2-
 | `docs/` | `make-figures.sh`, `white.ccolor`, `images/` (the pages use `images/white/`). |
 | `ci/build-release.sh`, `.github/workflows/release.yml` | The release zip, built and validated in the base image. |
 | `release/` | The `README.md`, `CLAUDE.md` and `.mcp.json` placed at the top of the release zip. |
-| `kit.def`, `kit.sh` | The image (`hpretl/iic-osic-tools` plus circuitRF 1.7.3) and its launcher. |
+| `kit.def`, `kit.sh` | The image (`hpretl/iic-osic-tools` plus circuitRF 1.7.4) and its launcher. |
 
 ## Running tools
 
 Run everything in the image, through `./kit.sh <command...>` from the top folder. The image has ngspice, Xyce,
-OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.7.3.
+OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.7.4.
 
 - Build the image once: `apptainer build --fakeroot kit.sif kit.def`.
 - `kit.sh` always starts in the top folder and uses `.home/` as HOME. Both `.home/` and `kit.sif` are git-ignored,

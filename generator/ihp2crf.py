@@ -618,7 +618,7 @@ folders directly under it, so a workspace using the kit holds one:
 allow them (it asks; headless, `--trust-kit <that folder>`). The PDK declares
 most parameters as text: write lengths as `0.9u` or `9e-07` and counts such as
 `ng` and `b` as `2`. A bare number in a text field is ignored, and the cell
-keeps its default. The kit's own cells have no layout view (circuitRF 1.7.3
+keeps its default. The kit's own cells have no layout view (circuitRF 1.7.4
 ties a generator only to imported kit parts, not to library cells), so place
 the PCell with the cell's values.
 

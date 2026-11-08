@@ -267,7 +267,7 @@ Running EM:
 
 ## circuitRF's MCP tools
 
-circuitRF 1.7.3's server offers 21 tools: `find`, `reference`, `create`, `check`, `explain`, `netlist`, `run`,
+circuitRF 1.7.4's server offers 21 tools: `find`, `reference`, `create`, `check`, `explain`, `netlist`, `run`,
 `read`, `render`, `plot`, `job`, `batch`, `history`, `solver`, `convert`, `import`, `lvs`, `recognize`,
 `impedance`, `review` and `model`. No tool writes your text: write documents with your own file tools.
 

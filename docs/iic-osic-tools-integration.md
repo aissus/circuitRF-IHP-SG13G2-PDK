@@ -18,7 +18,7 @@ them once, with its own OpenVAF (`generator/build-vbic.sh`). The image then no l
 | | IIC-OSIC-TOOLS-based image, today | Kit image (`kit.sif`, from `kit.def`) |
 |---|---|---|
 | Base | IIC-OSIC-TOOLS 2026.09, PDK commit `c271a7e97a7b…` | the same, so the same PDK, OpenVAF, ngspice, Xyce and Palace |
-| circuitRF | 1.6.0, built from source in the recipe (.NET SDK), GUI and CLI as two programs | 1.7.3, the release tarball: one program |
+| circuitRF | 1.6.0, built from source in the recipe (.NET SDK), GUI and CLI as two programs | 1.7.4, the release tarball: one program |
 | Patches to circuitRF | two: the OSDI worker's `$limit` and state (without it, VBIC crashes), and the 3D view's software present | none: both are upstream since 1.7.3 |
 | Command line | `circuitrf cli <verb>` (the recipe's wrapper) | `circuitrf <verb>` (upstream) |
 | Kit built by | the setup script, after every image build, from `circuitrf-kit/` | `generator/build.sh`; released by the workflow |
@@ -27,9 +27,9 @@ them once, with its own OpenVAF (`generator/build-vbic.sh`). The image then no l
 | Workspaces place a cell as | `/foss/tools/circuitrf/kits/IHP_SG13G2/<cell>` | `ws://IHP_SG13G2/<cell>`, through a `ReferencedWorkspaces` alias plus a `LibraryRefs` entry |
 | Kit `tools/` | a copy of the generator. The image links `/foss/tools/circuitrf/tools` and `circuitrf-ihp-workspace` into it | none; the generator is `generator/` here |
 | EM stackup (`tech/IHP_SG13G2.ctech`) | from the PDK's gds2palace XML (GPL-3.0); 180 µm substrate | from the PDK's ITF and process specification (Apache-2.0); 750 µm substrate |
-| Validation | 120/120 on circuitRF 1.6.0 | 120/120 on 1.7.3, every number the same |
+| Validation | 120/120 on circuitRF 1.6.0 | 143/143 on 1.7.4, every number the same as on 1.7.3; 120/120 on 1.7.3 matched 1.6.0's |
 | Palace wrapper, solve branch | its own `run_palace` (`PALACE_NP` cap, error estimate off) → Palace's `palace` launcher → one `mpirun` | `<launcher> -n N palace-x86_64.bin config.json` directly, with the `PALACE_NP` cap |
-| EMerge | installed into the image by circuitRF's installer; the wrapper hard-codes `emerge/3.0.0b3/env` | installed per user; circuitRF 1.7.3 pins EMerge **3.0.0** |
+| EMerge | installed into the image by circuitRF's installer; the wrapper hard-codes `emerge/3.0.0b3/env` | installed per user; circuitRF 1.7.4 pins EMerge **3.0.0** |
 | harmonicaRF `.charm` | in an example workspace, naming the kit's `.osdi` by absolute path | written by `generator/build.sh` into `examples/harmonica/` (git-ignored, not in the release) |
 
 The cells themselves are the same. Between the two builds, each cell's schematic differs only in its
@@ -37,12 +37,12 @@ model path. Cell names, pins and parameters are unchanged.
 
 ## Recommended: the released kit
 
-### 1. circuitRF 1.7.3 in the recipe
+### 1. circuitRF 1.7.4 in the recipe
 
 There are two ways:
 
-- **A. Keep building from source** at tag `1.7.3`, and drop both patches. This is the **smaller diff**:
-  one tag changes and the patch lines go. 1.7.3 still has both `src/Ui` and `src/Cli` and still targets
+- **A. Keep building from source** at tag `1.7.4`, and drop both patches. This is the **smaller diff**:
+  one tag changes and the patch lines go. 1.7.4 still has both `src/Ui` and `src/Cli` and still targets
   .NET 10, so the rest of the build block stands.
 - **B. Install the release tarball, as `kit.def` does.** This is a bigger diff, because the whole .NET
   block goes. It leaves a **smaller recipe**, and it is the recommendation:
@@ -80,9 +80,9 @@ Proposed change to the recipe for B:
 -    cp $C/app/osdi-worker $C/cli/
 -    cp -n $C/app/*.so $C/cli/
 +    # circuitRF's release: one self-contained program for the GUI and the verbs, its osdi-worker beside it.
-+    curl -fsSL https://github.com/potatobeanradio/circuitRF/releases/download/1.7.3/circuitRF-1.7.3-linux-x64.tar.gz \
++    curl -fsSL https://github.com/potatobeanradio/circuitRF/releases/download/1.7.4/circuitRF-1.7.4-linux-x64.tar.gz \
 +        | tar -xz -C /opt
-+    ln -s /opt/circuitRF-1.7.3/app-1.7.3 $C/app
++    ln -s /opt/circuitRF-1.7.4/app-1.7.4 $C/app
      ...
 -    HOME=$C/solver-home $C/cli/CircuitRF.Cli solver install emerge --yes
 +    HOME=$C/solver-home $C/app/circuitRF solver install emerge --yes
@@ -101,10 +101,10 @@ Proposed change to the recipe for B:
 
 `mkdir -p /opt/build` stays, because EMStudio's build still uses it.
 
-Option A changes the same `%files`, `IHP_KIT` and EMerge lines, sets `--branch 1.7.3`, and deletes the
+Option A changes the same `%files`, `IHP_KIT` and EMerge lines, sets `--branch 1.7.4`, and deletes the
 two `patch` lines. In both options, the patch files in the recipe's folder can then be deleted.
 
-**The EMerge path has to change either way.** circuitRF 1.7.3 installs EMerge 3.0.0 into `…/emerge/3.0.0/env`,
+**The EMerge path has to change either way.** circuitRF 1.7.4 installs EMerge 3.0.0 into `…/emerge/3.0.0/env`,
 and `lib/libmkl_rt.so.3` is still in it. With the old `3.0.0b3` path, the recipe's own
 `circuitrf cli solver list` check would report EMerge not found and stop the build.
 
@@ -245,10 +245,10 @@ again. Palace stopped with `mpirun does not support recursive calls`.
 
 - The recipe copies its own `run_palace` over the base's, and that one runs the launcher once:
   `exec /foss/tools/palace/bin/palace -np "$NP" "$CONFIG"`. The chain therefore has a single `mpirun`.
-- circuitRF 1.7.3 starts Palace as 1.6.0 did. It runs `<CIRCUITRF_PALACE> -np N --launcher <mpirun> config.json`
+- circuitRF 1.7.4 starts Palace as 1.6.0 did. It runs `<CIRCUITRF_PALACE> -np N --launcher <mpirun> config.json`
   and does not run that program under MPI itself (`PalaceCommand` in circuitRF's
   `src/Design/Em3d/PalaceRun.cs` is the same in both).
-- 1.7.3 still validates Palace commit `0dc74cd`, so the `--version` branch stays as it is.
+- 1.7.4 still validates Palace commit `0dc74cd`, so the `--version` branch stays as it is.
 
 Keep that wrapper. It also has the error-estimate saving that `kit.def`'s wrapper lacks. It would nest
 `mpirun` only if the recipe stopped installing its own `run_palace`. In that case, take `kit.def`'s
@@ -311,7 +311,7 @@ To make this path the setup script's default, keep the old "rebuild when the ima
 **After the change**, from the image's folder:
 
 ```bash
-./run.sh circuitrf --version                 # 1.7.3
+./run.sh circuitrf --version                 # 1.7.4
 ./run.sh circuitrf solver list               # Palace 0.18.1 (0dc74cd) validated; EMerge, openEMS, Gmsh found
 K=/foss/tools/circuitrf/kits/IHP_SG13G2
 ./run.sh bash -c "python3 $K/tools/validate_ihp_kit.py --kit $K | diff - $K/VALIDATION"   # 143/143, no diff
@@ -332,8 +332,9 @@ mkdir designs/kit-check/examples/tech && cp kits/IHP_SG13G2/tech/IHP_SG13G2.ctec
 ```
 
 - **One bench:** `CE_10GHz_HB` should give the same Pout, Gt, H2 and H3 as the same bench run on the old
-  image. This repository found every number identical between 1.6.0 and 1.7.3. Rerun one existing design
-  of your own as well, and compare it with its results from before the switch.
+  image. This repository found every number identical between 1.6.0 and 1.7.3, and between 1.7.3 and
+  1.7.4. Rerun one existing design of your own as well, and compare it with its results from before the
+  switch.
 - **EMerge:** the run takes about 28 s and checks the new 3.0.0 path and `EMERGE_PARDISO_PATH`.
 - **Palace:** start `circuitrf em inductor/em/inductor_palace.cem`, or any smaller `.cem`. Its log
   should show N ranks starting, with no `recursive calls`. The full inductor run takes about 1 h 18 min

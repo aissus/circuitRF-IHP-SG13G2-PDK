@@ -17,9 +17,9 @@ From: hpretl/iic-osic-tools:2026.09
     set -eux
     # The kit is generated from, and validated against, this PDK commit.
     test "$(cat /foss/pdks/ihp-sg13g2/COMMIT)" = c271a7e97a7bab201c1d0a399215969d2ee19573
-    curl -fsSL https://github.com/potatobeanradio/circuitRF/releases/download/1.7.3/circuitRF-1.7.3-linux-x64.tar.gz \
+    curl -fsSL https://github.com/potatobeanradio/circuitRF/releases/download/1.7.4/circuitRF-1.7.4-linux-x64.tar.gz \
         | tar -xz -C /opt
-    ln -s /opt/circuitRF-1.7.3/app-1.7.3/circuitRF /usr/local/bin/circuitrf
+    ln -s /opt/circuitRF-1.7.4/app-1.7.4/circuitRF /usr/local/bin/circuitrf
     # Fails the build if the runtime is short of a library.
     circuitrf --version
 

@@ -101,7 +101,7 @@ has is identical (50 of 50 comparisons, defaults and 12 parameter sets).
 
 The PCells need the IHP PDK at `$PDKPATH` (or `$PDK_ROOT/ihp-sg13g2`) and Python 3.10 or newer; circuitRF runs
 them once you allow the kit (headless: `--trust-kit <workspace>/ihp-sg13g2-pcells`). Most parameters are text:
-write lengths as `0.9u` or `9e-07`. circuitRF 1.7.3 links a PCell only to imported kit parts, so the schematic
+write lengths as `0.9u` or `9e-07`. circuitRF 1.7.4 links a PCell only to imported kit parts, so the schematic
 cells have no layout view of their own: place the PCell with the cell's values.
 
 <p align="center">
@@ -210,7 +210,7 @@ local circuitRF installation.
 
 ```mermaid
 flowchart LR
-    subgraph image["kit.sif: IIC-OSIC-TOOLS 2026.09 + circuitRF 1.7.3"]
+    subgraph image["kit.sif: IIC-OSIC-TOOLS 2026.09 + circuitRF 1.7.4"]
         PDK["IHP SG13G2 PDK<br/>ngspice models, corner libraries,<br/>Qucs-S symbols, KLayout .lyp, ITF"]
         VA["VBIC 1.3<br/>Verilog-A source"]
         TOOLS["OpenVAF · ngspice · Xyce"]
