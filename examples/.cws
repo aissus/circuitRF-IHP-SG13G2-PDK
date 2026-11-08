@@ -16,7 +16,7 @@
     {
       "Path": "/foss/pdks/ihp-sg13g2",
       "Provider": "ihp-sg13g2",
-      "TranslationVersion": 4
+      "TranslationVersion": 5
     }
   ]
 }

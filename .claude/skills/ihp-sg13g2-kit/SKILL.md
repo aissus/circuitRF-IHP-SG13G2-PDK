@@ -88,7 +88,7 @@ Notes:
   - `LibraryRefs` puts the kit in the Workspace tree and the palette.
   - The `IHP_SG13G2` alias is what `ws://IHP_SG13G2/<cell>` resolves through. The alias must be `IHP_SG13G2`.
   - `DefaultTechRef` is the workspace's own copy of the technology.
-  - `PdkRefs` (`{"Path": "<PDK>", "Provider": "ihp-sg13g2", "TranslationVersion": 4}`) is optional. It only adds
+  - `PdkRefs` (`{"Path": "<PDK>", "Provider": "ihp-sg13g2", "TranslationVersion": 5}`) is optional. It only adds
     the PDK's own parts to the GUI palette, and their HBTs do not run in circuitRF. Use the kit's cells instead.
 - **Add a cell:** use `create` with `what=cell workspace=<dir> name=<cell>`, or `circuitrf new cell <dir> <cell>`.
   Both make `<cell>/schematic/<cell>.csch`.

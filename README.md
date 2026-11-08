@@ -7,12 +7,6 @@
 
 (c) 2026 aissus
 
-> [!IMPORTANT]
-> The kit needs **circuitRF 1.7.3 or newer**. Its HBT cells run a VBIC model that is compiled once, on
-> the machine that uses the kit, with **OpenVAF** (`generator/build-vbic.sh`). The
-> [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container provides OpenVAF, ngspice, Xyce
-> and the IHP PDK, and is the environment this repository builds and validates the kit in.
-
 ## Description
 
 **circuitRF-IHP-SG13G2-PDK** provides the devices of the [IHP SG13G2](https://github.com/IHP-GmbH/IHP-Open-PDK)

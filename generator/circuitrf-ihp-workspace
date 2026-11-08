@@ -26,7 +26,7 @@ cat > "$1/.cws" <<EOF
   "ReferencedWorkspaces": [{"Alias": "IHP_SG13G2", "Path": "$REL/.cws"}],
   "KnownFiles": [],
   "DefaultTechRef": "tech/IHP_SG13G2.ctech",
-  "PdkRefs": [{"Path": "$PDK", "Provider": "$(basename "$PDK")", "TranslationVersion": 4}]
+  "PdkRefs": [{"Path": "$PDK", "Provider": "$(basename "$PDK")", "TranslationVersion": 5}]
 }
 EOF
 # Its declaration of the kit's PCells, in the folder circuitRF would otherwise fill for the PdkRef
