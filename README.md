@@ -5,8 +5,6 @@
 ![circuitRF 1.7.3+](https://img.shields.io/badge/circuitRF-1.7.3%2B-informational.svg)
 ![PDK: IHP SG13G2](https://img.shields.io/badge/PDK-IHP_SG13G2-lightgrey.svg)
 
-(c) 2026 aissus
-
 ## Description
 
 **circuitRF-IHP-SG13G2-PDK** provides the devices of the [IHP SG13G2](https://github.com/IHP-GmbH/IHP-Open-PDK)
