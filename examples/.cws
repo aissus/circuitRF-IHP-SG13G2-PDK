@@ -3,12 +3,6 @@
   "LibraryRefs": [
     "../kit/IHP_SG13G2"
   ],
-  "ReferencedWorkspaces": [
-    {
-      "Alias": "IHP_SG13G2",
-      "Path": "../kit/IHP_SG13G2/.cws"
-    }
-  ],
   "KnownFiles": [],
   "DefaultTechRef": "tech/IHP_SG13G2.ctech",
   "PythonInterpreter": "python3",
@@ -16,7 +10,124 @@
     {
       "Path": "/foss/pdks/ihp-sg13g2",
       "Provider": "ihp-sg13g2",
-      "TranslationVersion": 5
+      "TranslationVersion": 5,
+      "Settings": {
+        "provider": "ihp-sg13g2",
+        "baseDirectory": "/foss/pdks/ihp-sg13g2",
+        "generatedBy": "circuitRF",
+        "generatedFormat": 5,
+        "_note": "Written by circuitRF when this kit was imported. Its devices are compiled Verilog-A models, one file per model; the file below is the default, and each device selects its own from the .model card it names. Edit freely \u2014 this file is circuitRF\u0027s own, not the kit\u0027s.",
+        "workers": [
+          {
+            "platform": "any",
+            "command": "osdi-worker",
+            "arguments": [
+              "/foss/pdks/ihp-sg13g2/libs.tech/ngspice/osdi/cap_cmomf.osdi"
+            ]
+          }
+        ]
+      },
+      "Corners": [
+        {
+          "AxisId": "libs.tech/ngspice/models/cornerCAP.lib",
+          "DisplayName": "cornerCAP",
+          "Options": [
+            "cap_typ",
+            "cap_typ_mismatch",
+            "cap_typ_stat",
+            "cap_bcs",
+            "cap_bcs_mismatch",
+            "cap_wcs",
+            "cap_wcs_mismatch"
+          ]
+        },
+        {
+          "AxisId": "libs.tech/ngspice/models/cornerDIO.lib",
+          "DisplayName": "cornerDIO",
+          "Options": [
+            "dio_tt",
+            "dio_tt_stat",
+            "dio_ss",
+            "dio_ff"
+          ]
+        },
+        {
+          "AxisId": "libs.tech/ngspice/models/cornerHBT.lib",
+          "DisplayName": "cornerHBT",
+          "Options": [
+            "hbt_typ",
+            "hbt_typ_mismatch",
+            "hbt_typ_stat",
+            "hbt_bcs",
+            "hbt_bcs_mismatch",
+            "hbt_wcs",
+            "hbt_wcs_mismatch"
+          ]
+        },
+        {
+          "AxisId": "libs.tech/ngspice/models/cornerMOSCAP.lib",
+          "DisplayName": "cornerMOSCAP",
+          "Options": [
+            "moscap_tt",
+            "moscap_tt_mismatch",
+            "moscap_tt_stat"
+          ]
+        },
+        {
+          "AxisId": "libs.tech/ngspice/models/cornerMOShv.lib",
+          "DisplayName": "cornerMOShv",
+          "Options": [
+            "mos_tt",
+            "mos_tt_mismatch",
+            "mos_tt_stat",
+            "mos_ss",
+            "mos_ss_mismatch",
+            "mos_ff",
+            "mos_ff_mismatch",
+            "mos_sf",
+            "mos_sf_mismatch",
+            "mos_fs",
+            "mos_fs_mismatch"
+          ]
+        },
+        {
+          "AxisId": "libs.tech/ngspice/models/cornerMOSlv.lib",
+          "DisplayName": "cornerMOSlv",
+          "Options": [
+            "mos_tt",
+            "mos_tt_mismatch",
+            "mos_tt_stat",
+            "mos_ss",
+            "mos_ss_mismatch",
+            "mos_ff",
+            "mos_ff_mismatch",
+            "mos_sf",
+            "mos_sf_mismatch",
+            "mos_fs",
+            "mos_fs_mismatch"
+          ]
+        },
+        {
+          "AxisId": "libs.tech/ngspice/models/cornerRES.lib",
+          "DisplayName": "cornerRES",
+          "Options": [
+            "res_typ",
+            "res_typ_mismatch",
+            "res_stat",
+            "res_bcs",
+            "res_bcs_mismatch",
+            "res_wcs",
+            "res_wcs_mismatch",
+            "res_stat_mismatch"
+          ]
+        }
+      ]
+    }
+  ],
+  "ReferencedWorkspaces": [
+    {
+      "Alias": "IHP_SG13G2",
+      "Path": "../kit/IHP_SG13G2/.cws"
     }
   ]
 }

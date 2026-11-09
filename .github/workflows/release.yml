@@ -68,7 +68,7 @@ jobs:
           use (\`CLAUDE.md\`, a skill, \`.mcp.json\` for circuitRF's MCP server). Built from the IHP Open PDK
           and validated against the PDK's own models in ngspice and Xyce. The \`.sha256\` checks the archive.
 
-          Requires **circuitRF 1.7.3 or newer**, and **OpenVAF** once, to compile the VBIC models.
+          Requires **circuitRF 1.7.5 or newer**, and **OpenVAF** once, to compile the VBIC models.
 
           $(sed 's/^/    /' kit/IHP_SG13G2/BUILD)
 

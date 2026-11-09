@@ -7,7 +7,7 @@ of `../kit/IHP_SG13G2`.
 - **From the repository:** build the kit with `./kit.sh generator/build.sh`. The build also writes this
   workspace's copy of the technology (`tech/`) and its harmonicaRF documents (`harmonica/`).
 
-Open `examples/.cws` with File ▸ Open Workspace in circuitRF 1.7.3 or newer, or with
+Open `examples/.cws` with File ▸ Open Workspace in circuitRF 1.7.5 or newer, or with
 `./kit.sh circuitrf examples/.cws` in the repository.
 
 | Bench | What it shows | Ported from |
@@ -74,10 +74,13 @@ The workspace references two libraries:
 - **ihp-sg13g2**, the PDK itself, imported by circuitRF from `/foss/pdks/ihp-sg13g2` (where the image
   has it; a `.cws` cannot take a variable there).
   - It appears in File ▸ Manage Libraries and in the palette: 216 parts from IHP's xschem symbols and
-    ngspice models, the corner libraries, and IHP's KLayout PCells.
-  - circuitRF translates these parts itself, and they are not checked against ngspice the way the kit's
-    cells are.
-  - Its HBTs are ngspice's VBIC, which circuitRF does not run: use the kit's cells.
+    ngspice models, the corner libraries, and IHP's KLayout PCells (declared in `ihp-sg13g2-pcells/`).
+    `circuitrf import pdk` wrote both records; with the PDK elsewhere, run it again with that path.
+  - circuitRF translates these parts itself. The build checks its MOSFETs, resistors, MIM capacitor and
+    HBTs against ngspice too (the `pdk://` rows of the kit's `VALIDATION`).
+  - Its HBTs name ngspice's built-in VBIC, which circuitRF does not have. They run where the `.cws`
+    declares the kit's VBIC 1.3 to stand in for it, as `generator/circuitrf-ihp-workspace` does; this
+    workspace does not, because that declaration names an absolute path. Its benches use the kit's cells.
 
 ## fT and fmax
 

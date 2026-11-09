@@ -1,4 +1,12 @@
 {
   "schemaVersion": 1,
-  "entry": "../../kit/IHP_SG13G2/pcells/kit_entry.py"
+  "entry": "kit_entry.py",
+  "kitRoot": "/foss/pdks/ihp-sg13g2",
+  "pythonPath": [
+    "${kit}/libs.tech/klayout/python"
+  ],
+  "sources": [
+    "${kit}/libs.tech/klayout/python/sg13g2_pycell_lib/ihp"
+  ],
+  "dataFiles": []
 }

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Every IHP PCell the kit offers, drawn by circuitRF and compared with KLayout drawing the same cell:
+"""Every IHP PCell circuitRF offers from the PDK, drawn by circuitRF and compared with KLayout drawing the same cell:
 
     python3 generator/check_ihp_pcells.py --kit kit/IHP_SG13G2
 
-Writes a scratch workspace whose layout places each generator at its defaults and at the parameter
-sets below, has circuitRF build it (circuitrf convert --trust-kit), and runs itself again inside
-KLayout, which draws each cell through the PDK's own library and XORs it, layer by layer, against
-circuitRF's. One line per cell; exit 1 when a cell is not drawn or differs.
+Writes a scratch workspace, imports the PDK into it (circuitrf import pdk, which declares the PDK's
+PCell library, sg13g2_pycell_lib, in ihp-sg13g2-pcells/), places each generator at its defaults and at
+the parameter sets below, has circuitRF build it (circuitrf convert --trust-kit), and runs itself again
+inside KLayout, which draws each cell through the PDK's own library and XORs it, layer by layer,
+against circuitRF's. The kit gives the technology. One line per cell; exit 1 when a cell is not drawn
+or differs.
 
 KLayout-only parameters: Calculate = R (resistors) or C (cmim) makes KLayout take w and l as given,
 as circuitRF does (its default Calculate = l derives l from R in a callback circuitRF does not run),
@@ -29,8 +31,9 @@ DEFAULTS_OVERRIDE = {'inductor2': {'subE': True}, 'inductor3': {'subE': True}}
 
 
 def generator_ids(entry):
-    """What the kit's entry script registers, asked in-process with circuitRF's own Python package."""
+    """What the declaration's entry script registers, asked in-process with circuitRF's own Python package."""
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(shutil.which('circuitrf'))), 'pcell-python'))
+    sys.path.insert(0, os.path.join(os.environ['PDKPATH'], 'libs.tech', 'klayout', 'python'))
     import circuitrf_pcell as crf
     crf.run = lambda *a, **k: None
     runpy.run_path(entry)
@@ -38,16 +41,15 @@ def generator_ids(entry):
 
 
 def build(kit, ws):
-    entry = os.path.join(kit, 'pcells', 'kit_entry.py')
-    cases = [(g, DEFAULTS_OVERRIDE.get(g, {})) for g in generator_ids(entry)] + CASES
-    for d in ('tech', 'ihp-sg13g2-pcells', 'all/layout'):
+    for d in ('tech', 'all/layout'):
         os.makedirs(os.path.join(ws, d))
     shutil.copy(os.path.join(kit, 'tech', 'IHP_SG13G2.ctech'), os.path.join(ws, 'tech'))
     json.dump({'FormatVersion': 2, 'LibraryRefs': [], 'KnownFiles': [], 'DefaultTechRef': 'tech/IHP_SG13G2.ctech'},
               open(os.path.join(ws, '.cws'), 'w'))
+    subprocess.run(['circuitrf', 'import', 'pdk', os.environ['PDKPATH'], '--into', ws], check=True,
+                   stdout=subprocess.DEVNULL)
     decl = os.path.join(ws, 'ihp-sg13g2-pcells')
-    json.dump({'schemaVersion': 1, 'entry': os.path.relpath(entry, decl)},
-              open(os.path.join(decl, 'pcell-generators.json'), 'w'))
+    cases = [(g, DEFAULTS_OVERRIDE.get(g, {})) for g in generator_ids(os.path.join(decl, 'kit_entry.py'))] + CASES
     json.dump({'FormatVersion': 1, 'Parameters': [], 'IsTestBench': False, 'Terminals': [], 'NumPorts': 0,
                'PrimaryLayout': 'all.clay'}, open(os.path.join(ws, 'all', '.ccell'), 'w'))
     snaps, inst = {}, []

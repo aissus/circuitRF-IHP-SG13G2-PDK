@@ -9,6 +9,10 @@ runs in ngspice from the PDK's model files. HBTs: Ic and Ib at two VBE, over
 devices, Nx, le, corners and temperature. Resistors: R over w, l, b and
 corners. MIM capacitor: C at 1 GHz. Exit code 1 if anything is off by more
 than the tolerance.
+
+The same DC and MIM cases also run on the PDK's own parts as circuitRF imports
+them (pdk://ihp-sg13g2/<part>, rows marked pdk://), with the kit's VBIC 1.3
+declared to stand in for the built-in VBIC the PDK's HBT cards name.
 """
 import argparse, cmath, json, math, os, re, subprocess, sys, tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -17,6 +21,11 @@ from ihp2crf import Sheet, par
 PDK = os.environ['PDKPATH']
 CORNER_LIB = {'hbt': ('cornerHBT.lib', 'hbt'), 'res': ('cornerRES.lib', 'res'), 'cap': ('cornerCAP.lib', 'cap')}
 CNAME = ('typ', 'bcs', 'wcs')
+STAND_IN = {"model": "npn", "level": "9", "module": "vbic13_5t",
+            "parameters": {"dtemp": "trise", "vbe_max": None, "vbc_max": None, "vce_max": None}}
+# What circuitRF's import does not yet do, by row: reported as a gap, not a failure, while it is off.
+GAPS = {'pdk:// sg13_lv_nmos w=1e-05 l=1.3e-07 ng=4 mos_tt  C':
+        "the PDK picks a MOS's source/drain areas with .if on ng, which circuitRF's import settles once, at ng=1"}
 
 
 def cell_pins(kit, cell):
@@ -87,8 +96,83 @@ def check(label, got, ref, tol, rows, floor=0.0):
     rows.append((label, got, ref, err, err <= tol or abs(got - ref) <= floor))
 
 
-def run(kit, ws):
-    rows = []
+def caps_from_snp(path):
+    """C at each port of a one-frequency Touchstone file whose ports are separate parts, from S_kk."""
+    fmt = next(l for l in open(path) if l.startswith('#')).upper()
+    v = [float(x) for l in open(path) if l.strip() and l[0] not in '!#' for x in l.split('!')[0].split()]
+    n = round(math.sqrt((len(v) - 1) / 2))
+    f = v[0] * {'HZ': 1, 'KHZ': 1e3, 'MHZ': 1e6, 'GHZ': 1e9}[fmt.split()[1]]
+    caps = []
+    for k in range(n):
+        a, b = v[1 + 2 * (k * n + k)], v[2 + 2 * (k * n + k)]
+        s = complex(a, b) if ' RI' in fmt else cmath.rect(10 ** (a / 20) if ' DB' in fmt else a, math.radians(b))
+        caps.append(((1 - s) / (1 + s) / 50).imag / (2 * math.pi * f))
+    return caps
+
+
+def pdk_workspace(ws, kit):
+    """A workspace on the PDK as circuitRF imports it. The PDK's HBT cards name ngspice's built-in
+    VBIC (level 9); the kit's compiled VBIC 1.3 is declared to stand in for it."""
+    json.dump({"FormatVersion": 2, "LibraryRefs": [], "KnownFiles": []}, open(f'{ws}/.cws', 'w'))
+    crf('import', 'pdk', PDK, '--into', ws)
+    cws = json.load(open(f'{ws}/.cws'))
+    cws['PdkRefs'][0]['Settings']['standIns'] = [dict(STAND_IN, file=f'{kit}/models/osdi/vbic_1p3_5t.osdi')]
+    json.dump(cws, open(f'{ws}/.cws', 'w'), indent=1)
+
+
+def pdk_bench(ws, name, libs, insts, analysis, verb, *args):
+    """The PDK's own parts (pdk://ihp-sg13g2/<part>) placed in one bench with the corners of the .lib
+    lines `libs` selected, extracted, and wired. Each of insts is (part, parameters, nodes, lines):
+    nodes are the extracted line's nodes in order (a substrate global after them goes to ground),
+    lines the sources around it. One bench per corner and temperature: every extract and run loads
+    the whole imported PDK, about 10 s."""
+    os.makedirs(f'{ws}/{name}/schematic')
+    json.dump({"FormatVersion": 1, "Parameters": [], "IsTestBench": True, "Terminals": [], "NumPorts": 0},
+              open(f'{ws}/{name}/.ccell', 'w'))
+    comps = [{"InstanceName": f"X{k}", "Symbol": "Generic", "X": 0, "Y": 400 * k, "Rotation": "R0",
+              "MirrorX": False, "Disable": "None", "Parameters": [par(n, str(v), True) for n, v in p.items()],
+              "CellRef": 'pdk://ihp-sg13g2/' + part} for k, (part, p, _, _) in enumerate(insts)]
+    csch = f'{ws}/{name}/schematic/{name}.csch'
+    json.dump({"FormatVersion": 2, "CellName": name, "GridSize": 100, "GridSnap": True, "AuthorGridDivisor": 20,
+               "Components": comps, "Wires": [], "NetLabels": [], "Dots": [], "CanvasObjects": [],
+               "View": {"PanX": 0, "PanY": 0, "Zoom": 1}, "Analyses": [],
+               "CornerSelections": {'ihp-sg13g2|libs.tech/ngspice/models/' + l.split()[1]: l.split()[2] for l in libs}},
+              open(csch, 'w'), indent=1)
+    cnl = f'{ws}/{name}.cnl'
+    crf('netlist', csch, '-o', cnl)
+    s = open(cnl).read()
+    for k, (_, _, nodes, lines) in enumerate(insts):
+        m = re.search(rf'^(\S+:X{k})\s+(.*)$', s, re.M)
+        tok = m.group(2).split()
+        n = sum('=' not in t for t in tok)
+        line = ' '.join([m.group(1)] + nodes + ['0'] * (n - len(nodes)) + [t for t in tok if '=' in t])
+        s = s.replace(m.group(0), line + '\n' + '\n'.join(lines))
+    open(cnl, 'w').write(s + '\n' + analysis + '\n')
+    return crf(verb, cnl, *args)
+
+
+def pdk_dc(ws, queue, rows):
+    """The queued DC cases on the PDK's own parts, one bench per (corner, temperature). A case is
+    (.lib line, part, parameters, nets, {net: volts}, [(label, net, reference, tol, floor, f)]):
+    nets are the part's nodes in order; each source's probe gives the current into the part at that
+    net, and f(current) is compared with the reference."""
+    for (corner, temp), cases in queue.items():
+        insts, todo = [], []
+        for k, (libline, part, p, nets, volts, checks) in enumerate(cases):
+            u = lambda n: n if n == '0' else f'{n}_{k}'
+            insts.append((part, p, [u(n) for n in nets],
+                          [f'Vdc:V{u(n)} s{u(n)} 0 Vdc={v} V\nIProbe:I{u(n)} s{u(n)} {u(n)}' for n, v in volts.items()]))
+            todo += [(label, f'I{u(net)}', ref, tol, floor, f) for label, net, ref, tol, floor, f in checks]
+        got = currents(pdk_bench(ws, f'P{corner}_{temp}', {c[0] for c in cases}, insts, 'analysis DC1 type=dc',
+                                 'dc', '--set', f'temp={temp}'))
+        for label, probe, ref, tol, floor, f in todo:
+            check('pdk:// ' + label, f(got[probe]), ref, tol, rows, floor)
+
+
+def run(kit, ws, pws):
+    rows, queue = [], {}
+    q = lambda corner, temp, *case: queue.setdefault((corner, temp), []).append(case)
+    same = lambda i: i
     # ---- HBTs
     hbt_cases = [('npn13G2', {'Nx': 1}), ('npn13G2', {'Nx': 2}), ('npn13G2', {'Nx': 8}),
                  ('npn13G2l', {'Nx': 1}), ('npn13G2l', {'Nx': 4, 'le': 5e-6}),
@@ -114,6 +198,10 @@ def run(kit, ws):
             # rth differs from ngspice's built-in VBIC by up to ~1.5 %.
             check(tag + '  Ic', got['IC'], ref['-i(vc)'].real, 0.02, rows, 10e-9)
             check(tag + '  Ib', got['IB'], ref['-i(vb)'].real, 0.02, rows, 10e-9)
+            q(corner, temp, lib('hbt', corner), cell, {k: v for k, v in p.items() if k not in ('corner', 'T')},
+              ['nc', 'nb', '0', '0'], {'nb': vbe, 'nc': 1.5},
+              [(tag + '  Ic', 'nc', ref['-i(vc)'].real, 0.02, 10e-9, same),
+               (tag + '  Ib', 'nb', ref['-i(vb)'].real, 0.02, 10e-9, same)])
             if 'selft' in p:        # the compiled device keeps the PDK's selft=1
                 continue
             # the same device compiled whole (harmonicaRF's DUT): only Nx (le), corner and temp
@@ -142,6 +230,8 @@ def run(kit, ws):
         ref = ngspice([f'* {cell}', lib('res', corner), 'V1 n1 0 0.1', f'X1 n1 0 0 {cell} {inst}',
                        '.control', 'op', 'print -i(V1)', '.endc'])
         check(f'{cell} {inst} {CNAME[corner]}  R', got, 0.1 / ref['-i(v1)'].real, 0.01, rows)
+        q(corner, 27, lib('res', corner), cell, {k: v for k, v in p.items() if k != 'corner'}, ['n1', '0'],
+          {'n1': 0.1}, [(f'{cell} {inst} {CNAME[corner]}  R', 'n1', 0.1 / ref['-i(v1)'].real, 0.01, 0, lambda i: 0.1 / i)])
     # ---- MOSFETs: Id in saturation and in triode
     mos_cases = [('sg13_lv_nmos', {'w': 1e-6, 'l': 0.13e-6, 'ng': 1}), ('sg13_lv_nmos', {'w': 10e-6, 'l': 0.13e-6, 'ng': 4}),
                  ('sg13_lv_nmos', {'w': 1e-6, 'l': 0.13e-6, 'ng': 1, 'corner': 1}),
@@ -164,6 +254,10 @@ def run(kit, ws):
                            '.control', 'op', 'print -i(VD)', '.endc'])
             check(f'{cell} {inst} {("tt", "ff", "ss")[corner]} VGS={vgs:g} VDS={vds:g}  Id', got,
                   ref['-i(vd)'].real, 0.01, rows, 1e-9)
+            q(corner, 27, f'.lib cornerMOS{fam}.lib mos_{("tt", "ff", "ss")[corner]}', cell,
+              {k: v for k, v in p.items() if k != 'corner'}, ['nd', 'ng', '0', '0'], {'ng': sg * vgs, 'nd': sg * vds},
+              [(f'{cell} {inst} {("tt", "ff", "ss")[corner]} VGS={vgs:g} VDS={vds:g}  Id', 'nd',
+                ref['-i(vd)'].real, 0.01, 1e-9, same)])
     # ---- C at 1 GHz from S11: the MIM capacitor, and the MOS drain (its junction and overlap
     # capacitance, from the subckt's geometry formulas, for odd and even ng)
     caps = [('cap_cmim', p, {'PLUS': 'n1', 'MINUS': '0'}, lib('cap', p.get('corner', 0)))
@@ -172,6 +266,7 @@ def run(kit, ws):
              for c, p in (('sg13_lv_nmos', {'w': 10e-6, 'l': 0.13e-6, 'ng': 1}),
                           ('sg13_lv_nmos', {'w': 10e-6, 'l': 0.13e-6, 'ng': 4}),
                           ('sg13_hv_pmos', {'w': 10e-6, 'l': 0.4e-6, 'ng': 3}))]
+    capq = {}
     for cell, p, nets, libline in caps:
         def ex(s):
             s.comp('P1', 'TermG', 1000, 2000, [par('Num', '1', True), par('Z', '50', True)])
@@ -182,19 +277,27 @@ def run(kit, ws):
                                 "Kind": "Linear", "StartUnit": "GHz", "StopUnit": "GHz"}]}], ex)
         with tempfile.TemporaryDirectory() as t:
             crf('sparam', b, '-o', f'{t}/c.s1p')
-            data = [l.split() for l in open(f'{t}/c.s1p') if l.strip() and l[0] not in '!#']
-            fmt = next(l for l in open(f'{t}/c.s1p') if l.startswith('#')).upper()
-        f, a, bb = map(float, data[0][:3])
-        f *= {'HZ': 1, 'KHZ': 1e3, 'MHZ': 1e6, 'GHZ': 1e9}[fmt.split()[1]]
-        s11 = complex(a, bb) if ' RI' in fmt else cmath.rect(10 ** (a / 20) if ' DB' in fmt else a, math.radians(bb))
-        y = (1 - s11) / (1 + s11) / 50
-        got = y.imag / (2 * math.pi * f)
+            got, = caps_from_snp(f'{t}/c.s1p')
         corner = p.get('corner', 0)
         inst = ' '.join(f'{k}={v}' for k, v in p.items() if k != 'corner')
         ref = ngspice([f'* {cell}', libline, 'V1 n1 0 dc 0 ac 1', f'X1 {" ".join(nets.values())} {cell} {inst}',
                        '.control', 'ac lin 1 1e9 1e9', 'print i(V1)', '.endc'])
         cref = -ref['i(v1)'].imag / (2 * math.pi * 1e9)
         check(f'{cell} {inst} {libline.split()[-1]}  C', got, cref, 0.01, rows)
+        capq.setdefault(corner, []).append((libline, cell, {k: v for k, v in p.items() if k != 'corner'},
+                                            list(nets.values()), f'{cell} {inst} {libline.split()[-1]}  C', cref))
+    # the same cases on the PDK's own parts: DC, then C with a port on each part of a corner
+    pdk_dc(pws, queue, rows)
+    for corner, cs in capq.items():
+        u = lambda n, k: n if n == '0' else f'{n}_{k}'
+        insts = [(cell, p, [u(n, k) for n in nets], [f'Port:P{k + 1} {u(nets[0], k)} 0 Num={k + 1} Z=50 Ohm'])
+                 for k, (_, cell, p, nets, _, _) in enumerate(cs)]
+        with tempfile.TemporaryDirectory() as t:
+            out = f'{t}/c.s{len(cs)}p'
+            pdk_bench(pws, f'C{corner}', {c[0] for c in cs}, insts,
+                      'analysis SP1 type=sparam start=1 stop=1 npts=1 Unit=GHz', 'sparam', '-o', out)
+            for (_, _, _, _, label, cref), got in zip(cs, caps_from_snp(out)):
+                check('pdk:// ' + label, got, cref, 0.01, rows)
     hb(kit, ws, rows)
     return rows
 
@@ -279,14 +382,18 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--kit', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'kit', 'IHP_SG13G2'))
     a = ap.parse_args()
-    with tempfile.TemporaryDirectory() as ws:
+    with tempfile.TemporaryDirectory() as ws, tempfile.TemporaryDirectory() as pws:
         json.dump({"FormatVersion": 2, "LibraryRefs": [a.kit], "KnownFiles": []}, open(f'{ws}/.cws', 'w'))
-        rows = run(os.path.abspath(a.kit), ws)
-    bad = 0
+        pdk_workspace(pws, os.path.abspath(a.kit))
+        rows = run(os.path.abspath(a.kit), ws, pws)
+    bad, gaps = 0, []
     for label, got, ref, err, ok in rows:
-        bad += not ok
-        print(f"{'ok ' if ok else 'BAD'} {label:52s} kit {got:11.4e}  PDK {ref:11.4e}  {100 * err:6.2f} %")
-    print(f'{len(rows) - bad}/{len(rows)} within tolerance')
+        gap = not ok and GAPS.get(label)
+        bad += not ok and not gap
+        gaps += [gap] if gap else []
+        print(f"{'ok ' if ok else 'gap' if gap else 'BAD'} {label:52s} kit {got:11.4e}  PDK {ref:11.4e}  {100 * err:6.2f} %")
+    print(f'{len(rows) - bad - len(gaps)}/{len(rows)} within tolerance'
+          + ''.join(f'; known gap in circuitRF: {g}' for g in gaps))
     sys.exit(1 if bad else 0)
 
 

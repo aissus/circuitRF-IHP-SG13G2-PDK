@@ -7,7 +7,7 @@ workspace. Built and validated from the PDK by
 the PDK commit, the circuitRF version and the validation result.
 
 > [!IMPORTANT]
-> Requires **circuitRF 1.7.3 or newer**. The HBT cells also need their VBIC model compiled once (step 2),
+> Requires **circuitRF 1.7.5 or newer**. The HBT cells also need their VBIC model compiled once (step 2),
 > which takes **OpenVAF**. The [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container has
 > OpenVAF and the PDK.
 
@@ -52,10 +52,14 @@ The corner parameter is 0 for typ, 1 for bcs and 2 for wcs (MOSFETs: tt, ff, ss)
 
 The resistors, the MIM capacitor, the MOSFETs and the technology work without step 2.
 
-IHP's KLayout PCells (38 devices; `kit/IHP_SG13G2/PCELLS`) draw in circuitRF's layout editor when the IHP
-PDK is at `$PDKPATH` and Python 3.10 or newer is on PATH. circuitRF asks once before it runs them
-(headless: `--trust-kit examples/ihp-sg13g2-pcells`). A workspace of your own gets its declaration from
-`generator/circuitrf-ihp-workspace`.
+IHP's KLayout PCells (38 devices; `kit/IHP_SG13G2/PCELLS`) come with circuitRF's import of the IHP PDK,
+which `examples/` records at `/foss/pdks/ihp-sg13g2`, the IIC-OSIC-TOOLS location (with the PDK elsewhere:
+`circuitrf import pdk <PDK> --into examples`). They need Python 3.10 or newer, and circuitRF asks once before
+it runs them (headless: `--trust-kit examples/ihp-sg13g2-pcells`).
+
+A workspace of your own from `generator/circuitrf-ihp-workspace` imports the PDK too: the PDK's own parts
+(`pdk://ihp-sg13g2/<part>`) simulate there, its HBTs on the kit's VBIC 1.3 (step 2), which the script
+declares to stand in for ngspice's built-in VBIC.
 
 ## License
 

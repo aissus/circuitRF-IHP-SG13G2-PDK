@@ -12,7 +12,7 @@ description: Design and simulate circuits on IHP SG13G2 (130 nm SiGe BiCMOS) in 
 - **Examples:** `examples/` is a workspace with a working bench for each task (see the table at the end).
   Copy from these benches.
 - **Commands:**
-  - Release (the unzipped folder): `circuitrf <verb> ...`, from your own circuitRF 1.7.3 or newer.
+  - Release (the unzipped folder): `circuitrf <verb> ...`, from your own circuitRF 1.7.5 or newer.
   - Repository: `./kit.sh circuitrf <verb> ...`. It runs in the image and starts in the top folder, so give
     paths relative to the top folder.
   - The verb always comes first.
@@ -52,7 +52,9 @@ nominal). `dtemp` and `trise` are offsets in K. `corner` is 0 typ, 1 bcs, 2 wcs.
 
 The PDK's other Qucs-S components (diodes, ESD devices, varicap, cap_rfcmim, taps, pnpMPA, schottky_nbl1, isolbox, nmoscl) are not kit cells: `generator/qucs_cells.json` says what each one is and why. Do not reference them with `ws://IHP_SG13G2/...`.
 
-Layout: the kit offers IHP's own KLayout PCells (38 devices: HBTs, MOS, resistors, MIM/MOM, inductors, diodes, ESD, pads, seal ring) as circuitRF parametric cells; `kit/IHP_SG13G2/PCELLS` lists each one, compared with KLayout's drawing. They need the IHP PDK (`$PDKPATH`) and Python 3.10 or newer, and run once the kit is allowed (headless: `--trust-kit <workspace>/ihp-sg13g2-pcells`; the workspace's `ihp-sg13g2-pcells/pcell-generators.json` names the kit's `pcells/kit_entry.py`). Most parameters are text: lengths as `0.9u` or `9e-07`; a bare number in a text field is ignored and the default kept. `examples/HBT_layout` places npn13G2 at Nx 1, 4 and 8: `circuitrf render examples/HBT_layout/layout/HBT_layout.clay -o hbt.png --trust-kit examples/ihp-sg13g2-pcells`. The schematic cells have no layout view; place the PCell with the cell's values.
+The PDK's own parts: a workspace from `generator/circuitrf-ihp-workspace` (and `examples/`) also has the IHP PDK as circuitRF imports it. Its 216 parts are placed as `"CellRef": "pdk://ihp-sg13g2/<part>"`, with the PDK's pin and parameter names and its corner libraries, and simulate as imported: the MOSFETs, resistors and MIM capacitor match ngspice (the `pdk://` rows of `kit/IHP_SG13G2/VALIDATION`). The HBTs among them run only where the `.cws` declares the kit's VBIC 1.3 as `standIns` (the workspace script does; `examples/` does not, because the declaration names an absolute path). Without it a run is refused with the declaration to write. The kit's cells stay the validated reference, and the only ones with the `corner`/`T` parameters, harmonicaRF devices and Qucs-S symbols. An imported MOS with an even `ng` gets the odd-`ng` drain and source areas (circuitRF 1.7.5 settles the PDK's `.if` on `ng` at import), so its junction capacitance is a few % off; use the kit cell for that.
+
+Layout: IHP's own KLayout PCells (38 devices: HBTs, MOS, resistors, MIM/MOM, inductors, diodes, ESD, pads, seal ring) come with the PDK import: circuitRF declares them in the workspace's `ihp-sg13g2-pcells/` and draws them unmodified; `kit/IHP_SG13G2/PCELLS` lists each one, compared with KLayout's drawing. They need Python 3.10 or newer and run once the PDK is allowed (headless: `--trust-kit <workspace>/ihp-sg13g2-pcells`). Most parameters are text: lengths as `0.9u` or `9e-07`; a bare number in a text field is ignored and the default kept. `examples/HBT_layout` places npn13G2 at Nx 1, 4 and 8: `circuitrf render examples/HBT_layout/layout/HBT_layout.clay -o hbt.png --trust-kit examples/ihp-sg13g2-pcells`. A PCell is linked to the PDK's imported part, not to the kit's cells: for a kit cell, place the PCell with the cell's values.
 
 Notes:
 - **Ranges and limits:** the HBTs are valid from −40 to 125 °C. Nothing enforces the PDK ranges, so keep the
@@ -68,8 +70,9 @@ Notes:
 
 - **Quick benches:** add a cell to `examples/`.
 - **Your own workspace:**
-  - Run `generator/circuitrf-ihp-workspace <dir>`. It copies the technology and writes a `.cws` with absolute
-    paths.
+  - Run `generator/circuitrf-ihp-workspace <dir>`. It copies the technology, references the kit, and imports the
+    IHP PDK with circuitRF (its parts, corners and PCells), declaring the kit's VBIC 1.3 as the stand-in for the
+    PDK's HBTs. The PDK and the stand-in are absolute paths.
   - For a workspace you share or commit, write the `.cws` with relative paths instead. This is for `<dir>`
     beside `kit/`:
 
@@ -88,8 +91,8 @@ Notes:
   - `LibraryRefs` puts the kit in the Workspace tree and the palette.
   - The `IHP_SG13G2` alias is what `ws://IHP_SG13G2/<cell>` resolves through. The alias must be `IHP_SG13G2`.
   - `DefaultTechRef` is the workspace's own copy of the technology.
-  - `PdkRefs` (`{"Path": "<PDK>", "Provider": "ihp-sg13g2", "TranslationVersion": 5}`) is optional. It only adds
-    the PDK's own parts to the GUI palette, and their HBTs do not run in circuitRF. Use the kit's cells instead.
+  - `PdkRefs` is optional: the PDK's own parts, written by `circuitrf import pdk <PDK> --into <dir>` (never by
+    hand). Its `Settings.standIns` entry is what lets the PDK's HBTs run; see "The PDK's own parts" above.
 - **Add a cell:** use `create` with `what=cell workspace=<dir> name=<cell>`, or `circuitrf new cell <dir> <cell>`.
   Both make `<cell>/schematic/<cell>.csch`.
 
@@ -267,7 +270,7 @@ Running EM:
 
 ## circuitRF's MCP tools
 
-circuitRF 1.7.4's server offers 21 tools: `find`, `reference`, `create`, `check`, `explain`, `netlist`, `run`,
+circuitRF 1.7.5's server offers 21 tools: `find`, `reference`, `create`, `check`, `explain`, `netlist`, `run`,
 `read`, `render`, `plot`, `job`, `batch`, `history`, `solver`, `convert`, `import`, `lvs`, `recognize`,
 `impedance`, `review` and `model`. No tool writes your text: write documents with your own file tools.
 

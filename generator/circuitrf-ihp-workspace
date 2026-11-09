@@ -3,16 +3,17 @@
 # A new circuitRF workspace on the IHP SG13G2 kit: the kit's device library is
 # referenced (from this repository's kit/), and the IHP technology is copied in,
 # because a workspace owns its technology. Open <dir> in circuitRF afterwards.
-# The IHP Open PDK itself is referenced too, as an imported PDK: it is what
-# File > Manage Libraries and the Library palette list. circuitRF imports it
-# when the workspace first opens, and adds its decisions (model worker,
-# corners) to the .cws then. The Provider must be the importer's own kit name,
-# the PDK folder's name: circuitRF registers the parts under the Provider and
-# the palette looks them up under the folder name, so any other name leaves
-# every part unresolved (generic symbols, nothing to simulate).
+# The IHP Open PDK itself is imported too, by circuitRF (1.7.5 or newer): its
+# own parts, which simulate as imported, their corners, and IHP's KLayout PCells,
+# declared in <dir>/ihp-sg13g2-pcells. The PDK's HBT cards name ngspice's
+# built-in VBIC, which circuitRF does not have; the kit's compiled VBIC 1.3
+# (build-vbic.sh) is declared to stand in for it. circuitRF forgets that
+# declaration if it ever imports the PDK again (after an update that changes how
+# it reads PDKs): run this again on a new folder then, or copy the "standIns"
+# entry back into the .cws.
 set -e
 KIT=${IHP_KIT:-$(cd "$(dirname "$(readlink -f "$0")")/../kit/IHP_SG13G2" && pwd)}
-PDK=${IHP_PDK:-/foss/pdks/ihp-sg13g2}
+PDK=${IHP_PDK:-${PDKPATH:-/foss/pdks/ihp-sg13g2}}
 [ -n "$1" ] || { echo "usage: circuitrf-ihp-workspace <dir>" >&2; exit 1; }
 [ -e "$1/.cws" ] && { echo "$1 is already a workspace" >&2; exit 1; }
 mkdir -p "$1/tech"
@@ -25,11 +26,18 @@ cat > "$1/.cws" <<EOF
   "LibraryRefs": ["$REL"],
   "ReferencedWorkspaces": [{"Alias": "IHP_SG13G2", "Path": "$REL/.cws"}],
   "KnownFiles": [],
-  "DefaultTechRef": "tech/IHP_SG13G2.ctech",
-  "PdkRefs": [{"Path": "$PDK", "Provider": "$(basename "$PDK")", "TranslationVersion": 5}]
+  "DefaultTechRef": "tech/IHP_SG13G2.ctech"
 }
 EOF
-# Its declaration of the kit's PCells, in the folder circuitRF would otherwise fill for the PdkRef
-D="$1/$(basename "$PDK")-pcells"; mkdir -p "$D"
-printf '{\n  "schemaVersion": 1,\n  "entry": "%s"\n}\n' "$(realpath --relative-to="$D" "$KIT/pcells/kit_entry.py")" > "$D/pcell-generators.json"
+circuitrf import pdk "$PDK" --into "$1" >/dev/null
+V=$KIT/models/osdi/vbic_1p3_5t.osdi
+[ -f "$V" ] || echo "note: $V is not built yet (generator/build-vbic.sh); the PDK's HBTs need it to simulate" >&2
+python3 - "$1/.cws" "$V" <<'EOF'
+import json, sys
+cws = json.load(open(sys.argv[1]))
+cws['PdkRefs'][0]['Settings']['standIns'] = [{
+    "model": "npn", "level": "9", "file": sys.argv[2], "module": "vbic13_5t",
+    "parameters": {"dtemp": "trise", "vbe_max": None, "vbc_max": None, "vce_max": None}}]
+json.dump(cws, open(sys.argv[1], 'w'), indent=2)
+EOF
 echo "workspace $1: IHP SG13G2 technology, devices from $REL, IHP Open PDK from $PDK"

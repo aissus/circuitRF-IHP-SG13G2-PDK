@@ -6,6 +6,22 @@ Drafted 2026-11-05 (set aside). Revised 2026-11-07:
 - the inductor is also checked with circuitRF's planar MoM;
 - the README documents the flow.
 
+## Status (2026-11-09): circuitRF 1.7.5
+
+circuitRF 1.7.5 carries the kit's upstream pull requests #47 to #49: an OpenPDK kit's devices simulate
+straight from import, a CNI PCell library runs unmodified, and a kit's settings can declare a compiled
+stand-in for a built-in model card. The kit now:
+- runs on 1.7.5 (`kit.def`);
+- takes IHP's PCells from circuitRF's own import of the PDK (`examples/ihp-sg13g2-pcells/`, written by
+  `circuitrf import pdk`), without its own patched entry: still 50 of 50 identical to KLayout;
+- validates the PDK's imported parts as well as its cells, the HBTs on the kit's VBIC 1.3 declared as
+  `standIns`: 225/226, plus one known gap in the import (an imported MOSFET with even `ng` gets the odd-`ng`
+  drain and source areas, because circuitRF settles the PDK's `.if` on `ng` once, at `ng = 1`);
+- has `generator/circuitrf-ihp-workspace` import the PDK and declare the stand-in.
+
+The kit's own 143 rows are as on 1.7.4, except the resistors, now 0.00 % from ngspice (0.08 % before):
+1.7.5's OSDI worker no longer answers `$simparam("shrink")`, which R3 read as a 1 % shrink.
+
 ## Status (2026-11-07)
 
 Steps 0–5 and 7 are done, and step 6 (the inductor) is running; see the git log. README.md is the

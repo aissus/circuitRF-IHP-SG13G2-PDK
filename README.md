@@ -2,7 +2,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Kit build](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/actions/workflows/release.yml/badge.svg)](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/actions/workflows/release.yml)
-![circuitRF 1.7.3+](https://img.shields.io/badge/circuitRF-1.7.3%2B-informational.svg)
+![circuitRF 1.7.5+](https://img.shields.io/badge/circuitRF-1.7.5%2B-informational.svg)
 ![PDK: IHP SG13G2](https://img.shields.io/badge/PDK-IHP_SG13G2-lightgrey.svg)
 
 ## Description
@@ -11,11 +11,14 @@
 open 130 nm SiGe BiCMOS process as a device kit for [circuitRF](https://github.com/potatobeanradio/circuitRF),
 together with the generator that builds it from the PDK and an example workspace.
 
-circuitRF can import the IHP Open PDK directly, but the PDK's bipolar transistors are written for
-ngspice's built-in VBIC model, which circuitRF does not have. This kit provides each device as a
-parameterised circuitRF cell that evaluates the PDK's own model expressions with compiled Verilog-A
-models (VBIC 1.3 for the HBTs, PSP 103 for the MOSFETs, R3 (CMC) for the resistors), with IHP's Qucs-S
-symbols. Every build is validated against the PDK's models in ngspice and Xyce (143 comparisons).
+circuitRF 1.7.5 imports the IHP Open PDK directly: its parts simulate as imported, and its KLayout PCells
+draw unmodified. The PDK's bipolar transistors are the exception, because they are written for ngspice's
+built-in VBIC model, which circuitRF does not have. This kit compiles VBIC 1.3 and declares it to stand in,
+so that the imported HBTs simulate too. It also provides each device as a parameterised circuitRF cell
+that evaluates the PDK's own model expressions with compiled Verilog-A models (VBIC 1.3 for the HBTs,
+PSP 103 for the MOSFETs, R3 (CMC) for the resistors), with IHP's Qucs-S symbols, corner and temperature
+parameters, and harmonicaRF devices. Every build validates the kit's cells and the PDK's imported parts
+against the PDK's models in ngspice and Xyce (226 comparisons).
 
 | Cell | Device | Parameters |
 |---|---|---|
@@ -31,7 +34,8 @@ The corner parameter is 0 for typical, 1 for best case and 2 for worst case (MOS
 
 - **Technology** (`tech/IHP_SG13G2.ctech`): the PDK's layer table and an EM stackup for circuitRF's
   planar method-of-moments solver and its 3D solvers (Palace, EMerge, openEMS).
-- **Layout (PCells)**: IHP's own KLayout PCells, all 38 devices, as circuitRF parametric layout cells.
+- **Layout (PCells)**: IHP's own KLayout PCells, all 38 devices, drawn by circuitRF from its import of the
+  PDK and checked against KLayout.
 - **harmonicaRF devices**: the three HBTs compiled as single devices for harmonicaRF, circuitRF's
   interactive harmonic load-pull.
 - **Example workspace**: device characterisation benches (I-V, fT/fmax, load-pull, harmonic balance) and
@@ -82,10 +86,11 @@ also printed on the overview). Validation counts the comparisons with the PDK's 
 
 ### Layout: IHP's PCells
 
-The kit offers IHP's own KLayout PCells (`sg13g2_pycell_lib`) as circuitRF parametric layout cells, through
-circuitRF's CNI bridge. The build draws each one in circuitRF and compares it, layer by layer, with KLayout's own
-drawing of the same cell (`kit/IHP_SG13G2/PCELLS`): all 38 device generators draw, and every cell KLayout also
-has is identical (50 of 50 comparisons, defaults and 12 parameter sets).
+IHP's own KLayout PCells (`sg13g2_pycell_lib`) come with circuitRF's import of the PDK: `circuitrf import pdk`
+declares them in the workspace's `ihp-sg13g2-pcells/`, and circuitRF draws them unmodified through its CNI
+bridge. The build draws each one in circuitRF and compares it, layer by layer, with KLayout's own drawing of
+the same cell (`kit/IHP_SG13G2/PCELLS`): all 38 device generators draw, and every cell KLayout also has is
+identical (50 of 50 comparisons, defaults and 12 parameter sets).
 
 | Group | PCells |
 |---|---|
@@ -97,10 +102,10 @@ has is identical (50 of 50 comparisons, defaults and 12 parameter sets).
 | Diodes, ESD, taps | dantenna, dpantenna, schottky, schottky_nbl1, esd, ntap1, ptap1, isolbox, guard_ring |
 | Other | bondpad, sealring, via_stack, chipText, NoFillerStack |
 
-The PCells need the IHP PDK at `$PDKPATH` (or `$PDK_ROOT/ihp-sg13g2`) and Python 3.10 or newer; circuitRF runs
-them once you allow the kit (headless: `--trust-kit <workspace>/ihp-sg13g2-pcells`). Most parameters are text:
-write lengths as `0.9u` or `9e-07`. circuitRF 1.7.4 links a PCell only to imported kit parts, so the schematic
-cells have no layout view of their own: place the PCell with the cell's values.
+The PCells need Python 3.10 or newer; circuitRF runs them once you allow the PDK (headless:
+`--trust-kit <workspace>/ihp-sg13g2-pcells`). Most parameters are text: write lengths as `0.9u` or `9e-07`.
+circuitRF links a PCell to the PDK's imported part, not to library cells such as the kit's, so a kit cell has
+no layout view of its own: design with the imported part, or place the PCell with the cell's values.
 
 <p align="center">
   <img src="docs/images/gui/hbt_layout_window.png" alt="npn13G2 PCells in circuitRF's layout editor" width="85%"><br>
@@ -139,12 +144,11 @@ cells have no layout view of their own: place the PCell with the cell's values.
 │  ├─ qucs2csym.py                    symbols from the PDK's Qucs-S library
 │  ├─ qucs2csch.py                    the kit overview from the PDK's Qucs-S symbol gallery
 │  ├─ qucs_cells.json                 every Qucs-S component: works or not, with a note
-│  ├─ ihp_pcells.py                   the kit's PCell entry: IHP's KLayout PCells in circuitRF
-│  ├─ check_ihp_pcells.py             each PCell drawn by circuitRF against KLayout
+│  ├─ check_ihp_pcells.py             each of the PDK's PCells drawn by circuitRF against KLayout
 │  ├─ harmonica_ihp.py                harmonicaRF devices and documents
 │  ├─ validate_ihp_kit.py             validation against ngspice and Xyce
 │  ├─ va2cnl.py                       a parameter file as .cnl instance parameters
-│  └─ circuitrf-ihp-workspace         creates a workspace on the kit
+│  └─ circuitrf-ihp-workspace         creates a workspace on the kit and the imported PDK
 ├─ 📁 kit/                            build output (not tracked)
 ├─ 📁 release/                        README, CLAUDE.md and .mcp.json of the release archive
 ├─ CITATION.cff
@@ -170,7 +174,7 @@ Each [release](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/releases) prov
    the PDK at `$PDKPATH`, as in IIC-OSIC-TOOLS, it also builds the harmonicaRF devices.
 3. **Open** `examples/.cws` in circuitRF, or create a workspace of your own (below).
 
-The resistors, the MIM capacitor and the technology can be used without step 2.
+The resistors, the MIM capacitor, the MOSFETs and the technology can be used without step 2.
 
 ### From source
 
@@ -178,7 +182,7 @@ The resistors, the MIM capacitor and the technology can be used without step 2.
 git clone https://github.com/aissus/circuitRF-IHP-SG13G2-PDK.git
 cd circuitRF-IHP-SG13G2-PDK
 apptainer build --fakeroot kit.sif kit.def   # the build image, once (about 6 GB)
-./kit.sh generator/build.sh                  # the kit, in kit/IHP_SG13G2: about one minute
+./kit.sh generator/build.sh                  # the kit, in kit/IHP_SG13G2: about four minutes
 ./kit.sh circuitrf examples/.cws             # the example workspace in circuitRF
 ```
 
@@ -194,6 +198,11 @@ generator/circuitrf-ihp-workspace my_project      # IHP_KIT= names the kit if it
 The workspace references the kit and holds its own copy of the technology. Placed kit cells are stored as
 `ws://IHP_SG13G2/<cell>`, resolved through the workspace's `.cws`, so moving the kit means editing one path.
 
+It also imports the IHP Open PDK with circuitRF (`IHP_PDK=` or `$PDKPATH` names it): the PDK's own 216
+parts, placed as `pdk://ihp-sg13g2/<part>`, with their corners and IHP's PCells. They simulate as imported.
+For the HBTs among them, which name ngspice's built-in VBIC, the script declares the kit's compiled VBIC 1.3
+as a stand-in (`standIns` in the `.cws`). The build validates those parts against ngspice as well.
+
 ### With AI coding agents
 
 `CLAUDE.md`, the skill in `.claude/skills/ihp-sg13g2-kit/` and `.mcp.json` let an AI coding agent such as
@@ -208,7 +217,7 @@ local circuitRF installation.
 
 ```mermaid
 flowchart LR
-    subgraph image["kit.sif: IIC-OSIC-TOOLS 2026.09 + circuitRF 1.7.4"]
+    subgraph image["kit.sif: IIC-OSIC-TOOLS 2026.09 + circuitRF 1.7.5"]
         PDK["IHP SG13G2 PDK<br/>ngspice models, corner libraries,<br/>Qucs-S symbols, KLayout .lyp, ITF"]
         VA["VBIC 1.3<br/>Verilog-A source"]
         TOOLS["OpenVAF · ngspice · Xyce"]
@@ -218,7 +227,9 @@ flowchart LR
     PDK --> Q["qucs2csym.py"] --> SYM["symbols"]
     VA --> B["build-vbic.sh"] --> OSDI["models/osdi/*.osdi"]
     CELLS & SYM & OSDI --> KIT["kit/IHP_SG13G2"]
-    KIT --> VAL["validate_ihp_kit.py<br/>vs ngspice and Xyce"] --> CHK["circuitrf check"]
+    PDK --> IMP["circuitrf import pdk<br/>the PDK's own parts and PCells"]
+    KIT & IMP --> VAL["validate_ihp_kit.py<br/>vs ngspice and Xyce"] --> CHK["circuitrf check"]
+    IMP --> PC["check_ihp_pcells.py<br/>vs KLayout"]
 ```
 
 `generator/build.sh` runs these steps in order. It builds into a fresh folder and keeps the previous kit
@@ -232,9 +243,9 @@ version and the validation result.
 | `ihp2crf.py` | the PDK's model and corner libraries, `sg13g2.lyp`, the ITF | one cell per device; `tech/IHP_SG13G2.ctech`; the kit's `.cws` and `README.md` |
 | `qucs2csym.py` | the PDK's Qucs-S `user_lib` | each cell's symbol, pins in the PDK's terminal order |
 | `build-vbic.sh` | VBIC 1.3 Verilog-A source; the PDK's HBT library | `vbic_1p3_5t.osdi`; harmonicaRF's `vbic_1p3_bce.osdi` and `npn13G2{,l,v}.osdi` |
-| `validate_ihp_kit.py` | the kit, ngspice, Xyce | `VALIDATION` |
+| `validate_ihp_kit.py` | the kit; the PDK as circuitRF imports it; ngspice, Xyce | `VALIDATION` |
 | `circuitrf check` | the kit | stops the build on an error |
-| `ihp_pcells.py`, `check_ihp_pcells.py` | IHP's KLayout PCells; KLayout | `pcells/`: the kit's PCell entry; `PCELLS`: each PCell against KLayout |
+| `check_ihp_pcells.py` | IHP's KLayout PCells as circuitRF imports them; KLayout | `PCELLS`: each PCell against KLayout |
 | `qucs2csch.py` | the PDK's Qucs-S `symbols.sch`, `qucs_cells.json` | `examples/Kit_cells`: the gallery with the kit's cells and the status table |
 
 ## EM Stackup
@@ -265,14 +276,17 @@ Substrate layer.
 ## Validation
 
 `validate_ihp_kit.py` places each cell in a test bench and runs it in circuitRF, and runs the same device
-from the PDK's model files in ngspice, or in Xyce for harmonic balance.
+from the PDK's model files in ngspice, or in Xyce for harmonic balance. It runs the DC and MIM cases a
+second time on the PDK's own parts as circuitRF imports them (`pdk://ihp-sg13g2/<part>`, at the same
+corners and temperatures), with the kit's VBIC 1.3 declared as the stand-in for the HBTs.
 
 | Quantity | Reference | Tolerance | Rows | Largest deviation |
 |---|---|---|---|---|
 | HBT Ic and Ib at two VBE, all devices, Nx, le, corners and temperatures, as cells and as harmonicaRF devices | ngspice | 2 % or 10 nA | 92 | 6.5 nA on a 0.12 µA base current |
-| Resistance over w, l, bends and corners | ngspice | 1 % | 9 | 0.08 % |
+| Resistance over w, l, bends and corners | ngspice | 1 % | 9 | 0.00 % (0.08 % before circuitRF 1.7.5) |
 | MIM capacitance at 1 GHz, corners | ngspice | 1 % | 3 | 0.00 % |
 | npn13G2 common emitter at 10 GHz, Pout into compression, as a cell and as a harmonicaRF device | Xyce | 0.2 dB | 16 | 0.015 dB |
+| The PDK's imported parts: HBT Ic and Ib, R, MOS Id, MIM and MOS drain C, as above | ngspice | as above | 83 | as the kit's cells; one known gap (below) |
 
 > [!NOTE]
 > The remaining differences come from the models themselves. The VBIC 1.3 source has a
@@ -280,6 +294,12 @@ from the PDK's model files in ngspice, or in Xyce for harmonic balance.
 > current at high power), and the two differ by a few nA at sub-µA base currents. circuitRF reports a
 > thermal resistance of about 10⁴ °C/W on the HBT benches as unusual; for a minimum-size SiGe HBT it is
 > the PDK's value and expected.
+>
+> One difference is circuitRF's import, not the models: the PDK chooses a MOSFET's source and drain areas
+> with a netlist `.if` on `ng`, and circuitRF 1.7.5 settles it once, at `ng = 1`. An imported MOSFET with
+> an even `ng` therefore gets the odd-`ng` areas, and its drain capacitance is off (6.6 % at `ng = 4`);
+> its currents are not affected. `VALIDATION` lists the row as a gap, and it passes once circuitRF
+> evaluates the `.if` per instance. The kit's MOSFET cells handle both cases.
 
 ## Examples
 
@@ -307,7 +327,7 @@ IIC-OSIC-TOOLS Docker image (`hpretl/iic-osic-tools`) can take the released kit.
 - The [IHP Open PDK](https://github.com/IHP-GmbH/IHP-Open-PDK) and its authors, whose models, layer data,
   stackup data, symbols and parametric cells this kit is derived from.
 - [circuitRF](https://github.com/potatobeanradio/circuitRF) and its maintainer, including the integration of
-  the upstream changes this kit depends on, released in circuitRF 1.7.3.
+  the upstream changes this kit depends on, released in circuitRF 1.7.3 and 1.7.5.
 - [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS), Institute for Integrated Circuits and Quantum
   Computing, Johannes Kepler University Linz, the environment in which the kit is built and validated.
 - [VACASK](https://codeberg.org/arpadbuermen/VACASK), for its distribution of the VBIC 1.3 Verilog-A

@@ -10,17 +10,17 @@ To design or simulate with the kit, use the skill in `.claude/skills/ihp-sg13g2-
 |---|---|
 | `generator/` | `build.sh` runs the whole build: `ihp2va.py`, `ihp2crf.py` (cells, technology, the kit's `.cws`), `qucs2csym.py` (symbols), `build-vbic.sh` (VBIC 1.3 to OSDI, and harmonicaRF's devices through `harmonica_ihp.py`), `validate_ihp_kit.py`. `circuitrf-ihp-workspace` starts a workspace on the kit. |
 | `kit/IHP_SG13G2/` | Build output, git-ignored: the cells, `tech/IHP_SG13G2.ctech`, `models/`, `VALIDATION`, `BUILD`. Never edit it; change the generator and rebuild. |
-| `examples/` | One circuitRF workspace on the kit (`examples/.cws` references `../kit/IHP_SG13G2`). `tech/`, `harmonica/` and `results/*` (except `*.cdd`) are written by the build and the runs. |
-| `generator/` (PCells, overview) | `ihp_pcells.py` (the kit's PCell entry, copied to `kit/IHP_SG13G2/pcells/`), `check_ihp_pcells.py` (each PCell against KLayout), `qucs2csch.py` (the Qucs-S gallery as `examples/Kit_cells`), `qucs_cells.json` (what works, with notes). |
+| `examples/` | One circuitRF workspace on the kit (`examples/.cws` references `../kit/IHP_SG13G2`) and on the IHP PDK as circuitRF imports it (`PdkRefs`, and the PCell declaration in `ihp-sg13g2-pcells/`, both written by `circuitrf import pdk`). `tech/`, `harmonica/` and `results/*` (except `*.cdd`) are written by the build and the runs. |
+| `generator/` (PCells, overview) | `check_ihp_pcells.py` (each of the PDK's PCells, drawn by circuitRF from its import, against KLayout), `qucs2csch.py` (the Qucs-S gallery as `examples/Kit_cells`), `qucs_cells.json` (what works, with notes). |
 | `docs/` | `make-figures.sh`, `white.ccolor`, `images/` (the pages use `images/white/`). |
 | `ci/build-release.sh`, `.github/workflows/release.yml` | The release zip, built and validated in the base image. |
 | `release/` | The `README.md`, `CLAUDE.md` and `.mcp.json` placed at the top of the release zip. |
-| `kit.def`, `kit.sh` | The image (`hpretl/iic-osic-tools` plus circuitRF 1.7.4) and its launcher. |
+| `kit.def`, `kit.sh` | The image (`hpretl/iic-osic-tools` plus circuitRF 1.7.5) and its launcher. |
 
 ## Running tools
 
 Run everything in the image, through `./kit.sh <command...>` from the top folder. The image has ngspice, Xyce,
-OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.7.4.
+OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.7.5.
 
 - Build the image once: `apptainer build --fakeroot kit.sif kit.def`.
 - `kit.sh` always starts in the top folder and uses `.home/` as HOME. Both `.home/` and `kit.sif` are git-ignored,
@@ -31,8 +31,12 @@ OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.7.4.
 
 ## Checks
 
-- `./kit.sh generator/build.sh` (about 1 min) must end with `kit built`, with `143/143 within tolerance` in
-  `kit/IHP_SG13G2/VALIDATION`, `all identical` at the end of `PCELLS`, and 0 errors from `circuitrf check`. A failed build restores the previous kit.
+- `./kit.sh generator/build.sh` (about 4 min) must end with `kit built`, with `225/226 within tolerance` and
+  the one known gap in circuitRF's import (even `ng` MOS drain area) in `kit/IHP_SG13G2/VALIDATION`,
+  `all identical` at the end of `PCELLS`, and 0 errors from `circuitrf check`. A failed build restores the
+  previous kit. Rows marked `pdk://` run the PDK's own parts as circuitRF imports them; a `gap` row is a
+  difference in circuitRF's import, listed in `GAPS` in `validate_ihp_kit.py`, and turns into `ok` once
+  circuitRF fixes it.
 - `./kit.sh circuitrf check examples --summary` must report 0 errors. The 5 warnings are expected: `Kit_cells`
   and `inductor/schematic` declare no analysis, and the technology states no DRC rules (three layouts).
   On a fresh clone, before a build, add `--trust-kit examples/ihp-sg13g2-pcells`.
@@ -44,8 +48,11 @@ OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.7.4.
 
 - Benches place kit cells as `ws://IHP_SG13G2/<cell>`, through the `ReferencedWorkspaces` alias in the `.cws`.
   Never use a raw relative `CellRef`.
-- A workspace declares the kit's PCells in `ihp-sg13g2-pcells/pcell-generators.json`, with a relative `entry`
-  (the kit's `pcells/kit_entry.py`) and no `kitRoot`. circuitRF keeps that folder and never rewrites it.
+- A workspace gets the IHP PDK (its parts, corners and PCells) from `circuitrf import pdk <PDK> --into <ws>`,
+  which records `PdkRefs` in the `.cws` and declares the PCells in `ihp-sg13g2-pcells/`. Do not write either
+  by hand. The PDK's HBTs need the kit's VBIC 1.3 declared as `standIns` in that `PdkRefs` entry's
+  `Settings` (`generator/circuitrf-ihp-workspace` adds it); its `file` is an absolute path to the built
+  `vbic_1p3_5t.osdi`, so it is never committed, and a later import drops it.
 - A kit cell's status and note live in `generator/qucs_cells.json`. Update it when a cell is added or fixed;
   the build prints it on `examples/Kit_cells`.
 - Use relative paths only. The kit is relocatable because its cells name `models/osdi/<model>.osdi` relative to

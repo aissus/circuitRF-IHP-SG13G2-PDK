@@ -576,7 +576,11 @@ Start a project on it:
     generator/circuitrf-ihp-workspace my_project      # then open my_project in circuitRF
 
 The workspace references this folder as a library (Workspace > Libraries >
-IHP_SG13G2) and gets its own copy of the technology.
+IHP_SG13G2) and gets its own copy of the technology. It also imports the IHP
+Open PDK itself (circuitRF 1.7.5 or newer), whose own parts simulate as
+imported; the HBTs among them run on this kit's VBIC 1.3, which the workspace
+declares to stand in for ngspice's built-in VBIC. `VALIDATION` checks those
+parts too (the rows marked pdk://).
 
 | Cell | Device | Parameters |
 |---|---|---|
@@ -605,22 +609,18 @@ expressions. Their only parameters are Nx (and le on npn13G2l/v), corner and
 temp. Ready-to-pull documents are in the repository's examples/harmonica; make
 others with `generator/harmonica_ihp.py charm <out> --device npn13G2v --nx 4 ...`.
 
-**Layout.** `pcells/` offers IHP's own KLayout PCells (`sg13g2_pycell_lib`:
-HBTs, MOS, resistors, MIM, inductors, diodes, ESD, pads, seal ring, ...) as
-circuitRF parametric cells, through circuitRF's CNI bridge. `PCELLS` lists
-each one, drawn by circuitRF and compared with KLayout's own drawing. The PDK
-is found when the cells are drawn: `$PDKPATH`, else `$PDK_ROOT/ihp-sg13g2`.
-Without it the kit still loads and simulates, and its PCells draw as
-placeholders. circuitRF reads a PCell declaration only in a workspace and the
-folders directly under it, so a workspace using the kit holds one:
-`ihp-sg13g2-pcells/pcell-generators.json`, whose `entry` is this kit's
-`pcells/kit_entry.py`, as a relative path. circuitRF runs the scripts once you
-allow them (it asks; headless, `--trust-kit <that folder>`). The PDK declares
-most parameters as text: write lengths as `0.9u` or `9e-07` and counts such as
-`ng` and `b` as `2`. A bare number in a text field is ignored, and the cell
-keeps its default. The kit's own cells have no layout view (circuitRF 1.7.4
-ties a generator only to imported kit parts, not to library cells), so place
-the PCell with the cell's values.
+**Layout.** IHP's own KLayout PCells (`sg13g2_pycell_lib`: HBTs, MOS,
+resistors, MIM, inductors, diodes, ESD, pads, seal ring, ...) come with the
+PDK import: circuitRF declares them in the workspace's `ihp-sg13g2-pcells/`
+and draws them through its CNI bridge. `PCELLS` lists each one, drawn by
+circuitRF and compared with KLayout's own drawing. circuitRF runs the PDK's
+scripts once you allow them (it asks; headless, `--trust-kit <that folder>`).
+The PDK declares most parameters as text: write lengths as `0.9u` or `9e-07`
+and counts such as `ng` and `b` as `2`. A bare number in a text field is
+ignored, and the cell keeps its default. circuitRF links a PCell to the PDK's
+imported parts, not to library cells such as this kit's, so a kit cell has no
+layout view: place the PCell with the cell's values, or design with the
+imported part.
 
 `tech/IHP_SG13G2.ctech`: all 378 KLayout layers with their GDS numbers, and
 an EM stackup from the PDK's ITF (metal thickness and sheet resistance, vias)

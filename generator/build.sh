@@ -29,28 +29,22 @@ for d in npn13G2 npn13G2l npn13G2v; do for n in 1 2 4 8; do
 done; done
 python3 "$S/ihp2crf.py" --pdk "$PDKPATH" --out "$K"
 python3 "$S/qucs2csym.py" --kit "$K"
-# IHP's own KLayout PCells, offered by the kit through circuitRF's CNI bridge (the PDK is found at run time)
-mkdir -p "$K/pcells" && cp "$S/ihp_pcells.py" "$K/pcells/kit_entry.py"
-printf '{\n  "schemaVersion": 1,\n  "entry": "kit_entry.py"\n}\n' > "$K/pcells/pcell-generators.json"
 "$S/build-vbic.sh" "$K"
-# against the PDK's own models in ngspice and Xyce, then as circuitRF reads it
+# against the PDK's own models in ngspice and Xyce (the kit's cells, and the PDK's parts as circuitRF
+# imports them), then as circuitRF reads it
 python3 "$S/validate_ihp_kit.py" --kit "$K" | tee "$K/VALIDATION"
 circuitrf check "$K" --summary
-# each PCell drawn by circuitRF against the same cell drawn by KLayout
+# each of the PDK's PCells, drawn by circuitRF from its own import, against the same cell drawn by KLayout
 python3 "$S/check_ihp_pcells.py" --kit "$K" | tee "$K/PCELLS"
 
 # The examples' own copy of the technology (a workspace owns its technology), and their harmonicaRF
 # documents: a .charm names its compiled DUT by absolute path, so they are made for this kit, here.
 E=$(dirname "$S")/examples
-mkdir -p "$E/tech" "$E/harmonica" "$E/ihp-sg13g2-pcells"
+mkdir -p "$E/tech" "$E/harmonica"
 cp "$K"/tech/*.ctech "$E/tech/"
-# Their declaration of the kit's PCells. circuitRF looks for one only in a workspace and the folders
-# right under it; this one takes the folder circuitRF would declare the PdkRef's own PCells in, so the
-# GUI keeps it rather than writing a second, unpatched one.
-printf '{\n  "schemaVersion": 1,\n  "entry": "../../kit/IHP_SG13G2/pcells/kit_entry.py"\n}\n' \
-    > "$E/ihp-sg13g2-pcells/pcell-generators.json"
-# and the cells HBT_layout places, generated into the git-ignored .generated-cells/, where a check or an
-# open that may not run the kit's scripts finds them
+# The cells HBT_layout places: the PDK's PCells, which circuitRF's import declared in ihp-sg13g2-pcells/,
+# generated into the git-ignored .generated-cells/, where a check or an open that may not run the
+# PDK's scripts finds them
 g=$(mktemp --suffix=.gds) && circuitrf convert "$E/HBT_layout/layout/HBT_layout.clay" -o "$g" \
     --trust-kit "$E/ihp-sg13g2-pcells" >/dev/null && rm -f "$g"
 for d in npn13G2 npn13G2v; do for n in 1 2 4 8; do

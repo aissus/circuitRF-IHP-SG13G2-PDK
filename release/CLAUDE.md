@@ -16,7 +16,7 @@ example workspace. To design, simulate or run EM with it, use the skill in
 
 ## Setup
 
-1. **circuitRF 1.7.3 or newer.**
+1. **circuitRF 1.7.5 or newer.**
    - `.mcp.json` runs `circuitrf` from `PATH`. If `circuitrf --version` does not answer, set `"command"` to the
      executable's full path (macOS: `/Applications/circuitRF.app/Contents/MacOS/circuitRF`).
    - `circuitrf serve --root . --print-config` prints the right configuration.
@@ -39,8 +39,10 @@ example workspace. To design, simulate or run EM with it, use the skill in
   - write the relative `.cws` that the skill shows.
 
   Cells are placed as `ws://IHP_SG13G2/<cell>`.
-- **Machine paths:** `examples/.cws` names the PDK at `/foss/pdks/ihp-sg13g2` (`PdkRefs`). That only adds the
-  PDK's own parts to the GUI palette where the PDK is installed. The kit's cells do not need it.
+- **Machine paths:** `examples/.cws` names the PDK at `/foss/pdks/ihp-sg13g2` (`PdkRefs`), as circuitRF's import
+  recorded it, and so does the PCell declaration in `examples/ihp-sg13g2-pcells/`. They give the PDK's own parts and
+  IHP's PCells where the PDK is installed there; with the PDK elsewhere, import it again:
+  `circuitrf import pdk <PDK> --into examples`. The kit's cells do not need it.
 - **EM solvers:**
   - `circuitrf solver list` shows what is installed.
   - EMerge installs with `circuitrf solver install emerge --yes`.
