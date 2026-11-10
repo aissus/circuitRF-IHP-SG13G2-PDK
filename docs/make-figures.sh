@@ -18,12 +18,14 @@ mkdir -p "$I" "$W"
   circuitrf hb HBT_Ic/schematic/HBT_Ic.csch -a SW0 -o results/HBT_Ic.npy
   circuitrf hb HBT_fT_fmax/schematic/HBT_fT_fmax.csch -a SW0 -o results/HBT_fT_fmax.npy
   circuitrf lp HBT_Loadpull/schematic/HBT_Loadpull.csch -o results/HBT_Loadpull.npy
+  circuitrf hb HBT_Noise/schematic/HBT_Noise.csch -a SW0 -o results/HBT_Noise.npy
+  circuitrf osc VCO_PhaseNoise/schematic/VCO_PhaseNoise.csch -o results/VCO_PhaseNoise.npy
   if ls results/inductor.palace.s2p results/inductor.emerge.s2p results/inductor_mom.s1p >/dev/null 2>&1; then
       circuitrf sparam inductor_TB/schematic/inductor_TB.csch -o results/inductor_TB.npy
   else echo "inductor_TB: the EM results are missing; its display is left as it is" >&2; fi ) > /dev/null
 
 # Data displays: their own palette; white = an opaque background.
-for d in HBT_IcVce Resistors MIM_Cap HBT_fT_fmax HBT_Loadpull inductor_TB; do
+for d in HBT_IcVce Resistors MIM_Cap HBT_fT_fmax HBT_Loadpull HBT_Noise VCO_PhaseNoise inductor_TB; do
     [ -f examples/results/$d.npy ] || continue
     circuitrf render examples/results/$d.cdd -o $I/$d.png --scale 2
     circuitrf render examples/results/$d.cdd -o $W/$d.png --scale 2 --background opaque

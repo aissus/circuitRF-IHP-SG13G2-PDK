@@ -1,5 +1,5 @@
 {
- "npn13G2": {"works": "yes", "note": "SiGe HBT: VBIC 1.3 with the PDK's scaling; DC and HB", "validation": "68/68"},
+ "npn13G2": {"works": "yes", "note": "SiGe HBT: VBIC 1.3 with the PDK's scaling; DC, HB, noise and oscillation", "validation": "68/68"},
  "npn13G2l": {"works": "yes", "note": "SiGe HBT, long emitter: VBIC 1.3", "validation": "16/16"},
  "npn13G2v": {"works": "yes", "note": "SiGe HBT, high voltage: VBIC 1.3", "validation": "24/24"},
  "rsil": {"works": "yes", "note": "silicided poly resistor: CMC R3 (the PDK's r3_cmc.osdi)", "validation": "3/3"},

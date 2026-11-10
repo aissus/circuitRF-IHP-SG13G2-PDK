@@ -1,0 +1,398 @@
+{
+ "FormatVersion": 2,
+ "SelectedDataSource": "HBT_Noise.npy",
+ "SourceAliases": {
+  "HBT_Noise.npy": "HBT_Noise",
+  "HBT_Ic.npy": "HBT_Ic"
+ },
+ "ActiveTabIndex": 0,
+ "Tabs": [
+  {
+   "Name": "HBT_Noise",
+   "Plots": [
+    {
+     "Left": 0,
+     "Top": 0,
+     "Width": 760,
+     "Height": 440,
+     "PlotType": "Rect",
+     "FreqUnit": "GHz",
+     "CustomTitle": "NFmin and NF from 50 \u03a9 at VBE = 0.82 V",
+     "CustomTitleOn": true,
+     "CustomYLabel": "dB",
+     "CustomYLabelOn": true,
+     "CustomXLabel": "",
+     "CustomXLabelOn": false,
+     "Legend": "Below",
+     "Traces": [
+      {
+       "SourcePath": "HBT_Noise.npy",
+       "CubeName": "NFmin",
+       "CubeSlice": [
+        {
+         "AxisName": "VBE",
+         "Role": "PinToIndex",
+         "Index": 4,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "freq",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "NFmin",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 12,
+        "LineType": "Solid"
+       },
+       "Markers": [
+        {
+         "Name": "m1",
+         "Index": 38,
+         "Freq": 20,
+         "FreqUnits": "GHz",
+         "InfoBoxX": 300,
+         "InfoBoxY": 170,
+         "PositionStaticX": 20,
+         "SnappedToCurve": true
+        }
+       ]
+      },
+      {
+       "SourcePath": "HBT_Noise.npy",
+       "CubeName": "NF",
+       "CubeSlice": [
+        {
+         "AxisName": "VBE",
+         "Role": "PinToIndex",
+         "Index": 4,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "freq",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "NF from 50 \u03a9",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 1,
+        "LineType": "Dashed"
+       },
+       "Markers": []
+      }
+     ],
+     "Axes": null
+    },
+    {
+     "Left": 780,
+     "Top": 0,
+     "Width": 560,
+     "Height": 560,
+     "PlotType": "Smith",
+     "FreqUnit": "GHz",
+     "CustomTitle": "Sopt, 1\u201340 GHz; noise circles at 20 GHz",
+     "CustomTitleOn": true,
+     "CustomYLabel": "source \u0393",
+     "CustomYLabelOn": true,
+     "CustomXLabel": "",
+     "CustomXLabelOn": false,
+     "Legend": "Inside",
+     "Traces": [
+      {
+       "SourcePath": "HBT_Noise.npy",
+       "CubeName": "Sopt",
+       "CubeSlice": [
+        {
+         "AxisName": "VBE",
+         "Role": "PinToIndex",
+         "Index": 4,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "freq",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "Sopt",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 12,
+        "LineType": "Solid"
+       },
+       "Markers": []
+      },
+      {
+       "SourcePath": "HBT_Noise.npy",
+       "CubeName": "NC_025",
+       "CubeSlice": [
+        {
+         "AxisName": "VBE",
+         "Role": "PinToIndex",
+         "Index": 4,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "freq",
+         "Role": "PinToIndex",
+         "Index": 38,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "point",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "NFmin + 0.25 dB",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 1,
+        "LineType": "Solid"
+       },
+       "Markers": []
+      },
+      {
+       "SourcePath": "HBT_Noise.npy",
+       "CubeName": "NC_1",
+       "CubeSlice": [
+        {
+         "AxisName": "VBE",
+         "Role": "PinToIndex",
+         "Index": 4,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "freq",
+         "Role": "PinToIndex",
+         "Index": 38,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "point",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "NFmin + 1 dB",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 9,
+        "LineType": "Solid"
+       },
+       "Markers": []
+      }
+     ],
+     "Axes": null
+    },
+    {
+     "Left": 0,
+     "Top": 460,
+     "Width": 760,
+     "Height": 440,
+     "PlotType": "Rect",
+     "FreqUnit": "GHz",
+     "CustomTitle": "NFmin against Jc = Ic/Nx",
+     "CustomTitleOn": true,
+     "CustomYLabel": "NFmin, dB",
+     "CustomYLabelOn": true,
+     "CustomXLabel": "Jc, mA per Nx",
+     "CustomXLabelOn": true,
+     "Legend": "Inside",
+     "Traces": [
+      {
+       "SourcePath": "HBT_Noise.npy",
+       "CubeName": "NFmin",
+       "CubeSlice": [
+        {
+         "AxisName": "VBE",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "freq",
+         "Role": "PinToIndex",
+         "Index": 18,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "10 GHz",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 12,
+        "LineType": "Solid"
+       },
+       "Markers": [],
+       "XSpec": "Jc_mA[2,:]",
+       "XSourcePath": "HBT_Ic.npy"
+      },
+      {
+       "SourcePath": "HBT_Noise.npy",
+       "CubeName": "NFmin",
+       "CubeSlice": [
+        {
+         "AxisName": "VBE",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "freq",
+         "Role": "PinToIndex",
+         "Index": 38,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "20 GHz",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 1,
+        "LineType": "Solid"
+       },
+       "Markers": [],
+       "XSpec": "Jc_mA[2,:]",
+       "XSourcePath": "HBT_Ic.npy"
+      },
+      {
+       "SourcePath": "HBT_Noise.npy",
+       "CubeName": "NFmin",
+       "CubeSlice": [
+        {
+         "AxisName": "VBE",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "freq",
+         "Role": "PinToIndex",
+         "Index": 58,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "30 GHz",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 9,
+        "LineType": "Solid"
+       },
+       "Markers": [],
+       "XSpec": "Jc_mA[2,:]",
+       "XSourcePath": "HBT_Ic.npy"
+      },
+      {
+       "SourcePath": "HBT_Noise.npy",
+       "CubeName": "NFmin",
+       "CubeSlice": [
+        {
+         "AxisName": "VBE",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "freq",
+         "Role": "PinToIndex",
+         "Index": 78,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "40 GHz",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 6,
+        "LineType": "Solid"
+       },
+       "Markers": [],
+       "XSpec": "Jc_mA[2,:]",
+       "XSourcePath": "HBT_Ic.npy"
+      }
+     ],
+     "Axes": {
+      "AutoscaleX": true,
+      "AutoscaleY": true,
+      "AutoscaleRightY": true,
+      "AutoscaleMag": true,
+      "WindowX": 0,
+      "WindowY": 0,
+      "WindowWidth": 0,
+      "WindowHeight": 500,
+      "WindowSecondaryX": 0,
+      "WindowSecondaryY": 0,
+      "WindowSecondaryWidth": 0,
+      "WindowSecondaryHeight": 0,
+      "XScale": "Log"
+     }
+    }
+   ]
+  }
+ ]
+}

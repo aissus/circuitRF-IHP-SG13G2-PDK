@@ -7,12 +7,16 @@ Each test places a kit cell in a schematic bench (the way the GUI does: a cell
 reference into the library) and runs it with the circuitRF CLI; the same device
 runs in ngspice from the PDK's model files. HBTs: Ic and Ib at two VBE, over
 devices, Nx, le, corners and temperature. Resistors: R over w, l, b and
-corners. MIM capacitor: C at 1 GHz. Exit code 1 if anything is off by more
-than the tolerance.
+corners. MIM capacitor: C at 1 GHz. Small-signal noise (NF, NFmin, Rn, Sopt)
+of the HBT and the NMOS against ngspice's .sp with noise, and an HBT Colpitts
+oscillator against an ngspice transient; for the HBT, ngspice runs the same
+compiled VBIC 1.3 with the kit cell's parameters. Exit code 1 if anything is
+off by more than the tolerance.
 
-The same DC and MIM cases also run on the PDK's own parts as circuitRF imports
-them (pdk://ihp-sg13g2/<part>, rows marked pdk://), with the kit's VBIC 1.3
-declared to stand in for the built-in VBIC the PDK's HBT cards name.
+The same DC, MIM and noise cases also run on the PDK's own parts as circuitRF
+imports them (pdk://ihp-sg13g2/<part>, rows marked pdk://; the NMOS noise runs
+only there), with the kit's VBIC 1.3 declared to stand in for the built-in VBIC
+the PDK's HBT cards name.
 """
 import argparse, cmath, json, math, os, re, subprocess, sys, tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -299,7 +303,142 @@ def run(kit, ws, pws):
             for (_, _, _, _, label, cref), got in zip(cs, caps_from_snp(out)):
                 check('pdk:// ' + label, got, cref, 0.01, rows)
     hb(kit, ws, rows)
+    noise(kit, ws, pws, rows)
+    osc(kit, ws, rows)
     return rows
+
+
+def osc(kit, ws, rows):
+    """The VCO_PhaseNoise example's circuit (npn13G2 Nx=4 common-base Colpitts, 1 nH and 4 ohm tank,
+    each MIM capacitor as its 436.2 fF and 55 mOhm): circuitRF's oscillator analysis against an ngspice
+    transient on the same compiled VBIC 1.3, for the frequency and the collector's fundamental."""
+    b = bench(ws, kit, 'npn13G2', {'Nx': 4}, {'c': 'c', 'b': 'vb', 'e': 'e', 'bn': '0'}, [])
+    parts = [('Vdc:VCC vcc 0 Vdc=2.0 V', 'VCC vcc 0 2.0'), ('Vdc:VB sb 0 Vdc=1.6 V', 'VB sb 0 1.6'),
+             ('R:RB sb vb R=1k', 'RB sb vb 1k'), ('C:CBB vb 0 C=10 pF', 'CBB vb 0 10p'),
+             ('L:L1 vcc t L=1 nH', 'L1 vcc t 1n'), ('R:R1 t c R=4', 'R1 t c 4'), ('R:RE e 0 R=1k', 'RE e 0 1k'),
+             ('R:RC1 c m1 R=0.055', 'RC1 c m1 0.055'), ('C:C1 m1 e C=436.2 fF', 'C1 m1 e 436.2f'),
+             ('R:RC2 e m2 R=0.055', 'RC2 e m2 0.055'), ('C:C2 m2 0 C=436.2 fF', 'C2 m2 0 436.2f')]
+    with tempfile.TemporaryDirectory() as t:
+        crf('netlist', b, '-o', f'{t}/o.cnl')
+        cnl = open(f'{t}/o.cnl').read()
+        open(f'{t}/o.cnl', 'w').write(cnl + '\n'.join([p for p, _ in parts] + [
+            'OscProbe:OP1 c 0 Mode=shunt', 'analysis OSC1 type=osc Fguess=10 Unit=GHz MaxHarm=9']) + '\n')
+        crf('osc', f'{t}/o.cnl', '-o', f'{t}/o.txt')
+        txt = open(f'{t}/o.txt').read()
+        fosc = float(re.search(r'^# OSC1\.Fosc\nvalue\n(\S+)', txt, re.M)[1])
+        vsec = re.search(r'^# OSC1\.V\n(.*?)(?=\n# |\Z)', txt, re.M | re.S)[1]
+        v1 = abs(complex(*map(float, re.search(r'^c\t1\t(\S+)\t(\S+)$', vsec, re.M).groups())))
+        deck = ['* vco', '.temp 27'] + define_to_ngspice(cnl, ['c', 'vb', 'e', '0'], {'Nx': 4}) + \
+               [n for _, n in parts] + ['.ic v(c)=1.95', '.control', 'tran 0.05p 40n 0 0.05p',
+                                        'meas tran t1 when v(c)=2 rise=300', 'meas tran t2 when v(c)=2 rise=380',
+                                        'let f0 = 80/(t2-t1)', 'print f0', 'fourier $&f0 v(c)', '.endc', '.end']
+        open(f'{t}/n.cir', 'w').write('\n'.join(deck) + '\n')
+        out = subprocess.run(['ngspice', '-b', 'n.cir'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                             text=True, cwd=t).stdout
+    f0 = float(re.search(r'^f0\s*=\s*(\S+)', out, re.M)[1])
+    a1 = float(re.search(r'^\s*1\s+\S+\s+(\S+)', out.split('Fourier analysis for v(c)')[1], re.M)[1])
+    check('OSC npn13G2 Nx=4 Colpitts  Fosc Hz', fosc, f0, 5e-4, rows)
+    check('OSC npn13G2 Nx=4 Colpitts  |V(c)| fundamental', v1, a1, 0.01, rows)
+
+
+def noise_from_snp(path):
+    """(f in Hz, NFmin dB, Gamma_opt, Rn/R, R) per row of a two-port Touchstone file's noise block."""
+    opt = next(l for l in open(path) if l.startswith('#')).upper().split()
+    v = [[float(x) for x in l.split('!')[0].split()] for l in open(path) if l.strip() and l[0] not in '!#']
+    units = {'HZ': 1, 'KHZ': 1e3, 'MHZ': 1e6, 'GHZ': 1e9}
+    r, hz = float(opt[opt.index('R') + 1]), next(units[t] for t in opt if t in units)
+    return [(f * hz, nf, cmath.rect(m, math.radians(a)), rn, r) for f, nf, m, a, rn in (x for x in v if len(x) == 5)]
+
+
+def ngspice_sp(lines, f):
+    """ngspice's .sp with donoise on lines at the frequencies f: NF, NFmin (dB), Rn (ohm) and SOpt."""
+    n = len(f)
+    with tempfile.TemporaryDirectory() as t:
+        open(f'{t}/n.cir', 'w').write('\n'.join(lines + ['.control', f'sp lin {n} {f[0]:g} {f[-1]:g} 1',
+                                                         'set filetype=ascii', 'write o.raw all', '.endc', '.end']) + '\n')
+        subprocess.run(['ngspice', '-b', 'n.cir'], capture_output=True, cwd=t)
+        txt = open(f'{t}/o.raw').read()
+    names = [m.lower() for m in re.findall(r'^\t\d+\t(\S+)\t', txt.split('Values:')[0], re.M)]
+    nums = [complex(float(a), float(b)) for a, b in re.findall(r'(\S+),(\S+)', txt.split('Values:')[1])]
+    return {nm: [nums[k * len(names) + i] for k in range(n)] for i, nm in enumerate(names)}
+
+
+def define_to_ngspice(cnl, nodes, inst):
+    """A kit cell's definition, as circuitRF extracts it, in ngspice: its VerilogA device as an OSDI
+    instance of the same file, its R and C as they are, the pins renamed to nodes. Parameters are
+    evaluated at the typical corner (a ?: assignment takes its last value); internal nodes get an x_ prefix."""
+    pins, body = re.search(r'^define \S+ \(([^)]*)\)\n(.*?)^end', cnl, re.M | re.S).groups()
+    ren = dict(zip(pins.split(), nodes))
+    env = dict(t.split('=') for t in re.search(r'^\s*parameters (.*)$', body, re.M).group(1).split())
+    env = {k: float(v) for k, v in env.items()} | inst
+    ev = lambda v: eval(v.replace('^', '**'), {}, env)
+    lines = []
+    for l in body.splitlines():
+        if m := re.match(r'^\s*(\w+) = (.*)$', l):
+            env[m[1]] = float(re.findall(r'[-0-9.eE]+', m[2])[-1]) if '?' in m[2] else ev(m[2])
+            continue
+        tok = l.split()
+        if not tok or ':' not in tok[0]:
+            continue
+        kind, name = tok[0].split(':')
+        nets = ' '.join(ren.get(t, t if t == '0' else 'x_' + t) for t in tok[1:] if '=' not in t)
+        kv = dict(t.split('=', 1) for t in tok[1:] if '=' in t)
+        if kind == 'VerilogA':
+            osdi = kv.pop('File').strip('"')
+            card = ' '.join(f'{k}={ev(v):.10g}' for k, v in kv.items() if k not in ('Pins', 'Temp'))
+            lines += ['.control', f'pre_osdi {osdi}', '.endc', f'.model m{name} {STAND_IN["module"]} {card}',
+                      f'N{name} {nets} m{name}']
+        elif kind in ('R', 'C'):
+            lines.append(f'{kind}{name} {nets} {ev(kv[kind]):.10g}')
+    return lines
+
+
+def noise(kit, ws, pws, rows):
+    """Small-signal noise between two 50-ohm ports through ideal bias tees, at 16.85 C = T0 (where
+    ngspice's noise figure, referred to the circuit temperature, is the IEEE one), against ngspice's
+    .sp donoise. The MOSFET is the PDK's own part on both sides (pdk://, PSP 103). The HBT, as the
+    kit cell and as the PDK's part with the VBIC 1.3 stand-in, is compared with ngspice running the
+    same compiled VBIC 1.3: ngspice's built-in VBIC, which the PDK's cards name, stamps rbp's thermal
+    noise across re (vbicnoise.c, ngspice 47), and reads NFmin about 0.05 dB and Rn about 22 % higher."""
+    f = (2e9, 8e9, 14e9, 20e9)
+    ports = ['Vp1 p1 0 dc 0 ac 1 portnum 1 z0 50', 'Vp2 p2 0 dc 0 ac 0 portnum 2 z0 50']
+    tees = lambda vin, vout: ['C1 p1 nb 1u', 'L1 nb sb 1u', f'VB sb 0 {vin}', 'C2 p2 nc 1u', 'L2 sc nc 1u', f'VC sc 0 {vout}']
+    crf_tees = lambda vin, vout: ['Port:P1 p1 0 Num=1 Z=50 Ohm', 'Port:P2 p2 0 Num=2 Z=50 Ohm',
+                                  'C:CB1 p1 nb C=1 uF', 'L:LB1 nb sb L=1 uH', f'Vdc:VB sb 0 Vdc={vin} V',
+                                  'C:CB2 nc p2 C=1 uF', 'L:LC nc sc L=1 uH', f'Vdc:VC sc 0 Vdc={vout} V']
+    sp = f'analysis SP1 type=sparam start=2 stop=20 npts={len(f)} Unit=GHz Noise=yes'
+    runs = []
+    with tempfile.TemporaryDirectory() as t:
+        # the HBT: kit cell (its T is its own temperature) and pdk:// part, one ngspice reference
+        b = bench(ws, kit, 'npn13G2', {'Nx': 1, 'T': 16.85}, {'c': 'nc', 'b': 'nb', 'e': '0', 'bn': '0'}, [])
+        crf('netlist', b, '-o', f'{t}/k.cnl')
+        cnl = open(f'{t}/k.cnl').read()
+        open(f'{t}/k.cnl', 'w').write(cnl + '\n'.join(crf_tees(0.85, 1.5) + [sp]) + '\n')
+        crf('sparam', f'{t}/k.cnl', '-o', f'{t}/k.s2p', '--set', 'temp=16.85')
+        ng = ngspice_sp(['* npn13G2', '.temp 16.85'] + define_to_ngspice(cnl, ['nc', 'nb', '0', '0'],
+                                                                          {'Nx': 1, 'T': 16.85}) + ports + tees(0.85, 1.5), f)
+        runs.append(('npn13G2 Nx=1', noise_from_snp(f'{t}/k.s2p'), ng))
+        pdk_bench(pws, 'N_npn13G2', {lib('hbt', 0)}, [('npn13G2', {'Nx': 1}, ['nc', 'nb', '0', '0'], crf_tees(0.85, 1.5))],
+                  sp, 'sparam', '-o', f'{t}/p.s2p', '--set', 'temp=16.85')
+        runs.append(('pdk:// npn13G2 Nx=1', noise_from_snp(f'{t}/p.s2p'), ng))
+        mos, libline = 'w=1e-05 l=1.3e-07 ng=5', '.lib cornerMOSlv.lib mos_tt'
+        pdk_bench(pws, 'N_nmos', {libline}, [('sg13_lv_nmos', {'w': 1e-5, 'l': 1.3e-7, 'ng': 5}, ['nc', 'nb', '0', '0'],
+                                             crf_tees(0.6, 1.2))], sp, 'sparam', '-o', f'{t}/m.s2p', '--set', 'temp=16.85')
+        runs.append((f'pdk:// sg13_lv_nmos {mos}', noise_from_snp(f'{t}/m.s2p'),
+                     ngspice_sp(['* nmos', libline, '.temp 16.85', f'X1 nc nb 0 0 sg13_lv_nmos {mos}'] + ports + tees(0.6, 1.2), f)))
+    for label, got, ng in runs:
+        if len(got) != len(f) or any(abs(g[0] - fk) > 1 for g, fk in zip(got, f)):
+            raise RuntimeError(f'{label}: noise block at {[g[0] for g in got]} Hz, not at {f}')
+        for k, (fk, nfmin, gopt, rn, r) in enumerate(got):
+            # NF from a 50-ohm source, from the file's noise parameters (Gamma_s = 0)
+            nf = 10 * math.log10(10 ** (nfmin / 10) + 4 * rn * abs(gopt) ** 2 / abs(1 + gopt) ** 2)
+            tag = f'{label} SP noise {fk / 1e9:g} GHz'
+            check(tag + '  NF50 dB', nf, ng['nf'][k].real, 1e-3, rows)
+            check(tag + '  NFmin dB', nfmin, ng['nfmin'][k].real, 1e-3, rows)
+            check(tag + '  Rn ohm', rn * r, ng['rn'][k].real, 1e-3, rows)
+            so = ng['sopt'][k]       # compared as complex; the columns show magnitudes
+            err = abs(gopt - so) / abs(so)
+            rows.append((tag + '  Sopt', abs(gopt), abs(so), err, err <= 1e-3))
 
 
 def hb(kit, ws, rows):

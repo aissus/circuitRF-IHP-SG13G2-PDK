@@ -7,7 +7,7 @@ of `../kit/IHP_SG13G2`.
 - **From the repository:** build the kit with `./kit.sh generator/build.sh`. The build also writes this
   workspace's copy of the technology (`tech/`) and its harmonicaRF documents (`harmonica/`).
 
-Open `examples/.cws` with File ▸ Open Workspace in circuitRF 1.7.5 or newer, or with
+Open `examples/.cws` with File ▸ Open Workspace in circuitRF 1.8.0 or newer, or with
 `./kit.sh circuitrf examples/.cws` in the repository.
 
 | Bench | What it shows | Ported from |
@@ -19,6 +19,8 @@ Open `examples/.cws` with File ▸ Open Workspace in circuitRF 1.7.5 or newer, o
 | `HBT_Ic` | the same bias network and Nx × VBE grid at DC: Ic, and Jc = Ic/Nx, the x-axis of the Jc plot | |
 | `HBT_Loadpull` | npn13G2 (Nx=8) load-pull at 50 GHz: Pout and PAE contours at 1 dB compression | |
 | `CE_10GHz_HB` | npn13G2 common emitter at 10 GHz: an HB drive sweep, with Pout, Gt, H2 and H3 measured | |
+| `HBT_Noise` | npn13G2 (Nx=4) noise parameters from 1 to 40 GHz against VBE: NFmin, Sopt, Rn and noise circles | |
+| `VCO_PhaseNoise` | a 10.46 GHz Colpitts VCO on npn13G2 and two MIM capacitors: its oscillation and phase noise | |
 | `inductor` | a two-turn TopMetal2 inductor from IHP's PCell: its layout, its 3D view, and one EM setup per solver | IHP's `inductor2` PCell |
 | `inductor_TB` | the inductor's series L and Q from every EM run, side by side | |
 | `Kit_cells` | every kit cell, placed as in the PDK's Qucs-S symbol gallery, with the status of every Qucs-S component | Qucs-S `symbols.sch` |
@@ -37,11 +39,14 @@ From the repository's top folder:
   circuitrf hb HBT_Ic/schematic/HBT_Ic.csch -a SW0 -o results/HBT_Ic.npy &&
   circuitrf hb HBT_fT_fmax/schematic/HBT_fT_fmax.csch -a SW0 -o results/HBT_fT_fmax.npy &&
   circuitrf hb CE_10GHz_HB/schematic/CE_10GHz_HB.csch -a SW -o results/CE_10GHz_HB.npy &&
-  circuitrf lp HBT_Loadpull/schematic/HBT_Loadpull.csch -o results/HBT_Loadpull.npy'
+  circuitrf lp HBT_Loadpull/schematic/HBT_Loadpull.csch -o results/HBT_Loadpull.npy &&
+  circuitrf hb HBT_Noise/schematic/HBT_Noise.csch -a SW0 -o results/HBT_Noise.npy &&
+  circuitrf osc VCO_PhaseNoise/schematic/VCO_PhaseNoise.csch -o results/VCO_PhaseNoise.npy'
 ```
 
-The longest run, the load-pull, takes about 20 s. Each verb runs the whole parametric sweep that
-wraps its analysis, and `-a <sweep>` names the sweep. In the GUI, press Simulate on a bench as usual.
+The longest run, the load-pull, takes about 20 s; the noise sweep and the oscillator take a few seconds each.
+Each verb runs the whole parametric sweep that wraps its analysis, and `-a <sweep>` names the sweep. In the
+GUI, press Simulate on a bench as usual.
 
 Each bench's data display (`results/<bench>.cdd`) reads the `.npy` its run writes. Every axis of every
 plot autoscales to all its traces, and a marker reads the curves where it matters:
@@ -53,9 +58,13 @@ plot autoscales to all its traces, and a marker reads the curves where it matter
 | `MIM_Cap` | C and Q at 1 GHz |
 | `HBT_fT_fmax` | every Nx at VBE = 0.94 V (the peak), and m2 at the peak Jc |
 | `inductor_TB` | L and Q of every solver at 10 GHz |
+| `HBT_Noise` | NFmin at 20 GHz |
+| `VCO_PhaseNoise` | the phase noise at 1 MHz from the carrier |
 
 The inductor's L plot shows EMerge's self-resonance near 40 GHz in full. The three resistors share
 one axis. The pictures below are these displays, from `docs/make-figures.sh`, on white.
+
+Every existing bench gives the same numbers on circuitRF 1.8.0 as on 1.7.5.
 
 Against the same benches run on circuitRF 1.6.0 with the kit's previous build:
 - **Six benches are identical** in every number: everything except the load-pull.
@@ -111,6 +120,77 @@ The display has two plots, with fT solid and fmax dashed, one colour per Nx:
 Markers m1 and m2 read every trace at the same x. Drag one and all ten values in its box follow.
 
 ![fT and fmax](../docs/images/white/HBT_fT_fmax.png)
+
+## Noise parameters
+
+`HBT_Noise` biases npn13G2 (Nx = 4) through ideal bias tees (1 µH, 1 µF) between two 50 Ω ports at
+VCE = 1.5 V, and steps VBE from 0.80 to 0.98 V (SW0), the grid of `HBT_Ic`. At each VBE an S-parameter
+analysis with noise (`Noise=yes`) runs from 1 to 40 GHz. It writes the noise figure from port 1's 50 Ω (`NF`),
+the noise parameters (`NFmin`, `Sopt`, `Rn`, `Zopt`), the noise temperatures (`Te`, `Tmin`) and each part's share
+of the noise (`NFpct`). Two measurements draw noise circles: `ns_circle(SP1.S, SP1.NFmin + 0.25)` and
+`ns_circle(SP1.S, SP1.NFmin + 1)`.
+
+| Frequency | 10 GHz | 20 GHz | 30 GHz | 40 GHz |
+|---|---|---|---|---|
+| Lowest NFmin | 0.39 dB | 0.61 dB | 0.84 dB | 1.07 dB |
+| at VBE (Ic) | 0.80 V (0.58 mA) | 0.81 V (0.81 mA) | 0.82 V (1.11 mA) | 0.82 V (1.11 mA) |
+
+The current for the lowest NFmin rises with frequency and stays far below the current of the fT peak
+(11.2 mA at Nx = 4, at VBE = 0.935 V). At 10 GHz NFmin is still falling at the low end of the grid. At
+VBE = 0.82 V and 20 GHz, NFmin is 0.62 dB with Sopt = 0.86 ∠ 9° (Zopt = 319 + j338 Ω) and Rn = 49 Ω, so
+the noise figure from 50 Ω is 3.0 dB: the device wants a high source impedance, which an input match would
+have to provide. The bench runs at circuitRF's default ambient and the HBT cell at its default T = 27 °C,
+while the noise figure is referred to T0 = 290 K.
+
+The display shows NFmin and NF from 50 Ω at VBE = 0.82 V, Sopt over the band with the two noise circles
+at 20 GHz, and NFmin against Jc = Ic/Nx at 10, 20, 30 and 40 GHz. Like the fT plot, the last takes its
+x values from `results/HBT_Ic.npy`. The build checks the same noise analysis on npn13G2 Nx = 1, as
+a cell and as the PDK's part, and on the PDK's sg13_lv_nmos against ngspice (the noise rows of
+`VALIDATION`).
+
+![Noise parameters](../docs/images/white/HBT_Noise.png)
+![HBT_Noise in the schematic editor](../docs/images/gui/hbt_noise_schematic_window.png)
+![The noise display in circuitRF](../docs/images/gui/hbt_noise_display_window.png)
+
+## Phase noise
+
+`VCO_PhaseNoise` is a common-base Colpitts oscillator on npn13G2 (Nx = 4):
+- the tank: 1 nH from VCC = 2 V to the collector, with 4 Ω of loss (Q ≈ 16 at 10 GHz);
+- the capacitive divider: two `cap_cmim` of 17 × 17 µm (436 fF each), collector to emitter and emitter
+  to ground;
+- the bias: RE = 1 kΩ, and the base at 1.6 V through 1 kΩ, decoupled by 10 pF;
+- an OscProbe across the tank (`Mode=shunt`).
+
+Its oscillator analysis (`type=osc`, `Fguess` = 10 GHz, `MaxHarm` = 9, `PhaseNoise=yes` from 1 kHz to
+100 MHz) finds the oscillation at 10.456 GHz with 0.84 V of fundamental at the collector, in a few seconds. The
+phase noise comes from the circuit's own noise sources over the large-signal waveform:
+
+| Offset | 1 kHz | 10 kHz | 100 kHz | 1 MHz | 10 MHz | 100 MHz |
+|---|---|---|---|---|---|---|
+| L(f), dBc/Hz | −49.8 | −70.4 | −90.4 | −110.4 | −130.4 | −150.4 |
+
+- **The slope** is 20 dB per decade from 10 kHz up. At 1 kHz the HBT's flicker noise adds 0.5 dB.
+- **`PNcorner` stays empty**, and the run says why in a warning. The compiled VBIC reports its noise as
+  one density, so the analysis cannot split off the flicker part. `PN` includes it.
+- **At 1 MHz**, 62 % of the phase noise comes from the HBT, 28 % from the tank's 4 Ω and 8 % from RE
+  (`PNpct`).
+
+The build checks the oscillation against an ngspice transient on a validation circuit: the bench with
+each MIM as an ideal 436.2 fF plus 55 mΩ in place of the `cap_cmim` cells. With the same compiled VBIC 1.3
+in both, that circuit oscillates at 10.4564 GHz in circuitRF and at 10.4563 GHz in ngspice (0.0007 %),
+with a collector fundamental of 0.840 V against 0.841 V (0.18 %). The bench itself, with the `cap_cmim`
+cells, finds the 10.456 GHz above. There is no open reference for the phase noise. For an estimate,
+Leeson's formula with the tank's Q, the 0.33 mW in the tank and a noise factor of 1 gives −122 dBc/Hz at
+1 MHz: the result corresponds to an effective noise factor of 11.6 dB.
+
+The display shows L(f) and the amplitude noise at the collector, the three largest parts' phase noise,
+and the collector voltage at each harmonic. Right-click the L(f) trace's legend entry and choose **Copy
+as Phase-Noise Mask** to carry this phase noise onto a source in an envelope run.
+
+![Phase noise](../docs/images/white/VCO_PhaseNoise.png)
+![VCO_PhaseNoise in the schematic editor](../docs/images/gui/vco_phasenoise_schematic_window.png)
+![The phase-noise display in circuitRF](../docs/images/gui/vco_phasenoise_display_window.png)
+![The oscillator analysis with its phase-noise settings](../docs/images/gui/vco_phasenoise_osc_analysis.png)
 
 ## The other benches
 

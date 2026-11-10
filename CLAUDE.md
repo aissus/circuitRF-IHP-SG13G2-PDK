@@ -15,12 +15,12 @@ To design or simulate with the kit, use the skill in `.claude/skills/ihp-sg13g2-
 | `docs/` | `make-figures.sh`, `white.ccolor`, `images/` (the pages use `images/white/`). |
 | `ci/build-release.sh`, `.github/workflows/release.yml` | The release zip, built and validated in the base image. |
 | `release/` | The `README.md`, `CLAUDE.md` and `.mcp.json` placed at the top of the release zip. |
-| `kit.def`, `kit.sh` | The image (`hpretl/iic-osic-tools` plus circuitRF 1.7.5) and its launcher. |
+| `kit.def`, `kit.sh` | The image (`hpretl/iic-osic-tools` plus circuitRF 1.8.0) and its launcher. |
 
 ## Running tools
 
 Run everything in the image, through `./kit.sh <command...>` from the top folder. The image has ngspice, Xyce,
-OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.7.5.
+OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.8.0.
 
 - Build the image once: `apptainer build --fakeroot kit.sif kit.def`.
 - `kit.sh` always starts in the top folder and uses `.home/` as HOME. Both `.home/` and `kit.sif` are git-ignored,
@@ -31,7 +31,7 @@ OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.7.5.
 
 ## Checks
 
-- `./kit.sh generator/build.sh` (about 4 min) must end with `kit built`, with `225/226 within tolerance` and
+- `./kit.sh generator/build.sh` (about 6 min) must end with `kit built`, with `275/276 within tolerance` and
   the one known gap in circuitRF's import (even `ng` MOS drain area) in `kit/IHP_SG13G2/VALIDATION`,
   `all identical` at the end of `PCELLS`, and 0 errors from `circuitrf check`. A failed build restores the
   previous kit. Rows marked `pdk://` run the PDK's own parts as circuitRF imports them; a `gap` row is a

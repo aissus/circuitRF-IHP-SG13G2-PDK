@@ -1,6 +1,6 @@
 ---
 name: ihp-sg13g2-kit
-description: Design and simulate circuits on IHP SG13G2 (130 nm SiGe BiCMOS) in circuitRF with the circuitRF-IHP-SG13G2 kit. Covers the SG13G2 HBTs (npn13G2, npn13G2l, npn13G2v), MOSFETs (sg13_lv_nmos, sg13_lv_pmos, sg13_hv_nmos, sg13_hv_pmos), poly resistors (rsil, rppd, rhigh), MIM capacitors (cap_cmim), on-chip inductors and EM on the SG13G2 stackup. Use it to set up a workspace on the kit, place kit cells in a schematic or netlist, choose analyses (DC/I-V, S-parameters, fT/fmax, harmonic balance, load-pull) or EM solvers, drive circuitRF's MCP tools, or fix an HBT run that fails for a missing VBIC model.
+description: Design and simulate circuits on IHP SG13G2 (130 nm SiGe BiCMOS) in circuitRF with the circuitRF-IHP-SG13G2 kit. Covers the SG13G2 HBTs (npn13G2, npn13G2l, npn13G2v), MOSFETs (sg13_lv_nmos, sg13_lv_pmos, sg13_hv_nmos, sg13_hv_pmos), poly resistors (rsil, rppd, rhigh), MIM capacitors (cap_cmim), on-chip inductors and EM on the SG13G2 stackup. Use it to set up a workspace on the kit, place kit cells in a schematic or netlist, choose analyses (DC/I-V, S-parameters, fT/fmax, harmonic balance, load-pull, noise figure and noise parameters, oscillators and phase noise) or EM solvers, drive circuitRF's MCP tools, or fix an HBT run that fails for a missing VBIC model.
 ---
 
 # IHP SG13G2 kit for circuitRF
@@ -12,7 +12,7 @@ description: Design and simulate circuits on IHP SG13G2 (130 nm SiGe BiCMOS) in 
 - **Examples:** `examples/` is a workspace with a working bench for each task (see the table at the end).
   Copy from these benches.
 - **Commands:**
-  - Release (the unzipped folder): `circuitrf <verb> ...`, from your own circuitRF 1.7.5 or newer.
+  - Release (the unzipped folder): `circuitrf <verb> ...`, from your own circuitRF 1.8.0 or newer.
   - Repository: `./kit.sh circuitrf <verb> ...`. It runs in the image and starts in the top folder, so give
     paths relative to the top folder.
   - The verb always comes first.
@@ -52,7 +52,7 @@ nominal). `dtemp` and `trise` are offsets in K. `corner` is 0 typ, 1 bcs, 2 wcs.
 
 The PDK's other Qucs-S components (diodes, ESD devices, varicap, cap_rfcmim, taps, pnpMPA, schottky_nbl1, isolbox, nmoscl) are not kit cells: `generator/qucs_cells.json` says what each one is and why. Do not reference them with `ws://IHP_SG13G2/...`.
 
-The PDK's own parts: a workspace from `generator/circuitrf-ihp-workspace` (and `examples/`) also has the IHP PDK as circuitRF imports it. Its 216 parts are placed as `"CellRef": "pdk://ihp-sg13g2/<part>"`, with the PDK's pin and parameter names and its corner libraries, and simulate as imported: the MOSFETs, resistors and MIM capacitor match ngspice (the `pdk://` rows of `kit/IHP_SG13G2/VALIDATION`). The HBTs among them run only where the `.cws` declares the kit's VBIC 1.3 as `standIns` (the workspace script does; `examples/` does not, because the declaration names an absolute path). Without it a run is refused with the declaration to write. The kit's cells stay the validated reference, and the only ones with the `corner`/`T` parameters, harmonicaRF devices and Qucs-S symbols. An imported MOS with an even `ng` gets the odd-`ng` drain and source areas (circuitRF 1.7.5 settles the PDK's `.if` on `ng` at import), so its junction capacitance is a few % off; use the kit cell for that.
+The PDK's own parts: a workspace from `generator/circuitrf-ihp-workspace` (and `examples/`) also has the IHP PDK as circuitRF imports it. Its 216 parts are placed as `"CellRef": "pdk://ihp-sg13g2/<part>"`, with the PDK's pin and parameter names and its corner libraries, and simulate as imported: the MOSFETs, resistors and MIM capacitor match ngspice (the `pdk://` rows of `kit/IHP_SG13G2/VALIDATION`). The HBTs among them run only where the `.cws` declares the kit's VBIC 1.3 as `standIns` (the workspace script does; `examples/` does not, because the declaration names an absolute path). Without it a run is refused with the declaration to write. The kit's cells stay the validated reference, and the only ones with the `corner`/`T` parameters, harmonicaRF devices and Qucs-S symbols. An imported MOS with an even `ng` gets the odd-`ng` drain and source areas (circuitRF's import settles the PDK's `.if` on `ng` once, at `ng = 1`), so its junction capacitance is a few % off; use the kit cell for that.
 
 Layout: IHP's own KLayout PCells (38 devices: HBTs, MOS, resistors, MIM/MOM, inductors, diodes, ESD, pads, seal ring) come with the PDK import: circuitRF declares them in the workspace's `ihp-sg13g2-pcells/` and draws them unmodified; `kit/IHP_SG13G2/PCELLS` lists each one, compared with KLayout's drawing. They need Python 3.10 or newer and run once the PDK is allowed (headless: `--trust-kit <workspace>/ihp-sg13g2-pcells`). Most parameters are text: lengths as `0.9u` or `9e-07`; a bare number in a text field is ignored and the default kept. `examples/HBT_layout` places npn13G2 at Nx 1, 4 and 8: `circuitrf render examples/HBT_layout/layout/HBT_layout.clay -o hbt.png --trust-kit examples/ihp-sg13g2-pcells`. A PCell is linked to the PDK's imported part, not to the kit's cells: for a kit cell, place the PCell with the cell's values.
 
@@ -184,7 +184,7 @@ Other rules:
 
 ## Analyses for typical tasks
 
-Every run verb (`dc`, `sparam`, `hb`, `lp`) runs the outermost enabled sweep around its analysis. Name a chain
+Every run verb (`dc`, `sparam`, `hb`, `lp`, `osc`) runs the outermost enabled sweep around its analysis. Name a chain
 with `-a <name>` (MCP: `name`). `reference analyses <type>` lists every key.
 
 | Task | Analysis | Template | Run (CLI / MCP `run`) |
@@ -195,6 +195,8 @@ with `-a <name>` (MCP: `name`). `reference analyses <type>` lists every key.
 | fT and fmax vs bias | `sp` at one spot frequency inside sweeps | `HBT_fT_fmax` | as S-parameters |
 | Large signal: Pout, gain, harmonics | `hb` inside a power sweep, `P1Tone` source | `CE_10GHz_HB` | `circuitrf hb f.csch -a SW -o r.npy` / `analysis=hb` |
 | Load-pull | `lp` over a `.gam` Γ grid, `Tuner` source and load | `HBT_Loadpull` (about 20 s) | `circuitrf lp f.csch -o r.npy` / `analysis=lp`; `lpp` searches for the optima |
+| Noise figure, NFmin, Sopt, Rn, noise circles | `sp` with `Noise=yes` (`.csch`: `"NoiseExpr": "yes"`), in a VBE sweep | `HBT_Noise` (a few seconds) | `circuitrf hb f.csch -a SW0 -o r.npy` for the sweep; without a sweep, `circuitrf sparam f.csch -o r.s2p` also writes the noise block / `analysis=sparam` |
+| Oscillator: frequency, amplitude, phase noise | `osc` with an `OscProbe`, `PhaseNoise=yes` | `VCO_PhaseNoise` (a few seconds) | `circuitrf osc f.csch -o r.npy` / `analysis=osc` |
 
 Notes on these analyses:
 - **No DC current source and no AC analysis.** Step VBE, or bias through a resistor. Use `sp` and take
@@ -215,6 +217,24 @@ Notes on these analyses:
     which `build-vbic.sh` builds when `PDKPATH` is set.
   - `generator/harmonica_ihp.py charm <out.charm> --device npn13G2 --nx 4 --vbe 0.8 --vce 1.6 --f 50e9` writes a
     document.
+- **Noise** (`HBT_Noise`):
+  - The cubes are `NF` (from port 1's Z0), `Fn`, `NFmin`, `Fmin`, `Sopt`, `Zopt`, `Rn`, `Te`, `Tmin` and each part's
+    share, `NFpct`. Measurements: `nf(SP1.S, Γs)`, `te(...)`, `rn(SP1.S)`, `ns_circle(SP1.S, SP1.NFmin + 0.5)`.
+  - A noise figure is referred to T0 = 290 K, while circuitRF's default ambient is 300 K, and each part is noisy at
+    its own temperature. `--set temp=16.85` puts the whole design at T0. A kit HBT's `T` sets its own
+    temperature (27 °C by default).
+  - Ideal bias tees (L, C, Vdc) are noiseless. Use them for device noise parameters.
+  - The HBT noise agrees with ngspice running the same compiled VBIC 1.3. ngspice's built-in VBIC, which the
+    PDK's own cards name, misplaces rbp's thermal noise and reads Rn about 22 % higher. Do not use it as the
+    reference for HBT noise. The MOSFETs run the PDK's psp103.osdi in both and agree exactly.
+- **Oscillators** (`VCO_PhaseNoise`):
+  - Put an `OscProbe` across the tank (`Mode=shunt`) and give `Fguess`. The start-up search covers half to 1.5
+    times it.
+  - Bias the oscillator's transistor through a resistor with a decoupling capacitor, not with an ideal source
+    directly on its node, so that the phase-noise solve converges.
+  - `PNcorner` is NaN for the HBT cells, and the run warns. A compiled model reports one noise density, so
+    the flicker part cannot be split off; `PN` includes it.
+  - Results: `Fosc`, `Aosc`, the HB cubes at the oscillation, and `PN`, `AN`, `PNc`, `PNpct` against offset.
 - **Reading results:** `read` a result with `only`, `at` (`VBE=0.9`, `freq=2GHz`) and `range`, or with
   `result=summary` for the shape only. On the CLI, add `--json` to get the values.
 
@@ -270,7 +290,7 @@ Running EM:
 
 ## circuitRF's MCP tools
 
-circuitRF 1.7.5's server offers 21 tools: `find`, `reference`, `create`, `check`, `explain`, `netlist`, `run`,
+circuitRF 1.8.0's server offers 21 tools: `find`, `reference`, `create`, `check`, `explain`, `netlist`, `run`,
 `read`, `render`, `plot`, `job`, `batch`, `history`, `solver`, `convert`, `import`, `lvs`, `recognize`,
 `impedance`, `review` and `model`. No tool writes your text: write documents with your own file tools.
 
@@ -308,8 +328,8 @@ Server behaviour to expect:
 - **The thermal note on HBT runs:** every HBT run notes that "the thermal node ... reaches its reference only
   through 1.14E+04 °C/W, which is not a thermal resistance". This is expected: the value is the PDK's own rth for
   a small SiGe HBT. Ignore it.
-- **Expected warnings:** `check examples` gives 0 errors and 4 warnings. Two schematics declare no analysis, and
-  two layouts have no DRC rules in the technology.
+- **Expected warnings:** `check examples` gives 0 errors and 5 warnings. Two schematics declare no analysis, and
+  three layouts have no DRC rules in the technology.
 - **The missing VBIC model:** this is the error shown above. Run `generator/build-vbic.sh`.
 - **EMerge:** at circuitRF's default mesh it under-reads on-chip inductance.
 - **Results:** `results/*` is git-ignored except the data displays (`*.cdd`). `inductor_TB` needs the EM runs
@@ -327,5 +347,7 @@ Server behaviour to expect:
 | `MIM_Cap` | cap_cmim 70×70 µm, C and Q from 100 kHz to 300 GHz |
 | `CE_10GHz_HB` | common emitter at 10 GHz: Pout, Gt, H2, H3 against drive |
 | `HBT_Loadpull` | npn13G2 Nx=8 at 50 GHz, Pout and PAE contours at 1 dB compression |
+| `HBT_Noise` | npn13G2 Nx=4 NFmin, NF from 50 Ω, Sopt and noise circles, 1–40 GHz, against VBE and Jc |
+| `VCO_PhaseNoise` | Colpitts VCO at 10.46 GHz (npn13G2, cap_cmim): Fosc, phase noise, each part's share |
 | `inductor` | a two-turn TopMetal2 coil from IHP's `inductor2` PCell, one EM setup per solver |
 | `inductor_TB` | differential L and Q from every EM run |

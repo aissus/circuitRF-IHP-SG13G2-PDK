@@ -6,19 +6,19 @@
 	"AngleMode": "AnyAngle",
 	"TechRef": "../../tech/IHP_SG13G2.ctech",
 	"PCellSnapshots": {
-		"npn13G2_50532e4684a8": {
+		"npn13G2_c7dbc86463bb": {
 			"GeneratorId": "npn13G2",
 			"Parameters": {
 				"Nx": 1
 			}
 		},
-		"npn13G2_f33474293b6b": {
+		"npn13G2_e381407afc0e": {
 			"GeneratorId": "npn13G2",
 			"Parameters": {
 				"Nx": 4
 			}
 		},
-		"npn13G2_3436932dfd40": {
+		"npn13G2_0b241e1c32b6": {
 			"GeneratorId": "npn13G2",
 			"Parameters": {
 				"Nx": 8
@@ -28,7 +28,7 @@
 	"Shapes": [],
 	"Instances": [
 		{
-			"CellRef": "../../.generated-cells/npn13G2_50532e4684a8",
+			"CellRef": "../../.generated-cells/npn13G2_c7dbc86463bb",
 			"X": 0,
 			"Y": 0,
 			"Rot": "R0",
@@ -40,7 +40,7 @@
 			"PitchY": 0
 		},
 		{
-			"CellRef": "../../.generated-cells/npn13G2_f33474293b6b",
+			"CellRef": "../../.generated-cells/npn13G2_e381407afc0e",
 			"X": 0,
 			"Y": 12000,
 			"Rot": "R0",
@@ -52,7 +52,7 @@
 			"PitchY": 0
 		},
 		{
-			"CellRef": "../../.generated-cells/npn13G2_3436932dfd40",
+			"CellRef": "../../.generated-cells/npn13G2_0b241e1c32b6",
 			"X": 0,
 			"Y": 24000,
 			"Rot": "R0",

@@ -2,7 +2,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Kit build](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/actions/workflows/release.yml/badge.svg)](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/actions/workflows/release.yml)
-![circuitRF 1.7.5+](https://img.shields.io/badge/circuitRF-1.7.5%2B-informational.svg)
+![circuitRF 1.8.0+](https://img.shields.io/badge/circuitRF-1.8.0%2B-informational.svg)
 ![PDK: IHP SG13G2](https://img.shields.io/badge/PDK-IHP_SG13G2-lightgrey.svg)
 
 ## Description
@@ -11,14 +11,16 @@
 open 130 nm SiGe BiCMOS process as a device kit for [circuitRF](https://github.com/potatobeanradio/circuitRF),
 together with the generator that builds it from the PDK and an example workspace.
 
-circuitRF 1.7.5 imports the IHP Open PDK directly: its parts simulate as imported, and its KLayout PCells
+circuitRF imports the IHP Open PDK directly: its parts simulate as imported, and its KLayout PCells
 draw unmodified. The PDK's bipolar transistors are the exception, because they are written for ngspice's
 built-in VBIC model, which circuitRF does not have. This kit compiles VBIC 1.3 and declares it to stand in,
 so that the imported HBTs simulate too. It also provides each device as a parameterised circuitRF cell
 that evaluates the PDK's own model expressions with compiled Verilog-A models (VBIC 1.3 for the HBTs,
 PSP 103 for the MOSFETs, R3 (CMC) for the resistors), with IHP's Qucs-S symbols, corner and temperature
 parameters, and harmonicaRF devices. Every build validates the kit's cells and the PDK's imported parts
-against the PDK's models in ngspice and Xyce (226 comparisons).
+against the PDK's models in ngspice and Xyce (DC, capacitance, harmonic balance), and circuitRF's noise and
+oscillator analyses against ngspice on the same netlist (for the HBT, the compiled VBIC 1.3 with the kit
+cell's parameters; for the MOSFET, the PDK's PSP 103): 276 comparisons in all.
 
 | Cell | Device | Parameters |
 |---|---|---|
@@ -38,8 +40,9 @@ The corner parameter is 0 for typical, 1 for best case and 2 for worst case (MOS
   PDK and checked against KLayout.
 - **harmonicaRF devices**: the three HBTs compiled as single devices for harmonicaRF, circuitRF's
   interactive harmonic load-pull.
-- **Example workspace**: device characterisation benches (I-V, fT/fmax, load-pull, harmonic balance) and
-  a two-turn inductor from IHP's PCell, solved with four EM solvers.
+- **Example workspace**: device characterisation benches (I-V, fT/fmax, load-pull, harmonic balance, noise
+  parameters and noise circles), a 10 GHz VCO with its phase noise, and a two-turn inductor from IHP's
+  PCell, solved with four EM solvers.
 - **AI agent support**: instructions, a Claude Code skill and an MCP configuration, so that coding agents
   can design and simulate with the kit through circuitRF's MCP server.
 
@@ -49,12 +52,14 @@ The corner parameter is 0 for typical, 1 for best case and 2 for worst case (MOS
 </p>
 
 Every component of the PDK's Qucs-S library, and whether the kit has it (`generator/qucs_cells.json`,
-also printed on the overview). Validation counts the comparisons with the PDK's models that pass.
+also printed on the overview). Validation counts the comparisons with the PDK's models that pass; the noise
+and oscillator rows, which compare circuitRF's analyses with ngspice on the kit's own netlist, are not
+counted here.
 
 | Qucs-S component | Works | Note | Validation |
 |---|---|---|---|
 | `cap_cmim` | yes | MIM capacitor: area and fringe C, series R | 3/3 |
-| `npn13G2` | yes | SiGe HBT: VBIC 1.3 with the PDK's scaling; DC and HB | 68/68 |
+| `npn13G2` | yes | SiGe HBT: VBIC 1.3 with the PDK's scaling; DC, HB, noise and oscillation | 68/68 |
 | `npn13G2l` | yes | SiGe HBT, long emitter: VBIC 1.3 | 16/16 |
 | `npn13G2v` | yes | SiGe HBT, high voltage: VBIC 1.3 | 24/24 |
 | `rhigh` | yes | high-ohmic poly resistor: CMC R3 | 3/3 |
@@ -182,7 +187,7 @@ The resistors, the MIM capacitor, the MOSFETs and the technology can be used wit
 git clone https://github.com/aissus/circuitRF-IHP-SG13G2-PDK.git
 cd circuitRF-IHP-SG13G2-PDK
 apptainer build --fakeroot kit.sif kit.def   # the build image, once (about 6 GB)
-./kit.sh generator/build.sh                  # the kit, in kit/IHP_SG13G2: about four minutes
+./kit.sh generator/build.sh                  # the kit, in kit/IHP_SG13G2: about six minutes
 ./kit.sh circuitrf examples/.cws             # the example workspace in circuitRF
 ```
 
@@ -217,7 +222,7 @@ local circuitRF installation.
 
 ```mermaid
 flowchart LR
-    subgraph image["kit.sif: IIC-OSIC-TOOLS 2026.09 + circuitRF 1.7.5"]
+    subgraph image["kit.sif: IIC-OSIC-TOOLS 2026.09 + circuitRF 1.8.0"]
         PDK["IHP SG13G2 PDK<br/>ngspice models, corner libraries,<br/>Qucs-S symbols, KLayout .lyp, ITF"]
         VA["VBIC 1.3<br/>Verilog-A source"]
         TOOLS["OpenVAF · ngspice · Xyce"]
@@ -278,15 +283,22 @@ Substrate layer.
 `validate_ihp_kit.py` places each cell in a test bench and runs it in circuitRF, and runs the same device
 from the PDK's model files in ngspice, or in Xyce for harmonic balance. It runs the DC and MIM cases a
 second time on the PDK's own parts as circuitRF imports them (`pdk://ihp-sg13g2/<part>`, at the same
-corners and temperatures), with the kit's VBIC 1.3 declared as the stand-in for the HBTs.
+corners and temperatures), with the kit's VBIC 1.3 declared as the stand-in for the HBTs. The noise cases
+run circuitRF's S-parameter noise against ngspice's `.sp` with noise, between 50 Ω ports through ideal
+bias tees at 16.85 °C (T0 = 290 K), and the oscillator runs circuitRF's oscillator analysis against an
+ngspice transient.
 
 | Quantity | Reference | Tolerance | Rows | Largest deviation |
 |---|---|---|---|---|
 | HBT Ic and Ib at two VBE, all devices, Nx, le, corners and temperatures, as cells and as harmonicaRF devices | ngspice | 2 % or 10 nA | 92 | 6.5 nA on a 0.12 µA base current |
 | Resistance over w, l, bends and corners | ngspice | 1 % | 9 | 0.00 % (0.08 % before circuitRF 1.7.5) |
 | MIM capacitance at 1 GHz, corners | ngspice | 1 % | 3 | 0.00 % |
+| MOSFET Id in saturation and in triode, all four devices and corners; drain C at 1 GHz, odd and even ng | ngspice | 1 % or 1 nA | 23 | 0.00 % |
 | npn13G2 common emitter at 10 GHz, Pout into compression, as a cell and as a harmonicaRF device | Xyce | 0.2 dB | 16 | 0.015 dB |
 | The PDK's imported parts: HBT Ic and Ib, R, MOS Id, MIM and MOS drain C, as above | ngspice | as above | 83 | as the kit's cells; one known gap (below) |
+| Small-signal noise at 2, 8, 14 and 20 GHz (NF from 50 Ω, NFmin, Rn, complex Sopt): npn13G2 Nx = 1 as a cell and as the PDK's part | ngspice `.sp` with noise on the kit's netlist: the compiled VBIC 1.3 with the kit cell's parameters | 0.1 % | 32 | 0.0003 % |
+| The same for the PDK's sg13_lv_nmos (w = 10 µm, l = 0.13 µm, ng = 5) | ngspice `.sp` with noise; the PDK's PSP 103 in both | 0.1 % | 16 | 0.00003 % |
+| npn13G2 Nx = 4 Colpitts at 10.46 GHz: the oscillation frequency and the collector's fundamental | ngspice transient on the kit's netlist (compiled VBIC 1.3) | 0.05 %, 1 % | 2 | 0.0007 %, 0.18 % |
 
 > [!NOTE]
 > The remaining differences come from the models themselves. The VBIC 1.3 source has a
@@ -296,10 +308,16 @@ corners and temperatures), with the kit's VBIC 1.3 declared as the stand-in for 
 > the PDK's value and expected.
 >
 > One difference is circuitRF's import, not the models: the PDK chooses a MOSFET's source and drain areas
-> with a netlist `.if` on `ng`, and circuitRF 1.7.5 settles it once, at `ng = 1`. An imported MOSFET with
+> with a netlist `.if` on `ng`, and circuitRF's import settles it once, at `ng = 1`. An imported MOSFET with
 > an even `ng` therefore gets the odd-`ng` areas, and its drain capacitance is off (6.6 % at `ng = 4`);
 > its currents are not affected. `VALIDATION` lists the row as a gap, and it passes once circuitRF
 > evaluates the `.if` per instance. The kit's MOSFET cells handle both cases.
+>
+> The HBT noise rows are compared with ngspice running the same compiled VBIC 1.3, not ngspice's built-in
+> VBIC. ngspice 47's built-in VBIC places the thermal noise of the parasitic base resistance RBP across the
+> emitter resistance instead (`vbicnoise.c`), so for npn13G2 Nx = 1 it reads Rn about 22 % and NFmin about
+> 0.05 dB higher, and its Rn grows without bound as RBP goes to zero. With the compiled VBIC 1.3 in both,
+> circuitRF and ngspice agree to the sixth digit.
 
 ## Examples
 
@@ -308,6 +326,12 @@ The example workspace and its results are described in [examples/README.md](exam
 <p align="center">
   <img src="docs/images/white/HBT_fT_fmax.png" alt="fT and fmax of npn13G2" width="85%"><br>
   <em>npn13G2 fT and fmax against VBE and against collector current density, for Nx = 1 to 10.</em>
+</p>
+
+<p align="center">
+  <img src="docs/images/white/HBT_Noise.png" alt="Noise parameters of npn13G2" width="85%"><br>
+  <em>npn13G2 (Nx = 4) noise: NFmin and the noise figure from 50 Ω, Sopt with two noise circles, and NFmin
+  against collector current density at 10 to 40 GHz.</em>
 </p>
 
 ## Releases
@@ -327,7 +351,8 @@ IIC-OSIC-TOOLS Docker image (`hpretl/iic-osic-tools`) can take the released kit.
 - The [IHP Open PDK](https://github.com/IHP-GmbH/IHP-Open-PDK) and its authors, whose models, layer data,
   stackup data, symbols and parametric cells this kit is derived from.
 - [circuitRF](https://github.com/potatobeanradio/circuitRF) and its maintainer, including the integration of
-  the upstream changes this kit depends on, released in circuitRF 1.7.3 and 1.7.5.
+  the upstream changes this kit depends on, released in circuitRF 1.7.3 and 1.7.5, and the noise analysis of
+  circuitRF 1.8.0.
 - [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS), Institute for Integrated Circuits and Quantum
   Computing, Johannes Kepler University Linz, the environment in which the kit is built and validated.
 - [VACASK](https://codeberg.org/arpadbuermen/VACASK), for its distribution of the VBIC 1.3 Verilog-A

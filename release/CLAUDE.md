@@ -16,7 +16,7 @@ example workspace. To design, simulate or run EM with it, use the skill in
 
 ## Setup
 
-1. **circuitRF 1.7.5 or newer.**
+1. **circuitRF 1.8.0 or newer.**
    - `.mcp.json` runs `circuitrf` from `PATH`. If `circuitrf --version` does not answer, set `"command"` to the
      executable's full path (macOS: `/Applications/circuitRF.app/Contents/MacOS/circuitRF`).
    - `circuitrf serve --root . --print-config` prints the right configuration.

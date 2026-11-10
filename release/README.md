@@ -7,7 +7,7 @@ workspace. Built and validated from the PDK by
 the PDK commit, the circuitRF version and the validation result.
 
 > [!IMPORTANT]
-> Requires **circuitRF 1.7.5 or newer**. The HBT cells also need their VBIC model compiled once (step 2),
+> Requires **circuitRF 1.8.0 or newer**. The HBT cells also need their VBIC model compiled once (step 2),
 > which takes **OpenVAF**. The [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container has
 > OpenVAF and the PDK.
 

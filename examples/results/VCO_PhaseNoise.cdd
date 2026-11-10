@@ -1,0 +1,278 @@
+{
+ "FormatVersion": 2,
+ "SelectedDataSource": "VCO_PhaseNoise.npy",
+ "SourceAliases": {
+  "VCO_PhaseNoise.npy": "VCO_PhaseNoise"
+ },
+ "ActiveTabIndex": 0,
+ "Tabs": [
+  {
+   "Name": "VCO_PhaseNoise",
+   "Plots": [
+    {
+     "Left": 0,
+     "Top": 0,
+     "Width": 760,
+     "Height": 440,
+     "PlotType": "Rect",
+     "FreqUnit": "Hz",
+     "CustomTitle": "Phase and amplitude noise at the collector",
+     "CustomTitleOn": true,
+     "CustomYLabel": "dBc/Hz",
+     "CustomYLabelOn": true,
+     "CustomXLabel": "offset, Hz",
+     "CustomXLabelOn": true,
+     "Legend": "Inside",
+     "Traces": [
+      {
+       "SourcePath": "VCO_PhaseNoise.npy",
+       "CubeName": "OSC1.PN",
+       "CubeSlice": [
+        {
+         "AxisName": "offset",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "L(f)",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 12,
+        "LineType": "Solid"
+       },
+       "Markers": [
+        {
+         "Name": "m1",
+         "Index": 30,
+         "Freq": 1,
+         "FreqUnits": "MHz",
+         "InfoBoxX": 230,
+         "InfoBoxY": 45,
+         "PositionStaticX": 1000000.0,
+         "SnappedToCurve": true
+        }
+       ]
+      },
+      {
+       "SourcePath": "VCO_PhaseNoise.npy",
+       "CubeName": "OSC1.AN",
+       "CubeSlice": [
+        {
+         "AxisName": "offset",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "amplitude noise",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 1,
+        "LineType": "Dashed"
+       },
+       "Markers": []
+      }
+     ],
+     "Axes": {
+      "AutoscaleX": true,
+      "AutoscaleY": true,
+      "AutoscaleRightY": true,
+      "AutoscaleMag": true,
+      "WindowX": 0,
+      "WindowY": 0,
+      "WindowWidth": 0,
+      "WindowHeight": 500,
+      "WindowSecondaryX": 0,
+      "WindowSecondaryY": 0,
+      "WindowSecondaryWidth": 0,
+      "WindowSecondaryHeight": 0,
+      "XScale": "Log"
+     }
+    },
+    {
+     "Left": 780,
+     "Top": 0,
+     "Width": 760,
+     "Height": 440,
+     "PlotType": "Rect",
+     "FreqUnit": "Hz",
+     "CustomTitle": "The three largest parts' phase noise",
+     "CustomTitleOn": true,
+     "CustomYLabel": "dBc/Hz",
+     "CustomYLabelOn": true,
+     "CustomXLabel": "offset, Hz",
+     "CustomXLabelOn": true,
+     "Legend": "Inside",
+     "Traces": [
+      {
+       "SourcePath": "VCO_PhaseNoise.npy",
+       "CubeName": "OSC1.PNc",
+       "CubeSlice": [
+        {
+         "AxisName": "offset",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "part",
+         "Role": "PinToIndex",
+         "Index": 12,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "X1.Q1, the HBT",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 12,
+        "LineType": "Solid"
+       },
+       "Markers": []
+      },
+      {
+       "SourcePath": "VCO_PhaseNoise.npy",
+       "CubeName": "OSC1.PNc",
+       "CubeSlice": [
+        {
+         "AxisName": "offset",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "part",
+         "Role": "PinToIndex",
+         "Index": 6,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "R1, the tank loss",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 1,
+        "LineType": "Solid"
+       },
+       "Markers": []
+      },
+      {
+       "SourcePath": "VCO_PhaseNoise.npy",
+       "CubeName": "OSC1.PNc",
+       "CubeSlice": [
+        {
+         "AxisName": "offset",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "part",
+         "Role": "PinToIndex",
+         "Index": 11,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "None",
+       "Label": "RE",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 9,
+        "LineType": "Solid"
+       },
+       "Markers": []
+      }
+     ],
+     "Axes": {
+      "AutoscaleX": true,
+      "AutoscaleY": true,
+      "AutoscaleRightY": true,
+      "AutoscaleMag": true,
+      "WindowX": 0,
+      "WindowY": 0,
+      "WindowWidth": 0,
+      "WindowHeight": 500,
+      "WindowSecondaryX": 0,
+      "WindowSecondaryY": 0,
+      "WindowSecondaryWidth": 0,
+      "WindowSecondaryHeight": 0,
+      "XScale": "Log"
+     }
+    },
+    {
+     "Left": 0,
+     "Top": 460,
+     "Width": 760,
+     "Height": 440,
+     "PlotType": "Rect",
+     "FreqUnit": "GHz",
+     "CustomTitle": "Collector voltage at each harmonic",
+     "CustomTitleOn": true,
+     "CustomYLabel": "dBV",
+     "CustomYLabelOn": true,
+     "CustomXLabel": "frequency, GHz",
+     "CustomXLabelOn": true,
+     "Legend": "Inside",
+     "Traces": [
+      {
+       "SourcePath": "VCO_PhaseNoise.npy",
+       "CubeName": "OSC1.V",
+       "CubeSlice": [
+        {
+         "AxisName": "node",
+         "Role": "PinToIndex",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        },
+        {
+         "AxisName": "harmonic",
+         "Role": "KeepAsX",
+         "Index": 0,
+         "RangeStart": 0,
+         "RangeEndExclusive": -1,
+         "Label": ""
+        }
+       ],
+       "CubeTransform": "dB20",
+       "Label": "V(c)",
+       "Properties": {
+        "LineEnabled": true,
+        "LineWidth": 1.5,
+        "LineColorIndex": 12,
+        "LineType": "Solid"
+       },
+       "Markers": []
+      }
+     ],
+     "Axes": null
+    }
+   ]
+  }
+ ]
+}

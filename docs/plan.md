@@ -6,6 +6,26 @@ Drafted 2026-11-05 (set aside). Revised 2026-11-07:
 - the inductor is also checked with circuitRF's planar MoM;
 - the README documents the flow.
 
+## Status (2026-11-10): circuitRF 1.8.0
+
+circuitRF 1.8.0 adds noise to the simulator, starting from the kit's upstream pull request #50 (S-parameter
+noise): noise in harmonic balance, load-pull and envelope runs, and an oscillator analysis with phase noise.
+The kit now:
+- runs on 1.8.0 (`kit.def`); every existing bench gives the same numbers on 1.8.0 as on 1.7.5;
+- validates circuitRF's small-signal noise (NF from 50 Ω, NFmin, Rn, complex Sopt at 2–20 GHz) on npn13G2 as
+  a cell and as the PDK's part, and on the PDK's sg13_lv_nmos, against ngspice's `.sp` with noise. All 48 rows
+  agree to within 3·10⁻⁶. The HBT rows run ngspice on the kit's netlist, the same compiled VBIC 1.3 with the
+  kit cell's parameters, because ngspice 47's built-in VBIC stamps rbp's thermal noise across re
+  (`vbicnoise.c`) and reads Rn about 22 % higher; the NMOS rows run the PDK's PSP 103 in both;
+- validates circuitRF's oscillator analysis (npn13G2 Colpitts at 10.46 GHz) against an ngspice transient on
+  the kit's netlist: 0.0007 % in frequency, 0.18 % in amplitude. In all, 275/276 pass, with the same one
+  known gap;
+- has two new example benches: `HBT_Noise` (noise parameters and circles against bias) and `VCO_PhaseNoise`
+  (a Colpitts VCO on npn13G2 and two MIM cells, and its phase noise).
+
+Next: an LNA on the kit (noise and gain match, stability), checked against ngspice, and phase noise against
+bias or tuning.
+
 ## Status (2026-11-09): circuitRF 1.7.5
 
 circuitRF 1.7.5 carries the kit's upstream pull requests #47 to #49: an OpenPDK kit's devices simulate
