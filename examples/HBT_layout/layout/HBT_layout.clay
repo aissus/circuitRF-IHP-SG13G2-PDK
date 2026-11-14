@@ -8,18 +8,21 @@
 	"PCellSnapshots": {
 		"npn13G2_c7dbc86463bb": {
 			"GeneratorId": "npn13G2",
+			"TechIdentity": "tech/IHP_SG13G2.ctech",
 			"Parameters": {
 				"Nx": 1
 			}
 		},
 		"npn13G2_e381407afc0e": {
 			"GeneratorId": "npn13G2",
+			"TechIdentity": "tech/IHP_SG13G2.ctech",
 			"Parameters": {
 				"Nx": 4
 			}
 		},
 		"npn13G2_0b241e1c32b6": {
 			"GeneratorId": "npn13G2",
+			"TechIdentity": "tech/IHP_SG13G2.ctech",
 			"Parameters": {
 				"Nx": 8
 			}
