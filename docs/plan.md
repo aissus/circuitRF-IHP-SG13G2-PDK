@@ -6,6 +6,22 @@ Drafted 2026-11-05 (set aside). Revised 2026-11-07:
 - the inductor is also checked with circuitRF's planar MoM;
 - the README documents the flow.
 
+## Status (2026-11-14): circuitRF 1.8.4, kit v0.6.0
+
+circuitRF 1.8.4 cuts placed cells out of an EM run as component ports and puts their models back in a
+co-simulation netlist (upstream issue #69). The kit, as v0.6.0:
+- names circuitRF 1.8.4 in `kit.def` and as its minimum;
+- documents EM black-boxing on SG13G2 in the README, with two examples built and run on 1.8.4:
+  `examples/inductor_coupling` (two coils in the EM against both cut) and `examples/hbt_core_matching` (an
+  npn13G2 stage with Q1 and its MIMs cut, then its coils too);
+- has `circuitrf-ihp-workspace` make the `Settings` entry when the import writes none, and work without
+  `realpath --relative-to`; `HBT_layout`'s PCell snapshots name their technology.
+
+The release workflow numbers the next push to `main` v0.6.0; no file holds the version.
+
+Next: rebuild `kit.sif` and the kit on 1.8.4 and check that `VALIDATION` is unchanged; rerun both examples
+on circuitRF's component-port fixes once they are released.
+
 ## Status (2026-11-10): circuitRF 1.8.0
 
 circuitRF 1.8.0 adds noise to the simulator, starting from the kit's upstream pull request #50 (S-parameter
