@@ -2,7 +2,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Kit build](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/actions/workflows/release.yml/badge.svg)](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/actions/workflows/release.yml)
-![circuitRF 1.8.0+](https://img.shields.io/badge/circuitRF-1.8.0%2B-informational.svg)
+![circuitRF 1.8.4+](https://img.shields.io/badge/circuitRF-1.8.4%2B-informational.svg)
 ![PDK: IHP SG13G2](https://img.shields.io/badge/PDK-IHP_SG13G2-lightgrey.svg)
 
 ## Description
@@ -168,6 +168,9 @@ no layout view of its own: design with the imported part, or place the PCell wit
 
 ## How to Use
 
+The kit needs **circuitRF 1.8.4 or newer**, the first version that can cut cell instances out of an EM run as
+component ports. The EM black-boxing examples depend on this.
+
 ### From a release
 
 Each [release](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/releases) provides
@@ -222,7 +225,7 @@ local circuitRF installation.
 
 ```mermaid
 flowchart LR
-    subgraph image["kit.sif: IIC-OSIC-TOOLS 2026.09 + circuitRF 1.8.0"]
+    subgraph image["kit.sif: IIC-OSIC-TOOLS 2026.09 + circuitRF 1.8.4"]
         PDK["IHP SG13G2 PDK<br/>ngspice models, corner libraries,<br/>Qucs-S symbols, KLayout .lyp, ITF"]
         VA["VBIC 1.3<br/>Verilog-A source"]
         TOOLS["OpenVAF · ngspice · Xyce"]

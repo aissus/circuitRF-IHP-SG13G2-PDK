@@ -7,7 +7,7 @@ of `../kit/IHP_SG13G2`.
 - **From the repository:** build the kit with `./kit.sh generator/build.sh`. The build also writes this
   workspace's copy of the technology (`tech/`) and its harmonicaRF documents (`harmonica/`).
 
-Open `examples/.cws` with File ▸ Open Workspace in circuitRF 1.8.0 or newer, or with
+Open `examples/.cws` with File ▸ Open Workspace in circuitRF 1.8.4 or newer, or with
 `./kit.sh circuitrf examples/.cws` in the repository.
 
 | Bench | What it shows | Ported from |

@@ -12,7 +12,7 @@ description: Design and simulate circuits on IHP SG13G2 (130 nm SiGe BiCMOS) in 
 - **Examples:** `examples/` is a workspace with a working bench for each task (see the table at the end).
   Copy from these benches.
 - **Commands:**
-  - Release (the unzipped folder): `circuitrf <verb> ...`, from your own circuitRF 1.8.0 or newer.
+  - Release (the unzipped folder): `circuitrf <verb> ...`, from your own circuitRF 1.8.4 or newer.
   - Repository: `./kit.sh circuitrf <verb> ...`. It runs in the image and starts in the top folder, so give
     paths relative to the top folder.
   - The verb always comes first.
