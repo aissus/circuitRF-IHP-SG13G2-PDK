@@ -41,8 +41,8 @@ The corner parameter is 0 for typical, 1 for best case and 2 for worst case (MOS
 - **harmonicaRF devices**: the three HBTs compiled as single devices for harmonicaRF, circuitRF's
   interactive harmonic load-pull.
 - **Example workspace**: device characterisation benches (I-V, fT/fmax, load-pull, harmonic balance, noise
-  parameters and noise circles), a 10 GHz VCO with its phase noise, and a two-turn inductor from IHP's
-  PCell, solved with four EM solvers.
+  parameters and noise circles), a 10 GHz VCO with its phase noise, a two-turn inductor from IHP's
+  PCell, solved with four EM solvers, and two EM black-boxing examples.
 - **AI agent support**: instructions, a Claude Code skill and an MCP configuration, so that coding agents
   can design and simulate with the kit through circuitRF's MCP server.
 
@@ -280,6 +280,41 @@ Substrate layer.
   <em>The back-end stack edge-on in circuitRF's 3D view: the TopMetal2 coil, TopVia2, the TopMetal1
   underpass, the lumped ports to Metal1, the layers below Metal1 and the silicon.</em>
 </p>
+
+## EM Black-Boxing with Component Ports
+
+Since circuitRF 1.8.4, an EM setup can cut placed cells out of the layout it solves. You list the instances
+under `ComponentPorts` in the `.cem` (in the GUI: Component ports ▸ Cell instances). Each cut instance leaves a
+port at each pin face that the layout's metal meets, and the run writes a co-simulation netlist that puts the
+instance's own model back on those ports. The transistor stays a compact model, and the EM covers everything around it: lines, coils and
+the ground.
+
+What works on SG13G2:
+
+- **Ground reference.** Every port, drawn or cut, returns to the stackup's ground, which is the backside. A
+  local ground such as a TopMetal1 plane reaches it only through a port of its own. Draw a tie port on the
+  plane's edge and short it in the bench.
+- **Uncalibrated drawn ports.** Mark drawn ports next to devices `"PortUncalibrated": true`. A calibrated
+  port needs its feed clear of other metal, which a port beside a transistor never is.
+- **Planar, not 3D.** In a 3D setup, each cut port becomes a lumped sheet from the cut face down to the
+  backside, about 755 µm tall. Use the planar solver on this die.
+- **Bias at the device pins.** An EM result has no 0 Hz row. The bench holds the bias at the cut device's
+  pins through large inductors, not through the EM block.
+
+Two things about the PDK's cells:
+
+- The npn13G2 PCell has its emitter pin on Metal2 and its base and collector pins on Metal1. The setup has to
+  solve those levels, and the routes have to reach the pins there.
+- `inductor2` has no schematic model in the PDK. The examples solve each coil on its own and use that 2-port
+  as the coil's model when it is cut.
+
+The examples:
+
+- [`examples/inductor_coupling`](examples/inductor_coupling/README.md) solves two coils in a ground plane twice,
+  once with the coils in the EM and once with both cut. The difference is the coupling that a black box cannot
+  see.
+- [`examples/hbt_core_matching`](examples/hbt_core_matching/README.md) cuts a single-finger npn13G2 stage and its
+  MIM capacitors, then its matching coils as well, and compares the stage's gain and stability.
 
 ## Validation
 
