@@ -19,7 +19,8 @@ PDK=${IHP_PDK:-${PDKPATH:-/foss/pdks/ihp-sg13g2}}
 mkdir -p "$1/tech"
 cp "$KIT/tech/IHP_SG13G2.ctech" "$1/tech/"
 # The kit is named relative to the workspace, so the two can move or be shared together.
-REL=$(realpath --relative-to="$1" "$KIT")
+# (python3, not realpath --relative-to, which macOS does not have)
+REL=$(python3 -c 'import os, sys; print(os.path.relpath(*map(os.path.realpath, sys.argv[1:])))' "$KIT" "$1")
 cat > "$1/.cws" <<EOF
 {
   "FormatVersion": 2,
@@ -35,7 +36,7 @@ V=$KIT/models/osdi/vbic_1p3_5t.osdi
 python3 - "$1/.cws" "$V" <<'EOF'
 import json, sys
 cws = json.load(open(sys.argv[1]))
-cws['PdkRefs'][0]['Settings']['standIns'] = [{
+cws['PdkRefs'][0].setdefault('Settings', {})['standIns'] = [{
     "model": "npn", "level": "9", "file": sys.argv[2], "module": "vbic13_5t",
     "parameters": {"dtemp": "trise", "vbe_max": None, "vbc_max": None, "vce_max": None}}]
 json.dump(cws, open(sys.argv[1], 'w'), indent=2)
