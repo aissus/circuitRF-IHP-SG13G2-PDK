@@ -1,0 +1,515 @@
+{
+ "FormatVersion": 2,
+ "CellName": "CORE",
+ "GridSize": 100,
+ "GridSnap": true,
+ "AuthorGridDivisor": 20,
+ "Components": [
+  {
+   "InstanceName": "P1",
+   "Symbol": "Term",
+   "X": -2400,
+   "Y": 500,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "Ohm",
+     "ShowOnSchematic": true,
+     "Dimension": "Resistance"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND2",
+   "Symbol": "Ground",
+   "X": -2400,
+   "Y": 800,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "C1",
+   "Symbol": "Generic",
+   "X": -1800,
+   "Y": 500,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "w",
+     "Expression": "8e-06",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "l",
+     "Expression": "8e-06",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/cap_cmim"
+  },
+  {
+   "InstanceName": "GND4",
+   "Symbol": "Ground",
+   "X": -1800,
+   "Y": 900,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "L1",
+   "Symbol": "Generic",
+   "X": -1000,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [],
+   "CellRef": "../../IND_BIG"
+  },
+  {
+   "InstanceName": "Q1",
+   "Symbol": "Generic",
+   "X": 0,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Nx",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/npn13G2"
+  },
+  {
+   "InstanceName": "GND9",
+   "Symbol": "Ground",
+   "X": 0,
+   "Y": 400,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "GND10",
+   "Symbol": "Ground",
+   "X": 200,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "L2",
+   "Symbol": "Generic",
+   "X": 1000,
+   "Y": -600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [],
+   "CellRef": "../../IND_SMALL"
+  },
+  {
+   "InstanceName": "C2",
+   "Symbol": "Generic",
+   "X": 1800,
+   "Y": -600,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "w",
+     "Expression": "20e-06",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "l",
+     "Expression": "20e-06",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    }
+   ],
+   "CellRef": "ws://IHP_SG13G2/cap_cmim"
+  },
+  {
+   "InstanceName": "P2",
+   "Symbol": "Term",
+   "X": 2600,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "2",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "Ohm",
+     "ShowOnSchematic": true,
+     "Dimension": "Resistance"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND16",
+   "Symbol": "Ground",
+   "X": 2600,
+   "Y": 300,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  }
+ ],
+ "Wires": [
+  {
+   "Points": [
+    [
+     -2400,
+     300
+    ],
+    [
+     -2400,
+     200
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -2400,
+     700
+    ],
+    [
+     -2400,
+     800
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1800,
+     200
+    ],
+    [
+     -1800,
+     100
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1800,
+     800
+    ],
+    [
+     -1800,
+     900
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1200,
+     0
+    ],
+    [
+     -1300,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -800,
+     0
+    ],
+    [
+     -700,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     0,
+     -300
+    ],
+    [
+     0,
+     -400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -300,
+     0
+    ],
+    [
+     -400,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     0,
+     300
+    ],
+    [
+     0,
+     400
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     100,
+     0
+    ],
+    [
+     200,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     800,
+     -600
+    ],
+    [
+     700,
+     -600
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1200,
+     -600
+    ],
+    [
+     1300,
+     -600
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1800,
+     -900
+    ],
+    [
+     1800,
+     -1000
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1800,
+     -300
+    ],
+    [
+     1800,
+     -200
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     2600,
+     -200
+    ],
+    [
+     2600,
+     -300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     2600,
+     200
+    ],
+    [
+     2600,
+     300
+    ]
+   ]
+  }
+ ],
+ "NetLabels": [
+  {
+   "X": -2400,
+   "Y": 250,
+   "Name": "in",
+   "OwnerWireIndex": 0,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1800,
+   "Y": 150,
+   "Name": "in",
+   "OwnerWireIndex": 2,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1250,
+   "Y": 0,
+   "Name": "in",
+   "OwnerWireIndex": 4,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -750,
+   "Y": 0,
+   "Name": "b",
+   "OwnerWireIndex": 5,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 0,
+   "Y": -350,
+   "Name": "c",
+   "OwnerWireIndex": 6,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -350,
+   "Y": 0,
+   "Name": "b",
+   "OwnerWireIndex": 7,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 750,
+   "Y": -600,
+   "Name": "c",
+   "OwnerWireIndex": 10,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1250,
+   "Y": -600,
+   "Name": "o1",
+   "OwnerWireIndex": 11,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1800,
+   "Y": -950,
+   "Name": "o1",
+   "OwnerWireIndex": 12,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1800,
+   "Y": -250,
+   "Name": "out",
+   "OwnerWireIndex": 13,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 2600,
+   "Y": -250,
+   "Name": "out",
+   "OwnerWireIndex": 14,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  }
+ ],
+ "Dots": [],
+ "CanvasObjects": [],
+ "View": {
+  "PanX": 0,
+  "PanY": 0,
+  "Zoom": 1
+ }
+}

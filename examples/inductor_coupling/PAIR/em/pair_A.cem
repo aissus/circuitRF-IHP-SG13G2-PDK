@@ -1,0 +1,32 @@
+{
+ "FormatVersion": 1,
+ "Name": "pair_A",
+ "LayoutRef": "PAIR/layout/PAIR.clay",
+ "Frequency": {
+  "StartExpr": "1",
+  "StopExpr": "40",
+  "NumPoints": 14,
+  "Mode": "PointCount",
+  "Kind": "Linear",
+  "StartUnit": "GHz",
+  "StopUnit": "GHz"
+ },
+ "DispersionCorrection": true,
+ "CreateSnpSchematic": true,
+ "AnalysisKind": "Planar",
+ "AnalysisLevelNames": [
+  "TopMetal1",
+  "TopMetal2"
+ ],
+ "PlanarMesh": {
+  "Auto": true,
+  "CellsPerWavelength": 20,
+  "EdgeMesh": false,
+  "EdgeCells": 3,
+  "MinCellsAcrossConductor": 2
+ },
+ "ComponentPorts": [
+  "L1",
+  "L2"
+ ]
+}

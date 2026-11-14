@@ -10,7 +10,7 @@ To design or simulate with the kit, use the skill in `.claude/skills/ihp-sg13g2-
 |---|---|
 | `generator/` | `build.sh` runs the whole build: `ihp2va.py`, `ihp2crf.py` (cells, technology, the kit's `.cws`), `qucs2csym.py` (symbols), `build-vbic.sh` (VBIC 1.3 to OSDI, and harmonicaRF's devices through `harmonica_ihp.py`), `validate_ihp_kit.py`. `circuitrf-ihp-workspace` starts a workspace on the kit. |
 | `kit/IHP_SG13G2/` | Build output, git-ignored: the cells, `tech/IHP_SG13G2.ctech`, `models/`, `VALIDATION`, `BUILD`. Never edit it; change the generator and rebuild. |
-| `examples/` | One circuitRF workspace on the kit (`examples/.cws` references `../kit/IHP_SG13G2`) and on the IHP PDK as circuitRF imports it (`PdkRefs`, and the PCell declaration in `ihp-sg13g2-pcells/`, both written by `circuitrf import pdk`). `tech/`, `harmonica/` and `results/*` (except `*.cdd`) are written by the build and the runs. |
+| `examples/` | One circuitRF workspace on the kit (`examples/.cws` references `../kit/IHP_SG13G2`) and on the IHP PDK as circuitRF imports it (`PdkRefs`, and the PCell declaration in `ihp-sg13g2-pcells/`, both written by `circuitrf import pdk`). `tech/`, `harmonica/` and `results/*` (except `*.cdd`) are written by the build and the runs. The EM black-boxing examples `inductor_coupling/` and `hbt_core_matching/` are workspaces of their own (shared code in `blackbox_common/`); their `.cws`, `tech/` and `ihp-sg13g2-pcells/` carry machine paths, so the build makes them and git ignores them. |
 | `generator/` (PCells, overview) | `check_ihp_pcells.py` (each of the PDK's PCells, drawn by circuitRF from its import, against KLayout), `qucs2csch.py` (the Qucs-S gallery as `examples/Kit_cells`), `qucs_cells.json` (what works, with notes). |
 | `docs/` | `make-figures.sh`, `white.ccolor`, `images/` (the pages use `images/white/`). |
 | `ci/build-release.sh`, `.github/workflows/release.yml` | The release zip, built and validated in the base image. |
@@ -39,7 +39,8 @@ OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.8.4.
   circuitRF fixes it.
 - `./kit.sh circuitrf check examples --summary` must report 0 errors. The 5 warnings are expected: `Kit_cells`
   and `inductor/schematic` declare no analysis, and the technology states no DRC rules (three layouts).
-  On a fresh clone, before a build, add `--trust-kit examples/ihp-sg13g2-pcells`.
+  On a fresh clone, before a build, add `--trust-kit examples/ihp-sg13g2-pcells`; the check then also reports the
+  black-boxing examples' cells, until their workspaces exist.
 - After changing a bench, run it with the commands in `examples/README.md`. If a picture changes, regenerate
   the figures with `./kit.sh docs/make-figures.sh`.
 - Before committing, search the diff for absolute paths, user names and host names.

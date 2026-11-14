@@ -5,7 +5,12 @@ of `../kit/IHP_SG13G2`.
 
 - **From a release:** run `generator/build-vbic.sh` once, for the HBTs' VBIC model.
 - **From the repository:** build the kit with `./kit.sh generator/build.sh`. The build also writes this
-  workspace's copy of the technology (`tech/`) and its harmonicaRF documents (`harmonica/`).
+  workspace's copy of the technology (`tech/`), its harmonicaRF documents (`harmonica/`) and the workspaces of
+  the two EM black-boxing examples.
+
+The black-boxing examples, `inductor_coupling/` and `hbt_core_matching/`, are workspaces of their own, each
+with its own README. `blackbox_common/` holds their shared code. From a release, make their workspaces with
+`generator/circuitrf-ihp-workspace examples/<name>` before you open or check them.
 
 Open `examples/.cws` with File ▸ Open Workspace in circuitRF 1.8.4 or newer, or with
 `./kit.sh circuitrf examples/.cws` in the repository.
@@ -26,6 +31,8 @@ Open `examples/.cws` with File ▸ Open Workspace in circuitRF 1.8.4 or newer, o
 | `Kit_cells` | every kit cell, placed as in the PDK's Qucs-S symbol gallery, with the status of every Qucs-S component | Qucs-S `symbols.sch` |
 | `HBT_layout` | IHP's npn13G2 PCell at Nx = 1, 4 and 8, with a 3D view on the SG13G2 stack | IHP KLayout PCells |
 | `harmonica/` | harmonicaRF documents: npn13G2 and npn13G2v at Nx = 1, 2, 4, 8, at 50 GHz (written by the build) | |
+| [`inductor_coupling/`](inductor_coupling/README.md) | EM black-boxing: two `inductor2` coils 75 µm apart in a TopMetal1 plane, solved with both coils in the EM and with both cut out as component ports | |
+| [`hbt_core_matching/`](hbt_core_matching/README.md) | EM black-boxing: a single-finger npn13G2 stage matched by those coils, with Q1 and the MIMs cut, then the coils cut too | |
 
 ## Running them
 

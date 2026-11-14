@@ -18,4 +18,15 @@ dist/
 # Made by generator/build.sh for the kit it builds.
 examples/tech/
 examples/harmonica/
+# The black-boxing examples (examples/inductor_coupling, examples/hbt_core_matching) are workspaces of their own.
+# generator/circuitrf-ihp-workspace writes each one's .cws, technology copy and PCell declaration, and the EM runs
+# write the co-simulation netlists and cells; these carry machine paths. Their small Touchstone results are kept.
+examples/*/.cws
+examples/*/tech/
+examples/*/ihp-sg13g2-pcells/
+examples/*/*_cosim*
+examples/*/*_sim
+examples/*/*_sim.cdd
+examples/*/tb/*_sch.cnl
+!examples/*/results/*.s*p
 __pycache__/

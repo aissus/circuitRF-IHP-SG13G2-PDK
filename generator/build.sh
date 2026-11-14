@@ -47,6 +47,11 @@ cp "$K"/tech/*.ctech "$E/tech/"
 # PDK's scripts finds them
 g=$(mktemp --suffix=.gds) && circuitrf convert "$E/HBT_layout/layout/HBT_layout.clay" -o "$g" \
     --trust-kit "$E/ihp-sg13g2-pcells" >/dev/null && rm -f "$g"
+# The black-boxing examples are workspaces of their own, made once, as their READMEs make them. Their .cws
+# names this machine's paths, so it is never committed; without it, a check of examples/ descends into them.
+for w in inductor_coupling hbt_core_matching; do
+    [ -e "$E/$w/.cws" ] || IHP_KIT=$K "$S/circuitrf-ihp-workspace" "$E/$w" >/dev/null
+done
 for d in npn13G2 npn13G2v; do for n in 1 2 4 8; do
     python3 "$S/harmonica_ihp.py" charm "$E/harmonica/${d}_Nx${n}_50GHz.charm" --device $d --nx $n \
         --osdi "$K/models/osdi/$d.osdi"

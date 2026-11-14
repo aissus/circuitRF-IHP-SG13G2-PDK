@@ -1,0 +1,38 @@
+{
+ "FormatVersion": 1,
+ "Name": "core_i",
+ "LayoutRef": "CORE/layout/CORE.clay",
+ "Frequency": {
+  "StartExpr": "4",
+  "StopExpr": "40",
+  "NumPoints": 7,
+  "Mode": "PointCount",
+  "Kind": "Linear",
+  "StartUnit": "GHz",
+  "StopUnit": "GHz"
+ },
+ "DispersionCorrection": true,
+ "CreateSnpSchematic": true,
+ "AnalysisKind": "Planar",
+ "AnalysisLevelNames": [
+  "Metal1",
+  "Metal2",
+  "Metal3",
+  "Metal4",
+  "Metal5",
+  "TopMetal1",
+  "TopMetal2"
+ ],
+ "PlanarMesh": {
+  "Auto": true,
+  "CellsPerWavelength": 20,
+  "EdgeMesh": false,
+  "EdgeCells": 3,
+  "MinCellsAcrossConductor": 2
+ },
+ "ComponentPorts": [
+  "Q1",
+  "C1",
+  "C2"
+ ]
+}

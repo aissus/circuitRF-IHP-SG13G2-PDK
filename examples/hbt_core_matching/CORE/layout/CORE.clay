@@ -1,0 +1,720 @@
+{
+ "FormatVersion": 1,
+ "DbuPerMicron": 1000,
+ "DisplayUnit": "Um",
+ "SnapDbu": 5,
+ "AngleMode": "AnyAngle",
+ "TechRef": "../../tech/IHP_SG13G2.ctech",
+ "PCellSnapshots": {
+  "inductor2_0d8ac11f9f1f": {
+   "GeneratorId": "inductor2",
+   "Parameters": {
+    "w": "5.4u",
+    "s": "4.1u",
+    "d": "62.63u",
+    "nr_r": {
+     "int": 2
+    }
+   },
+   "TechIdentity": "tech/IHP_SG13G2.ctech"
+  },
+  "inductor2_e25e3f1e4ecf": {
+   "GeneratorId": "inductor2",
+   "Parameters": {
+    "w": "4u",
+    "s": "2.1u",
+    "d": "35u",
+    "nr_r": {
+     "int": 2
+    }
+   },
+   "TechIdentity": "tech/IHP_SG13G2.ctech"
+  },
+  "npn13G2_9bcac288b019": {
+   "GeneratorId": "npn13G2",
+   "Parameters": {
+    "Nx": 1
+   },
+   "TechIdentity": "tech/IHP_SG13G2.ctech"
+  },
+  "cmim_48ddc806fb18": {
+   "GeneratorId": "cmim",
+   "Parameters": {
+    "w": "8u",
+    "l": "8u"
+   },
+   "TechIdentity": "tech/IHP_SG13G2.ctech"
+  },
+  "cmim_ff1bff80e4ba": {
+   "GeneratorId": "cmim",
+   "Parameters": {
+    "w": "20u",
+    "l": "20u"
+   },
+   "TechIdentity": "tech/IHP_SG13G2.ctech"
+  }
+ },
+ "Shapes": [
+  {
+   "$type": "Poly",
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   },
+   "Xy": [
+    -100000,
+    -100000,
+    237500,
+    -100000,
+    237500,
+    175000,
+    -100000,
+    175000
+   ],
+   "Holes": [
+    [
+     -76250,
+     -70000,
+     213750,
+     -70000,
+     213750,
+     122500,
+     91250,
+     122500,
+     91250,
+     0,
+     76250,
+     0,
+     76250,
+     152500,
+     -76250,
+     152500
+    ]
+   ]
+  },
+  {
+   "$type": "Rect",
+   "X1": -7450,
+   "Y1": -60000,
+   "X2": -2050,
+   "Y2": -1000,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Label",
+   "X": -4750,
+   "Y": -60000,
+   "Text": "1",
+   "Height": 2000,
+   "Rotation": "R0",
+   "IsPort": true,
+   "PortDirection": "R90",
+   "PortLayer": {
+    "Layer": 126,
+    "Datatype": 0
+   },
+   "Style": "Regular",
+   "PortUncalibrated": true,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   },
+   "SchematicId": "P1"
+  },
+  {
+   "$type": "Rect",
+   "X1": -23050,
+   "Y1": -42000,
+   "X2": -7450,
+   "Y2": -38000,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": -82000,
+   "Y1": -42000,
+   "X2": -31050,
+   "Y2": -38000,
+   "Layer": {
+    "Layer": 67,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": -81500,
+   "Y1": -41500,
+   "X2": -78500,
+   "Y2": -38500,
+   "Layer": {
+    "Layer": 125,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 2050,
+   "Y1": -52700,
+   "X2": 7450,
+   "Y2": -1000,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 2050,
+   "Y1": -52700,
+   "X2": 86700,
+   "Y2": -47300,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 82750,
+   "Y1": -51250,
+   "X2": 85250,
+   "Y2": -48750,
+   "Layer": {
+    "Layer": 8,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 82750,
+   "Y1": -51250,
+   "X2": 85250,
+   "Y2": -48750,
+   "Layer": {
+    "Layer": 10,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 82750,
+   "Y1": -51250,
+   "X2": 85250,
+   "Y2": -48750,
+   "Layer": {
+    "Layer": 30,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 82750,
+   "Y1": -51250,
+   "X2": 85250,
+   "Y2": -48750,
+   "Layer": {
+    "Layer": 50,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 82750,
+   "Y1": -51250,
+   "X2": 85250,
+   "Y2": -48750,
+   "Layer": {
+    "Layer": 67,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83500,
+   "Y1": -50500,
+   "X2": 84500,
+   "Y2": -49500,
+   "Layer": {
+    "Layer": 19,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83500,
+   "Y1": -50500,
+   "X2": 84500,
+   "Y2": -49500,
+   "Layer": {
+    "Layer": 29,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83500,
+   "Y1": -50500,
+   "X2": 84500,
+   "Y2": -49500,
+   "Layer": {
+    "Layer": 49,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83500,
+   "Y1": -50500,
+   "X2": 84500,
+   "Y2": -49500,
+   "Layer": {
+    "Layer": 66,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83500,
+   "Y1": -50500,
+   "X2": 84500,
+   "Y2": -49500,
+   "Layer": {
+    "Layer": 125,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83250,
+   "Y1": -51250,
+   "X2": 84750,
+   "Y2": -36260,
+   "Layer": {
+    "Layer": 8,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83250,
+   "Y1": -33750,
+   "X2": 84750,
+   "Y2": -25000,
+   "Layer": {
+    "Layer": 8,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 82750,
+   "Y1": -27500,
+   "X2": 85250,
+   "Y2": -25000,
+   "Layer": {
+    "Layer": 8,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 82750,
+   "Y1": -27500,
+   "X2": 85250,
+   "Y2": -25000,
+   "Layer": {
+    "Layer": 10,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 82750,
+   "Y1": -27500,
+   "X2": 85250,
+   "Y2": -25000,
+   "Layer": {
+    "Layer": 30,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 82750,
+   "Y1": -27500,
+   "X2": 85250,
+   "Y2": -25000,
+   "Layer": {
+    "Layer": 50,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 82750,
+   "Y1": -27500,
+   "X2": 85250,
+   "Y2": -25000,
+   "Layer": {
+    "Layer": 67,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83500,
+   "Y1": -26750,
+   "X2": 84500,
+   "Y2": -25750,
+   "Layer": {
+    "Layer": 19,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83500,
+   "Y1": -26750,
+   "X2": 84500,
+   "Y2": -25750,
+   "Layer": {
+    "Layer": 29,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83500,
+   "Y1": -26750,
+   "X2": 84500,
+   "Y2": -25750,
+   "Layer": {
+    "Layer": 49,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83500,
+   "Y1": -26750,
+   "X2": 84500,
+   "Y2": -25750,
+   "Layer": {
+    "Layer": 66,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 83500,
+   "Y1": -26750,
+   "X2": 84500,
+   "Y2": -25750,
+   "Layer": {
+    "Layer": 125,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 82000,
+   "Y1": -28250,
+   "X2": 151450,
+   "Y2": -24250,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 147450,
+   "Y1": -28250,
+   "X2": 151450,
+   "Y2": -1000,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 84925,
+   "Y1": -35750,
+   "X2": 96250,
+   "Y2": -34250,
+   "Layer": {
+    "Layer": 10,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 93750,
+   "Y1": -36250,
+   "X2": 96250,
+   "Y2": -33750,
+   "Layer": {
+    "Layer": 10,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 93750,
+   "Y1": -36250,
+   "X2": 96250,
+   "Y2": -33750,
+   "Layer": {
+    "Layer": 30,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 93750,
+   "Y1": -36250,
+   "X2": 96250,
+   "Y2": -33750,
+   "Layer": {
+    "Layer": 50,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 93750,
+   "Y1": -36250,
+   "X2": 96250,
+   "Y2": -33750,
+   "Layer": {
+    "Layer": 67,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 94500,
+   "Y1": -35500,
+   "X2": 95500,
+   "Y2": -34500,
+   "Layer": {
+    "Layer": 29,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 94500,
+   "Y1": -35500,
+   "X2": 95500,
+   "Y2": -34500,
+   "Layer": {
+    "Layer": 49,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 94500,
+   "Y1": -35500,
+   "X2": 95500,
+   "Y2": -34500,
+   "Layer": {
+    "Layer": 66,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 94500,
+   "Y1": -35500,
+   "X2": 95500,
+   "Y2": -34500,
+   "Layer": {
+    "Layer": 125,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 92000,
+   "Y1": -75000,
+   "X2": 102000,
+   "Y2": -32000,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 153550,
+   "Y1": -37000,
+   "X2": 157550,
+   "Y2": -1000,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 153550,
+   "Y1": -37000,
+   "X2": 165600,
+   "Y2": -33000,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 185600,
+   "Y1": -37000,
+   "X2": 195000,
+   "Y2": -33000,
+   "Layer": {
+    "Layer": 67,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 192000,
+   "Y1": -36500,
+   "X2": 195000,
+   "Y2": -33500,
+   "Layer": {
+    "Layer": 125,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Rect",
+   "X1": 192000,
+   "Y1": -37000,
+   "X2": 205000,
+   "Y2": -33000,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   }
+  },
+  {
+   "$type": "Label",
+   "X": 205000,
+   "Y": -35000,
+   "Text": "2",
+   "Height": 2000,
+   "Rotation": "R0",
+   "IsPort": true,
+   "PortDirection": "R180",
+   "PortLayer": {
+    "Layer": 126,
+    "Datatype": 0
+   },
+   "Style": "Regular",
+   "PortUncalibrated": true,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   },
+   "SchematicId": "P2"
+  },
+  {
+   "$type": "Label",
+   "X": -100000,
+   "Y": 37500,
+   "Text": "3",
+   "Height": 2000,
+   "Rotation": "R0",
+   "IsPort": true,
+   "PortDirection": "R0",
+   "PortLayer": {
+    "Layer": 126,
+    "Datatype": 0
+   },
+   "Style": "Regular",
+   "PortUncalibrated": true,
+   "Layer": {
+    "Layer": 126,
+    "Datatype": 0
+   }
+  }
+ ],
+ "Instances": [
+  {
+   "CellRef": "../../.generated-cells/inductor2_0d8ac11f9f1f",
+   "X": 0,
+   "Y": 0,
+   "Rot": "R0",
+   "MirrorX": false,
+   "Mag": 1,
+   "Rows": 1,
+   "Cols": 1,
+   "PitchX": 0,
+   "PitchY": 0,
+   "SchematicId": "L1"
+  },
+  {
+   "CellRef": "../../.generated-cells/inductor2_e25e3f1e4ecf",
+   "X": 152500,
+   "Y": 0,
+   "Rot": "R0",
+   "MirrorX": false,
+   "Mag": 1,
+   "Rows": 1,
+   "Cols": 1,
+   "PitchX": 0,
+   "PitchY": 0,
+   "SchematicId": "L2"
+  },
+  {
+   "CellRef": "../../.generated-cells/npn13G2_9bcac288b019",
+   "X": 84000,
+   "Y": -35000,
+   "Rot": "R0",
+   "MirrorX": false,
+   "Mag": 1,
+   "Rows": 1,
+   "Cols": 1,
+   "PitchX": 0,
+   "PitchY": 0,
+   "SchematicId": "Q1"
+  },
+  {
+   "CellRef": "../../.generated-cells/cmim_48ddc806fb18",
+   "X": -30450,
+   "Y": -44000,
+   "Rot": "R0",
+   "MirrorX": false,
+   "Mag": 1,
+   "Rows": 1,
+   "Cols": 1,
+   "PitchX": 0,
+   "PitchY": 0,
+   "SchematicId": "C1"
+  },
+  {
+   "CellRef": "../../.generated-cells/cmim_ff1bff80e4ba",
+   "X": 165000,
+   "Y": -45000,
+   "Rot": "R0",
+   "MirrorX": false,
+   "Mag": 1,
+   "Rows": 1,
+   "Cols": 1,
+   "PitchX": 0,
+   "PitchY": 0,
+   "SchematicId": "C2"
+  }
+ ]
+}

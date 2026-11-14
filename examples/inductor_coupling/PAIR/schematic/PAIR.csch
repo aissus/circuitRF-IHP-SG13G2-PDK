@@ -1,0 +1,406 @@
+{
+ "FormatVersion": 2,
+ "CellName": "PAIR",
+ "GridSize": 100,
+ "GridSnap": true,
+ "AuthorGridDivisor": 20,
+ "Components": [
+  {
+   "InstanceName": "P1",
+   "Symbol": "Term",
+   "X": -1000,
+   "Y": 500,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "1",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "Ohm",
+     "ShowOnSchematic": true,
+     "Dimension": "Resistance"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND2",
+   "Symbol": "Ground",
+   "X": -1000,
+   "Y": 800,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "P2",
+   "Symbol": "Term",
+   "X": 1000,
+   "Y": 500,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "2",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "Ohm",
+     "ShowOnSchematic": true,
+     "Dimension": "Resistance"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND4",
+   "Symbol": "Ground",
+   "X": 1000,
+   "Y": 800,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "P3",
+   "Symbol": "Term",
+   "X": -1000,
+   "Y": 2000,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "3",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "Ohm",
+     "ShowOnSchematic": true,
+     "Dimension": "Resistance"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND6",
+   "Symbol": "Ground",
+   "X": -1000,
+   "Y": 2300,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "P4",
+   "Symbol": "Term",
+   "X": 1000,
+   "Y": 2000,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [
+    {
+     "Name": "Num",
+     "Expression": "4",
+     "Unit": "",
+     "ShowOnSchematic": true,
+     "Dimension": "None"
+    },
+    {
+     "Name": "Z",
+     "Expression": "50",
+     "Unit": "Ohm",
+     "ShowOnSchematic": true,
+     "Dimension": "Resistance"
+    }
+   ]
+  },
+  {
+   "InstanceName": "GND8",
+   "Symbol": "Ground",
+   "X": 1000,
+   "Y": 2300,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": []
+  },
+  {
+   "InstanceName": "L1",
+   "Symbol": "Generic",
+   "X": 0,
+   "Y": 0,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [],
+   "CellRef": "../../IND_BIG"
+  },
+  {
+   "InstanceName": "L2",
+   "Symbol": "Generic",
+   "X": 0,
+   "Y": 1500,
+   "Rotation": "R0",
+   "MirrorX": false,
+   "Disable": "None",
+   "Parameters": [],
+   "CellRef": "../../IND_SMALL"
+  }
+ ],
+ "Wires": [
+  {
+   "Points": [
+    [
+     -1000,
+     300
+    ],
+    [
+     -1000,
+     200
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1000,
+     700
+    ],
+    [
+     -1000,
+     800
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1000,
+     300
+    ],
+    [
+     1000,
+     200
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1000,
+     700
+    ],
+    [
+     1000,
+     800
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1000,
+     1800
+    ],
+    [
+     -1000,
+     1700
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -1000,
+     2200
+    ],
+    [
+     -1000,
+     2300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1000,
+     1800
+    ],
+    [
+     1000,
+     1700
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     1000,
+     2200
+    ],
+    [
+     1000,
+     2300
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -200,
+     0
+    ],
+    [
+     -300,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     200,
+     0
+    ],
+    [
+     300,
+     0
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     -200,
+     1500
+    ],
+    [
+     -300,
+     1500
+    ]
+   ]
+  },
+  {
+   "Points": [
+    [
+     200,
+     1500
+    ],
+    [
+     300,
+     1500
+    ]
+   ]
+  }
+ ],
+ "NetLabels": [
+  {
+   "X": -1000,
+   "Y": 250,
+   "Name": "a1",
+   "OwnerWireIndex": 0,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1000,
+   "Y": 250,
+   "Name": "b1",
+   "OwnerWireIndex": 2,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -1000,
+   "Y": 1750,
+   "Name": "a2",
+   "OwnerWireIndex": 4,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 1000,
+   "Y": 1750,
+   "Name": "b2",
+   "OwnerWireIndex": 6,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -250,
+   "Y": 0,
+   "Name": "a1",
+   "OwnerWireIndex": 8,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 250,
+   "Y": 0,
+   "Name": "b1",
+   "OwnerWireIndex": 9,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": -250,
+   "Y": 1500,
+   "Name": "a2",
+   "OwnerWireIndex": 10,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  },
+  {
+   "X": 250,
+   "Y": 1500,
+   "Name": "b2",
+   "OwnerWireIndex": 11,
+   "SegmentIndex": 0,
+   "AlongT": 0.5,
+   "OffsetX": 0,
+   "OffsetY": 0
+  }
+ ],
+ "Dots": [],
+ "CanvasObjects": [],
+ "View": {
+  "PanX": 0,
+  "PanY": 0,
+  "Zoom": 1
+ }
+}

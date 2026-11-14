@@ -27,8 +27,10 @@ example workspace. To design, simulate or run EM with it, use the skill in
    - It needs `openvaf` on `PATH`, or `OPENVAF=`.
    - With `PDKPATH` set to the IHP PDK, it also builds harmonicaRF's devices.
    - Resistors, the MIM capacitor and EM work without it.
-3. **Check:** `circuitrf check examples --summary` must report 0 errors. Four warnings are expected: two
-   schematics declare no analysis, and the technology has no DRC rules.
+3. **Check:** first make the EM black-boxing examples' workspaces, `generator/circuitrf-ihp-workspace
+   examples/inductor_coupling` and the same for `examples/hbt_core_matching`. Then `circuitrf check examples
+   --summary` must report 0 errors. Four warnings are expected: two schematics declare no analysis, and the
+   technology has no DRC rules.
 
 ## Working here
 

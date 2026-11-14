@@ -1,0 +1,173 @@
+; extracted from PAIR
+
+define IND_BIG (LA LB)
+  SnP:S1  LA  LB  NumPorts=2  File="../results/ind_big.s2p"
+end IND_BIG
+
+define IND_SMALL (LA LB)
+  SnP:S1  LA  LB  NumPorts=2  File="../results/ind_small.s2p"
+end IND_SMALL
+
+cap_carea = 1.5E-15
+cap_cpara = 1
+none = 0
+same = 1
+double = 2
+schottky_nbl1_is = 1.28
+schottky_nbl1_kf = 1
+vbic_cje = 1
+vbic_cjc = 1
+vbic_cjcp = 1
+vbic_is = 1
+vbic_ibei = 1
+vbic_re = 1
+vbic_rcx = 1
+vbic_rbx = 1
+vbic_tf = 1
+sgp_mpa_cje = 1
+sgp_mpa_cjc = 1
+sgp_mpa_is = 1
+sgp_mpa_bf = 1
+sgp_mpa_re = 1
+sgp_mpa_rb = 1
+sgp_mpa_rc = 1
+ccb0 = 9.7E-16
+isc0 = 2E-23
+ikr0 = 4E-07
+rc0 = 1000
+rb0 = 700
+sg13g2_moscap_n_vfbo = 1
+sg13g2_moscap_n_ctl = 1.208
+sg13g2_moscap_n_rsw1 = 0.72
+sg13g2_moscap_n_muew = 0.85
+sg13g2_moscap_n_dphibo = 0.9915
+sg13g2_moscap_n_dphibl = 0.9693
+sg13g2_moscap_n_dphibw = 0.9749
+sg13g2_moscap_n_dphiblw = 0.9754
+sg13g2_moscap_n_themuo = 0.8757
+sg13g2_moscap_n_thesatl = 0.785
+sg13g2_moscap_n_thesatw = 1.5
+sg13g2_moscap_n_thesatlw = 0.6127
+sg13g2_moscap_n_toxo = 1
+sg13g2_moscap_n_toxovo = 1
+sg13g2_moscap_n_cjorbot = 1
+sg13g2_moscap_n_cjorsti = 1
+sg13g2_moscap_n_cjorgat = 1
+sg13g2_moscap_p_vfbo = 1
+sg13g2_moscap_p_ctl = 1.957
+sg13g2_moscap_p_rsw1 = 0.772
+sg13g2_moscap_p_muew = 1.052
+sg13g2_moscap_p_dphibo = 0.905
+sg13g2_moscap_p_dphibl = 0.855
+sg13g2_moscap_p_dphibw = -1.58
+sg13g2_moscap_p_dphiblw = 1
+sg13g2_moscap_p_themuo = 0.958
+sg13g2_moscap_p_thesatl = 0.551
+sg13g2_moscap_p_thesatw = 1.08
+sg13g2_moscap_p_thesatlw = 1
+sg13g2_moscap_p_toxo = 1
+sg13g2_moscap_p_toxovo = 1
+sg13g2_moscap_p_cjorbot = 1
+sg13g2_moscap_p_cjorsti = 1
+sg13g2_moscap_p_cjorgat = 1
+SWSOA = 0
+sg13g2_hv_nmos_vfbo = 1
+sg13g2_hv_nmos_rsgo = 1
+sg13g2_hv_nmos_rsw1 = 0.7886
+sg13g2_hv_nmos_mueo = 1.078
+sg13g2_hv_nmos_dphibo = 1.4388
+sg13g2_hv_nmos_dphibl = 1.5299
+sg13g2_hv_nmos_dphibw = 1
+sg13g2_hv_nmos_dphiblw = 0.8712
+sg13g2_hv_nmos_ctl = 1
+sg13g2_hv_nmos_thesato = 1
+sg13g2_hv_nmos_thesatl = 1.035
+sg13g2_hv_nmos_thesatw = 1
+sg13g2_hv_nmos_thesatlw = 1.605
+sg13g2_hv_nmos_toxo = 1
+sg13g2_hv_nmos_toxovo = 1
+sg13g2_hv_nmos_cjorbot = 1
+sg13g2_hv_nmos_cjorsti = 1
+sg13g2_hv_nmos_cjorgat = 1
+sg13g2_hv_pmos_vfbo = 1
+sg13g2_hv_pmos_rsgo = 1.111
+sg13g2_hv_pmos_rsw1 = 1
+sg13g2_hv_pmos_mueo = 0.9605
+sg13g2_hv_pmos_dphibo = 1.001
+sg13g2_hv_pmos_dphibl = 0.9504
+sg13g2_hv_pmos_dphibw = 1.408
+sg13g2_hv_pmos_dphiblw = -0.1693
+sg13g2_hv_pmos_bgidlo = 0.8409
+sg13g2_hv_pmos_thesato = 1
+sg13g2_hv_pmos_thesatl = 0.4814
+sg13g2_hv_pmos_thesatw = 5.7745
+sg13g2_hv_pmos_thesatlw = 1
+sg13g2_hv_pmos_csl = 1
+sg13g2_hv_pmos_toxo = 1
+sg13g2_hv_pmos_toxovo = 1
+sg13g2_hv_pmos_cjorbot = 1
+sg13g2_hv_pmos_cjorsti = 1
+sg13g2_hv_pmos_cjorgat = 1
+sg13g2_hv_svaricap_vfbo = 1
+sg13g2_hv_svaricap_toxo = 1
+sg13g2_hv_svaricap_dlq = 1
+sg13g2_hv_svaricap_dwq = 1
+sg13g2_lv_nmos_vfbo = 1
+sg13g2_lv_nmos_ctl = 1.208
+sg13g2_lv_nmos_rsw1 = 0.72
+sg13g2_lv_nmos_muew = 0.85
+sg13g2_lv_nmos_dphibo = 0.9915
+sg13g2_lv_nmos_dphibl = 0.9693
+sg13g2_lv_nmos_dphibw = 0.9749
+sg13g2_lv_nmos_dphiblw = 0.9754
+sg13g2_lv_nmos_themuo = 0.8757
+sg13g2_lv_nmos_thesatl = 0.785
+sg13g2_lv_nmos_thesatw = 1.5
+sg13g2_lv_nmos_thesatlw = 0.6127
+sg13g2_lv_nmos_toxo = 1
+sg13g2_lv_nmos_toxovo = 1
+sg13g2_lv_nmos_cjorbot = 1
+sg13g2_lv_nmos_cjorsti = 1
+sg13g2_lv_nmos_cjorgat = 1
+sg13g2_lv_pmos_vfbo = 1
+sg13g2_lv_pmos_ctl = 1.957
+sg13g2_lv_pmos_rsw1 = 0.772
+sg13g2_lv_pmos_muew = 1.052
+sg13g2_lv_pmos_dphibo = 0.905
+sg13g2_lv_pmos_dphibl = 0.855
+sg13g2_lv_pmos_dphibw = -1.58
+sg13g2_lv_pmos_dphiblw = 1
+sg13g2_lv_pmos_themuo = 0.958
+sg13g2_lv_pmos_thesatl = 0.551
+sg13g2_lv_pmos_thesatw = 1.08
+sg13g2_lv_pmos_thesatlw = 1
+sg13g2_lv_pmos_toxo = 1
+sg13g2_lv_pmos_toxovo = 1
+sg13g2_lv_pmos_cjorbot = 1
+sg13g2_lv_pmos_cjorsti = 1
+sg13g2_lv_pmos_cjorgat = 1
+sg13g2_lv_svaricap_lap = 1.082
+sg13g2_lv_svaricap_toxo = 1
+rsh_rhigh = 1360
+rsh_rppd = 260
+rsh_rsil = 7
+drsh_rhigh = 0
+drsh_rsil = 0
+drsh_rppd = 0
+dl_rhigh = 0
+dw_rhigh = 0
+dl_rsil = 0
+dw_rsil = 0
+dl_rppd = 0
+dw_rppd = 0
+dw_rsil_par = 0
+dw_rppd_par = 0
+dw_rhigh_par = 0
+
+Port:P1  a1  0  Num=1  Z=50 Ohm
+Port:P2  b1  0  Num=2  Z=50 Ohm
+Port:P3  a2  0  Num=3  Z=50 Ohm
+Port:P4  b2  0  Num=4  Z=50 Ohm
+IND_BIG:L1  a1  b1
+IND_SMALL:L2  a2  b2
+analysis SP1 type=sparam start="1" startUnit=GHz stop="40" stopUnit=GHz npts=14

@@ -1,0 +1,215 @@
+VBE = 0.88
+VCC = 1.5
+; extracted from CORE
+
+define cap_cmim (PLUS MINUS)
+  parameters w=7e-06  l=7e-06  corner=0  T=27
+  cap_carea = corner==1 ? 0.9*1.5E-15 : (corner==2 ? 1.1*1.5E-15 : 1.5E-15)
+  Cmim = (cap_carea*(w*1e6)*(l*1e6) + 40E-18*2*(w*1e6+l*1e6))*(1 + 3.6E-6*(T-27) + 2E-9*(T-27)^2)
+  R:R1  PLUS  n1  R=0.055
+  C:C1  n1  MINUS  C=Cmim
+end cap_cmim
+
+define IND_BIG (LA LB)
+  SnP:S1  LA  LB  NumPorts=2  File="../results/ind_big.s2p"
+end IND_BIG
+
+define npn13G2 (c b e bn)
+  parameters Nx=1  corner=0  T=27  dtemp=0  selft=1
+  vbic_cje = corner==1 ? 0.83 : (corner==2 ? 1.17 : 1.0)
+  vbic_cjc = corner==1 ? 0.87 : (corner==2 ? 1.13 : 1.0)
+  vbic_cjcp = corner==1 ? 0.89 : (corner==2 ? 1.11 : 1.0)
+  vbic_is = corner==1 ? 1.26 : (corner==2 ? 0.74 : 1.0)
+  vbic_ibei = corner==1 ? 0.67 : (corner==2 ? 1.33 : 1.0)
+  vbic_re = corner==1 ? 0.73 : (corner==2 ? 1.27 : 1.0)
+  vbic_rcx = corner==1 ? 0.79 : (corner==2 ? 1.21 : 1.0)
+  vbic_rbx = corner==1 ? 0.88 : (corner==2 ? 1.12 : 1.0)
+  vbic_tf = corner==1 ? 0.89 : (corner==2 ? 1.11 : 1.0)
+  Ny = 1
+  le = 0.96e-6
+  we = 0.12e-6
+  El = le*1e6
+  sw_nqs = 0
+  VerilogA:Q1  c  b  e  s1  t  File="../../../kit/IHP_SG13G2/models/osdi/vbic_1p3_5t.osdi"  Pins=5  tnom=27  cbeo=8.00E-16*(Nx*0.25)^0.975  cje=8.418E-15*(Nx*0.25)^0.975*vbic_cje  pe=0.92  me=0.12  aje=-0.50  wbe=1.00  cbco=2.36E-15*(Nx*0.25)  cjc=1.53E-15*(Nx*0.25)*vbic_cjc  pc=0.558  mc=0.12  ajc=-0.50  cjep=3.56E-15*(Nx*0.25)*vbic_cjc  cjcp=4.56E-15*(Nx*0.25)^0.8*vbic_cjcp  ps=0.46  ms=0.23  ajs=-0.50  fc=0.80  vef=189  ver=5.3  is=4.81E-17*(Nx*0.25)*vbic_is  nf=1.018  ibei=1.9E-19*(Nx*0.25)*vbic_ibei  nei=1.066  iben=4.00E-16*(Nx*0.25)  nen=2.00  ikf=0.009*(Nx*0.25)  nr=1.01  ibci=1.50E-20*(Nx*0.25)  nci=1.103  ibcn=1.00E-15*(Nx*0.25)  ncn=1.96  ikr=0.01*(Nx*0.25)  wsp=1  isp=4.00E-20*(Nx*0.25)  nfp=1.04  ibcip=2.00E-15*(Nx*0.25)^0.7  ncip=1.00  ibcnp=5.00E-15*(Nx*0.25)  ncnp=1.50  ikp=.00E-04*(Nx*0.25)  ibeip=4.00E-19*(Nx*0.25)  ibenp=2.00E-14*(Nx*0.25)  re=7.13E+00*(4/Nx)^1*vbic_re  rcx=1.3E+01*(4/Nx)^1*vbic_rcx  rci=1.29E+01*(4/Nx)^1  qco=1.00E-18  vo=0.80  gamm=2.25E-14  hrcf=1000  rbx=6.93E+00*(4/Nx)^0.95*vbic_rbx  rbi=2.20E+01*(4/Nx)^0.95*vbic_rbx  rbp=5.5*(4/Nx)  rs=1  avc1=2.40  avc2=10.81  tf=2.08E-13*vbic_tf*((T+273)/300)^0.7  qtf=1.00E-18  xtf=10.0  vtf=20.0  itf=0.585*(Nx*0.25)  tr=3.50E-13  td=sw_nqs*2.80E-13*(Nx*0.25)^0  cth=1.60E-12*(Nx*0.25)^0.95  rth=1*selft*3.26E+03*(4/Nx)^0.9  ea=1.056  eaie=1.056  eaic=1.12  eais=1.12  eane=1.12  eanc=1.12  eans=1.12  xre=-0.42  xrb=0.90  xrc=0.245  xrs=1.50  xvo=1.50  xis=2.30  xii=3.30  xin=3.30  tnf=0.00015  tavc=-0.00188  kfn=6.00E-9*(4/Nx)  afn=1.80  bfn=1.00  Temp=T+dtemp
+  R:Rsub  s1  bn  R=300+100*Nx
+  C:Csub  s1  bn  C=2.30E-14-(1.50E-15*Nx)
+  R:Rt  t  0  R=1e9
+end npn13G2
+
+define IND_SMALL (LA LB)
+  SnP:S1  LA  LB  NumPorts=2  File="../results/ind_small.s2p"
+end IND_SMALL
+
+cap_carea = 1.5E-15
+cap_cpara = 1
+none = 0
+same = 1
+double = 2
+schottky_nbl1_is = 1.28
+schottky_nbl1_kf = 1
+vbic_cje = 1
+vbic_cjc = 1
+vbic_cjcp = 1
+vbic_is = 1
+vbic_ibei = 1
+vbic_re = 1
+vbic_rcx = 1
+vbic_rbx = 1
+vbic_tf = 1
+sgp_mpa_cje = 1
+sgp_mpa_cjc = 1
+sgp_mpa_is = 1
+sgp_mpa_bf = 1
+sgp_mpa_re = 1
+sgp_mpa_rb = 1
+sgp_mpa_rc = 1
+ccb0 = 9.7E-16
+isc0 = 2E-23
+ikr0 = 4E-07
+rc0 = 1000
+rb0 = 700
+sg13g2_moscap_n_vfbo = 1
+sg13g2_moscap_n_ctl = 1.208
+sg13g2_moscap_n_rsw1 = 0.72
+sg13g2_moscap_n_muew = 0.85
+sg13g2_moscap_n_dphibo = 0.9915
+sg13g2_moscap_n_dphibl = 0.9693
+sg13g2_moscap_n_dphibw = 0.9749
+sg13g2_moscap_n_dphiblw = 0.9754
+sg13g2_moscap_n_themuo = 0.8757
+sg13g2_moscap_n_thesatl = 0.785
+sg13g2_moscap_n_thesatw = 1.5
+sg13g2_moscap_n_thesatlw = 0.6127
+sg13g2_moscap_n_toxo = 1
+sg13g2_moscap_n_toxovo = 1
+sg13g2_moscap_n_cjorbot = 1
+sg13g2_moscap_n_cjorsti = 1
+sg13g2_moscap_n_cjorgat = 1
+sg13g2_moscap_p_vfbo = 1
+sg13g2_moscap_p_ctl = 1.957
+sg13g2_moscap_p_rsw1 = 0.772
+sg13g2_moscap_p_muew = 1.052
+sg13g2_moscap_p_dphibo = 0.905
+sg13g2_moscap_p_dphibl = 0.855
+sg13g2_moscap_p_dphibw = -1.58
+sg13g2_moscap_p_dphiblw = 1
+sg13g2_moscap_p_themuo = 0.958
+sg13g2_moscap_p_thesatl = 0.551
+sg13g2_moscap_p_thesatw = 1.08
+sg13g2_moscap_p_thesatlw = 1
+sg13g2_moscap_p_toxo = 1
+sg13g2_moscap_p_toxovo = 1
+sg13g2_moscap_p_cjorbot = 1
+sg13g2_moscap_p_cjorsti = 1
+sg13g2_moscap_p_cjorgat = 1
+SWSOA = 0
+sg13g2_hv_nmos_vfbo = 1
+sg13g2_hv_nmos_rsgo = 1
+sg13g2_hv_nmos_rsw1 = 0.7886
+sg13g2_hv_nmos_mueo = 1.078
+sg13g2_hv_nmos_dphibo = 1.4388
+sg13g2_hv_nmos_dphibl = 1.5299
+sg13g2_hv_nmos_dphibw = 1
+sg13g2_hv_nmos_dphiblw = 0.8712
+sg13g2_hv_nmos_ctl = 1
+sg13g2_hv_nmos_thesato = 1
+sg13g2_hv_nmos_thesatl = 1.035
+sg13g2_hv_nmos_thesatw = 1
+sg13g2_hv_nmos_thesatlw = 1.605
+sg13g2_hv_nmos_toxo = 1
+sg13g2_hv_nmos_toxovo = 1
+sg13g2_hv_nmos_cjorbot = 1
+sg13g2_hv_nmos_cjorsti = 1
+sg13g2_hv_nmos_cjorgat = 1
+sg13g2_hv_pmos_vfbo = 1
+sg13g2_hv_pmos_rsgo = 1.111
+sg13g2_hv_pmos_rsw1 = 1
+sg13g2_hv_pmos_mueo = 0.9605
+sg13g2_hv_pmos_dphibo = 1.001
+sg13g2_hv_pmos_dphibl = 0.9504
+sg13g2_hv_pmos_dphibw = 1.408
+sg13g2_hv_pmos_dphiblw = -0.1693
+sg13g2_hv_pmos_bgidlo = 0.8409
+sg13g2_hv_pmos_thesato = 1
+sg13g2_hv_pmos_thesatl = 0.4814
+sg13g2_hv_pmos_thesatw = 5.7745
+sg13g2_hv_pmos_thesatlw = 1
+sg13g2_hv_pmos_csl = 1
+sg13g2_hv_pmos_toxo = 1
+sg13g2_hv_pmos_toxovo = 1
+sg13g2_hv_pmos_cjorbot = 1
+sg13g2_hv_pmos_cjorsti = 1
+sg13g2_hv_pmos_cjorgat = 1
+sg13g2_hv_svaricap_vfbo = 1
+sg13g2_hv_svaricap_toxo = 1
+sg13g2_hv_svaricap_dlq = 1
+sg13g2_hv_svaricap_dwq = 1
+sg13g2_lv_nmos_vfbo = 1
+sg13g2_lv_nmos_ctl = 1.208
+sg13g2_lv_nmos_rsw1 = 0.72
+sg13g2_lv_nmos_muew = 0.85
+sg13g2_lv_nmos_dphibo = 0.9915
+sg13g2_lv_nmos_dphibl = 0.9693
+sg13g2_lv_nmos_dphibw = 0.9749
+sg13g2_lv_nmos_dphiblw = 0.9754
+sg13g2_lv_nmos_themuo = 0.8757
+sg13g2_lv_nmos_thesatl = 0.785
+sg13g2_lv_nmos_thesatw = 1.5
+sg13g2_lv_nmos_thesatlw = 0.6127
+sg13g2_lv_nmos_toxo = 1
+sg13g2_lv_nmos_toxovo = 1
+sg13g2_lv_nmos_cjorbot = 1
+sg13g2_lv_nmos_cjorsti = 1
+sg13g2_lv_nmos_cjorgat = 1
+sg13g2_lv_pmos_vfbo = 1
+sg13g2_lv_pmos_ctl = 1.957
+sg13g2_lv_pmos_rsw1 = 0.772
+sg13g2_lv_pmos_muew = 1.052
+sg13g2_lv_pmos_dphibo = 0.905
+sg13g2_lv_pmos_dphibl = 0.855
+sg13g2_lv_pmos_dphibw = -1.58
+sg13g2_lv_pmos_dphiblw = 1
+sg13g2_lv_pmos_themuo = 0.958
+sg13g2_lv_pmos_thesatl = 0.551
+sg13g2_lv_pmos_thesatw = 1.08
+sg13g2_lv_pmos_thesatlw = 1
+sg13g2_lv_pmos_toxo = 1
+sg13g2_lv_pmos_toxovo = 1
+sg13g2_lv_pmos_cjorbot = 1
+sg13g2_lv_pmos_cjorsti = 1
+sg13g2_lv_pmos_cjorgat = 1
+sg13g2_lv_svaricap_lap = 1.082
+sg13g2_lv_svaricap_toxo = 1
+rsh_rhigh = 1360
+rsh_rppd = 260
+rsh_rsil = 7
+drsh_rhigh = 0
+drsh_rsil = 0
+drsh_rppd = 0
+dl_rhigh = 0
+dw_rhigh = 0
+dl_rsil = 0
+dw_rsil = 0
+dl_rppd = 0
+dw_rppd = 0
+dw_rsil_par = 0
+dw_rppd_par = 0
+dw_rhigh_par = 0
+
+Port:P1 x1 0 Num=1 Z=50 Ohm
+C:CB1 x1 in C=1uF
+cap_cmim:C1  in  0  w=8e-06  l=8e-06
+IND_BIG:L1  in  b
+npn13G2:Q1  c  b  0  0  Nx=1
+L:LF_c c f_c L=1mH
+Vdc:VF_c s_c 0 Vdc=VCC
+IProbe:ICC s_c f_c
+L:LF_b b f_b L=1mH
+Vdc:VF_b s_b 0 Vdc=VBE
+IProbe:IB s_b f_b
+IND_SMALL:L2  c  o1
+cap_cmim:C2  o1  out  w=20e-06  l=20e-06
+Port:P2 x2 0 Num=2 Z=50 Ohm
+C:CB2 x2 out C=1uF
+analysis DC1 type=dc
+analysis SP1 type=sparam start="4" startUnit=GHz stop="40" stopUnit=GHz npts=7

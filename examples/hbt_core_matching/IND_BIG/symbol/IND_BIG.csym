@@ -1,0 +1,75 @@
+{
+ "FormatVersion": 6,
+ "GridSize": 100,
+ "PortCount": 2,
+ "Primitives": [
+  {
+   "$type": "Line",
+   "ColorRole": "SymbolLine",
+   "StrokeTier": "Normal",
+   "X1": -200,
+   "Y1": 0,
+   "X2": -100,
+   "Y2": 0
+  },
+  {
+   "$type": "Line",
+   "ColorRole": "SymbolLine",
+   "StrokeTier": "Normal",
+   "X1": 100,
+   "Y1": 0,
+   "X2": 200,
+   "Y2": 0
+  },
+  {
+   "$type": "Line",
+   "ColorRole": "SymbolLine",
+   "StrokeTier": "Normal",
+   "X1": -100,
+   "Y1": -50,
+   "X2": 100,
+   "Y2": -50
+  },
+  {
+   "$type": "Line",
+   "ColorRole": "SymbolLine",
+   "StrokeTier": "Normal",
+   "X1": 100,
+   "Y1": -50,
+   "X2": 100,
+   "Y2": 50
+  },
+  {
+   "$type": "Line",
+   "ColorRole": "SymbolLine",
+   "StrokeTier": "Normal",
+   "X1": 100,
+   "Y1": 50,
+   "X2": -100,
+   "Y2": 50
+  },
+  {
+   "$type": "Line",
+   "ColorRole": "SymbolLine",
+   "StrokeTier": "Normal",
+   "X1": -100,
+   "Y1": 50,
+   "X2": -100,
+   "Y2": -50
+  }
+ ],
+ "Pins": [
+  {
+   "LocalX": -200,
+   "LocalY": 0,
+   "PortIndex": 0,
+   "Name": "LA"
+  },
+  {
+   "LocalX": 200,
+   "LocalY": 0,
+   "PortIndex": 1,
+   "Name": "LB"
+  }
+ ]
+}
