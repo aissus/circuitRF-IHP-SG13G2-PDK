@@ -72,7 +72,7 @@ kit_part(s, 'C2', 'cap_cmim', 1800, -600, {'w': f'{A2:g}e-06', 'l': f'{A2:g}e-06
 term(s, 'P2', 2, 2600, 0, 'out')
 write_sheet(s, 'CORE')
 # The two cmims are cut in both setups and get the kit's cap_cmim back: kept as copper, their Vmim arrays mesh to
-# about 48,000 unknowns (73 GB per frequency point, past this machine's 52 GB); cut, about 16,000.
+# about 51,000 unknowns (88 GB per frequency point, past this machine's 52 GB); cut, about 22,000.
 cem('CORE', 'core_i', LEVELS, ["Q1", "C1", "C2"], freq=FREQ2)                # (i): coils and lines in the EM
 cem('CORE', 'core_ii', LEVELS, ["Q1", "C1", "C2", "L1", "L2"], freq=FREQ2)   # (ii): the coils cut too, own 2-ports back
 print('written', HERE)

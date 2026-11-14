@@ -13,7 +13,8 @@ co-simulation netlist (upstream issue #69). The kit, as v0.6.0:
 - names circuitRF 1.8.4 in `kit.def` and as its minimum;
 - documents EM black-boxing on SG13G2 in the README, with two examples built and run on 1.8.4:
   `examples/inductor_coupling` (two coils in the EM against both cut) and `examples/hbt_core_matching` (an
-  npn13G2 stage with Q1 and its MIMs cut, then its coils too);
+  npn13G2 stage with Q1 and its MIMs cut, then its coils too). Both mesh on the plain tensor grid
+  (`"LocalGrid": false`), because 1.8.4's default local grid moves a coil's L with the sweep's top frequency;
 - has `circuitrf-ihp-workspace` make the `Settings` entry when the import writes none, and work without
   `realpath --relative-to`; `HBT_layout`'s PCell snapshots name their technology.
 

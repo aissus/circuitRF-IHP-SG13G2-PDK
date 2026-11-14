@@ -102,8 +102,7 @@ k python3 ../blackbox_common/portmap.py IND_BIG/em/ind_big.cem IND_SMALL/em/ind_
 Everything lands in `results/` (Touchstone, `.cemr` record, `_em.npy`), plus `pair_A_cosim.cnl` and the cells
 `pair_A_cosim` and `pair_B_sim` that the runs make. The repository keeps the Touchstone files only; the runs write
 the rest again. `compare.py` prints the table below and writes the tie-shorted
-4-ports `results/pair_{B,A}_tie.s4p` (without the bad 19 GHz row, Known limits); `compare.py display` draws them
-as `coupling.cdd` and `pictures/coupling.png`.
+4-ports `results/pair_{B,A}_tie.s4p`; `compare.py display` draws them as `coupling.cdd` and `pictures/coupling.png`.
 
 How each number is taken: port 5 (the tie) and the far end of each coil (ports 2 and 4) are shorted to the reference,
 which leaves the 2-port of ports 1 and 3, one end of each coil. L = Im(Z11)/ω and Q = Im(Z11)/Re(Z11) for L1 (Z22
@@ -114,15 +113,15 @@ else, so k = 0 by construction). The L values include the two 30 µm feeds (S ha
 | | 1 GHz | 4 GHz | 10 GHz | 16 GHz | 22 GHz | 28 GHz | 34 GHz | 40 GHz |
 |---|---|---|---|---|---|---|---|---|
 | **k**, B (coils in the EM) | −0.0074 | −0.0078 | −0.0083 | −0.0091 | −0.010 | −0.012 | −0.013 | −0.014 |
-| **k**, A (coils cut) | −3e−6 | −3e−6 | −8e−6 | −2e−5 | −3e−5 | −4e−5 | −5e−5 | −4e−5 |
-| **\|S31\|**, B | −82.6 dB | −67.3 | −58.2 | −53.4 | −50.2 | −48.9 | −47.4 | −45.2 |
-| **\|S31\|**, A | −118.7 dB | −104.9 | −97.1 | −93.7 | −91.3 | −89.8 | −91.4 | −93.2 |
+| **k**, A (coils cut) | −3e−6 | −4e−6 | −7e−6 | −1e−5 | −2e−5 | −4e−5 | −4e−5 | −3e−5 |
+| **\|S31\|**, B | −82.5 dB | −67.3 | −58.1 | −53.3 | −50.2 | −48.9 | −47.4 | −45.2 |
+| **\|S31\|**, A | −118.7 dB | −104.9 | −97.2 | −93.7 | −91.4 | −89.9 | −91.5 | −93.4 |
 | L1 / Q1, B | 612 pH / 1.1 | 610 / 4.0 | 621 / 8.2 | 649 / 10.6 | 699 / 11.6 | 784 / 11.6 | 933 / 10.5 | 1217 / 8.2 |
-| L1 / Q1, A | 599 / 0.7 | 661 / 3.5 | 681 / 7.3 | 710 / 9.1 | 762 / 9.5 | 841 / 9.6 | 992 / 10.2 | 1282 / 9.2 |
-| L1 / Q1, S | 585 / 0.7 | 647 / 3.5 | 665 / 7.3 | 690 / 9.2 | 733 / 9.7 | 797 / 9.9 | 917 / 10.9 | 1133 / 10.3 |
+| L1 / Q1, A | 592 / 1.1 | 591 / 4.0 | 600 / 8.5 | 622 / 10.9 | 660 / 11.9 | 718 / 12.4 | 823 / 14.0 | 1008 / 13.8 |
+| L1 / Q1, S | 579 / 1.1 | 577 / 4.1 | 584 / 8.5 | 603 / 11.1 | 635 / 12.2 | 683 / 12.9 | 766 / 14.9 | 907 / 15.2 |
 | L2 / Q2, B | 437 / 0.8 | 435 / 2.9 | 437 / 6.1 | 444 / 8.1 | 459 / 9.4 | 484 / 10.2 | 522 / 10.4 | 578 / 10.0 |
-| L2 / Q2, A | 386 / 0.6 | 425 / 2.7 | 431 / 6.0 | 437 / 8.1 | 449 / 9.4 | 467 / 10.3 | 497 / 11.2 | 541 / 11.5 |
-| L2 / Q2, S | 372 / 0.6 | 412 / 2.8 | 417 / 6.1 | 421 / 8.2 | 431 / 9.6 | 445 / 10.5 | 469 / 11.6 | 504 / 12.1 |
+| L2 / Q2, A | 426 / 0.8 | 424 / 2.9 | 425 / 6.2 | 430 / 8.3 | 442 / 9.6 | 459 / 10.5 | 488 / 11.5 | 530 / 11.8 |
+| L2 / Q2, S | 413 / 0.8 | 410 / 2.9 | 410 / 6.2 | 414 / 8.4 | 423 / 9.8 | 438 / 10.8 | 461 / 11.9 | 494 / 12.5 |
 
 How to read it:
 
@@ -130,20 +129,16 @@ How to read it:
   −1.4 % at 40 GHz, and L1.LA to L2.LA is −58 dB at 10 GHz, −45 dB at 40 GHz. With both coils cut, what is left
   (the feeds and the plane alone) is about 40 dB lower, k below 5·10⁻⁵. Almost all of the coupling is coil to coil
   and coil to plane, and a cut removes it. The sign of k follows the two coils' winding and lead order.
-- **L moves too.** In the plane, L1 reads 621 pH at 10 GHz against 681 pH cut out (−9 %), and its Q is higher;
-  L2 moves less. Part of that is the plane round each coil, a shorted turn; part is mesh (Known limits).
-- **The schematic, S, is A without the feeds and the plane**: A − S is the feeds' 14–29 pH up to 22 GHz.
-- At 1 GHz circuitRF's planar kernel drives an edge port against ground (series gaps from 3.6 GHz up); the coils'
-  own runs, and so A and S, step by about 10 % between 1 and 4 GHz where B does not.
-- **The notch A would show at 19 GHz is not real.** `ind_big.s2p`, the big coil's own run and so the model A and S
-  put back, reads |S21| −16.5 dB at 19 GHz between −1.8 dB (16 GHz) and −2.8 dB (22 GHz); `ind_small.s2p` has a bad
-  19 GHz row too. `pair_A`'s own EM (plane and feeds, −0.01 dB from feed to lead face) and `pair_B` are smooth there,
-  and S, the model alone, shows the same notch, so it is neither the cut nor the co-simulation's mapping. Re-solving
-  the coil on 17–21 GHz gives a bad row at 18 GHz as well (deterministic, also on one core), and shifts the good
-  rows by up to 10 %. `compare.py` leaves 19 GHz
-  out of the table and of the files the display draws.
+- **L and Q move a little at the low end, more at the top.** Up to 10 GHz B reads L1 about 3.5 % above A (621
+  against 600 pH at 10 GHz) and L2 about 3 % (437 against 425 pH), with Q within 0.3. That offset does not grow
+  with frequency and is not coupling (Known limits). From 16 GHz up the gap opens: at 28 GHz L1 is 784 pH in the
+  plane against 718 pH cut out, and its Q 11.6 against 12.4. That fits the coil's capacitance to the plane round
+  it, which a cut leaves out.
+- **The schematic, S, is A without the feeds and the plane**: A − S is the feeds' 13–25 pH up to 22 GHz.
+- **Every row is used.** On the tensor grid (Known limits) the coils' own runs have no outlier row from 1 to 40 GHz,
+  19 GHz included, and L is flat from 1 to 4 GHz in B, A and S.
 
-![|S31|, |S42| and |S21| of pair_B (blue) and pair_A (red), the tie shorted, 19 GHz left out](pictures/coupling.png)
+![|S31|, |S42| and |S21| of pair_B (blue) and pair_A (red), the tie shorted](pictures/coupling.png)
 
 ### The port map
 
@@ -166,13 +161,22 @@ lines and, for comparison, the same information one line per port as this exampl
 
 ### Run times
 
-On a shared machine, 8 threads per run: `ind_big` 4 min, `ind_small` 4–9 min, `pair_A` 5 min, `pair_B` 66 min
-(11,464 unknowns, 14 points). The co-simulation and the bench take a second each.
+On a shared machine, 8 threads per run, three runs at a time: `ind_big` 4 min (1,778 unknowns), `ind_small` 4 min
+(1,990), `pair_A` 2.5 min (2,260), `pair_B` 102 min (16,425 unknowns, 14 points). The co-simulation and the bench
+take a second each.
 
 ## Known limits
 
-- The 19 GHz row of each coil's own run is a known solver artefact; it is dropped from the table and the display.
+- **The mesh rule.** Every setup meshes on the plain tensor grid: `"LocalGrid": false` in its `PlanarMesh`, written
+  by `../blackbox_common/blackbox.py`. With circuitRF 1.8.4's default local grid, the base blocks are λ_g/20 of the
+  sweep's top frequency, so a coil's L moves with the sweep. The big coil alone reads 690 pH at 16 GHz on the
+  1–40 GHz partition and 603 pH on the tensor grid. That partition also gave each coil's own run a wrong row at
+  19 GHz and a 10 % step in L between 1 and 4 GHz; on the tensor grid both are gone. The tensor grid costs 1.1 to
+  1.5 times the unknowns (`pair_B`: 16,425 against 11,464).
 - There is no DC row (the lowest is 1 GHz), and rows from 31–34 GHz up are flagged as not passive: do not read them.
 - Planar only on this die: in 3D, each cut port is a lumped sheet down to the backside, about 755 µm tall.
 - Ports are uncalibrated and return to the backside; edge mesh is off, so Q reads low.
-- L and Q of A against B include a mesh difference (coil alone, coil in the pair); k and |S31| are the result.
+- A and B still differ in more than the coupling. Each coil's model is meshed on its own layout's grid, and in the
+  pair on the pair's. A also has an uncalibrated port's launch twice at each lead face, once in `pair_A` and once
+  in the coil's own run, which B has not. So read the 3 % offset in L between A and B below 10 GHz as that, not as
+  coupling; k and |S31| are the result.

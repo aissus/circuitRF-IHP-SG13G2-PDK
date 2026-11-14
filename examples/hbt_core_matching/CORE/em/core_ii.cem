@@ -28,7 +28,8 @@
   "CellsPerWavelength": 20,
   "EdgeMesh": false,
   "EdgeCells": 3,
-  "MinCellsAcrossConductor": 2
+  "MinCellsAcrossConductor": 2,
+  "LocalGrid": false
  },
  "ComponentPorts": [
   "Q1",

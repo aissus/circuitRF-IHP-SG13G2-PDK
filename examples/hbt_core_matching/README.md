@@ -117,31 +117,28 @@ Everything lands in `results/` (Touchstone, `.cemr` record, `_em.npy`), plus `co
 benches; the runs write the rest again. The biased benches are in `tb/`; their 2-ports are
 `results/core_{i,ii,sch}_tb.s2p`. `tb.py` names the kit's compiled VBIC model relative to each bench, so the stored
 benches run as they are. `compare.py` prints the table below; `compare.py display` draws `core.cdd` and
-`pictures/core.png`. The EM points are 4, 10, 16, 22, 28, 34 and 40 GHz, on the coils' own 3 GHz grid and clear of
-its bad 19 GHz row (`../inductor_coupling`, Known limits).
+`pictures/core.png`. The EM points are 4, 10, 16, 22, 28, 34 and 40 GHz, on the coils' own 3 GHz grid.
 
 | | 4 GHz | 10 GHz | 16 GHz | 22 GHz | 28 GHz | 34 GHz* | 40 GHz* |
 |---|---|---|---|---|---|---|---|
-| \|S21\|, (i) coils in the EM | 3.51 dB | 3.54 | 3.76 | 4.47 | 6.29 | 10.98 | 10.02 |
-| \|S21\|, (ii) coils cut | 3.52 dB | 3.61 | 3.94 | 4.84 | 7.17 | 13.67 | 5.86 |
-| \|S21\|, schematic | 4.11 dB | 4.05 | 4.07 | 4.39 | 5.37 | 8.05 | 14.74 |
-| \|S11\|, (i) / (ii) | −0.27 / −0.26 | −0.44 / −0.43 | −0.73 / −0.71 | −1.20 / −1.26 | −2.06 / −2.24 | −4.47 / −8.38 | −1.47 / −0.69 |
-| \|S22\|, (i) / (ii) | −0.08 / −0.08 | −0.12 / −0.10 | −0.13 / −0.09 | −0.09 / −0.05 | +0.13 / +0.27 | +0.84 / +0.53 | −10.2 / −8.8 |
-| μ, (i) / (ii) | 0.84 / 0.88 | 0.79 / 0.84 | 0.83 / 0.86 | 0.87 / 0.89 | 0.89 / 0.88 | 0.82 / 0.71 | 0.66 / 0.94 |
-| K, (i) / (ii) | 0.16 / 0.13 | 0.26 / 0.25 | 0.36 / 0.36 | 0.46 / 0.49 | 0.51 / 0.52 | 0.39 / 0.46 | 0.68 / 0.97 |
+| \|S21\|, (i) coils in the EM | 3.51 dB | 3.54 | 3.76 | 4.47 | 6.30 | 10.99 | 10.02 |
+| \|S21\|, (ii) coils cut | 3.51 dB | 3.53 | 3.74 | 4.37 | 6.13 | 11.33 | 10.56 |
+| \|S21\|, schematic | 4.10 dB | 4.00 | 3.94 | 4.10 | 4.80 | 6.79 | 11.20 |
+| \|S11\|, (i) / (ii) | −0.27 / −0.26 | −0.44 / −0.42 | −0.73 / −0.68 | −1.20 / −1.14 | −2.05 / −1.82 | −4.47 / −4.03 | −1.48 / −1.17 |
+| \|S22\|, (i) / (ii) | −0.08 / −0.09 | −0.12 / −0.11 | −0.13 / −0.11 | −0.09 / −0.11 | +0.14 / +0.14 | +0.85 / +1.21 | −10.2 / −11.9 |
+| μ, (i) / (ii) | 0.84 / 0.88 | 0.79 / 0.83 | 0.83 / 0.86 | 0.87 / 0.89 | 0.89 / 0.89 | 0.82 / 0.76 | 0.66 / 0.53 |
+| K, (i) / (ii) | 0.16 / 0.13 | 0.25 / 0.24 | 0.36 / 0.36 | 0.46 / 0.49 | 0.51 / 0.51 | 0.39 / 0.38 | 0.68 / 0.67 |
 
 \* circuitRF flags the 34 and 40 GHz rows of both EM results as not passive (σmax up to 1.13): not to be read.
 
 How to read it:
 
-- **Up to 22 GHz the black-boxed coils cost little**: (ii) is within 0.4 dB of (i) in S21 and within 0.06 dB in
-  S11; the coupling (k about −1 %, `../inductor_coupling`) and the plane round the coils move this stage by tenths of
-  a dB there.
-- **From 28 GHz up they start to matter**: at 28 GHz (ii) reads 0.9 dB more gain than (i), with S22 already above
-  0 dB in both, so the cut makes the stage look better than the layout with its coils in the EM. Above that the rows
-  are not passive and say nothing.
+- **Up to 28 GHz the black-boxed coils cost little**: (ii) is within 0.1 dB of (i) in S21 up to 22 GHz and 0.17 dB
+  below it at 28 GHz; S11 is within 0.06 dB up to 22 GHz and 0.23 dB at 28 GHz, and S22 within 0.02 dB. The coupling
+  (k about −1 %, `../inductor_coupling`) and the plane round the coils move this stage by at most a few tenths of a
+  dB. Above 28 GHz the rows are not passive and say nothing.
 - **At the low end the interconnect costs more than the coupling**: the schematic (the same models, ideal wires, no
-  plane) has 0.4–0.6 dB more gain than either EM run at 4–10 GHz, and a different input match.
+  plane) has 0.5–0.6 dB more gain than either EM run at 4–10 GHz, and a different input match.
 - **The stage is potentially unstable in all three** (μ < 1, K < 1 at every point): the matching is rudimentary
   and nothing stabilises the single finger. Black-boxing the coils does not change that verdict.
 
@@ -167,14 +164,19 @@ via stack, the plane and port 3, so that path is in the answer.
 
 ### Run times
 
-On a shared machine, 8 threads per run, two runs at a time: `core_i` 80 min (16,234 unknowns, 7 points),
-`core_ii` 42 min (9,316 unknowns). The coil runs are `../inductor_coupling`'s (4–9 min each). Each bench takes a
+On a shared machine, 8 threads per run, three runs at a time: `core_i` 139 min (22,460 unknowns, 7 points),
+`core_ii` 56 min (14,390 unknowns). The coil runs are `../inductor_coupling`'s (4 min each). Each bench takes a
 second.
 
 ## Known limits
 
-- C1 and C2 are cut in both setups because of mesh size: as copper, their Vmim arrays mesh to about 48,000 unknowns.
+- **The mesh rule.** Every setup, the coils' own runs included, meshes on the plain tensor grid (`"LocalGrid": false`
+  in its `PlanarMesh`, written by `../blackbox_common/blackbox.py`). circuitRF 1.8.4's default local grid sizes its
+  base blocks from the sweep's top frequency; on the 1–40 GHz sweep that read the big coil's L 14 % high from 10 to
+  16 GHz (`../inductor_coupling`, Known limits). On those coil models (ii) read 0.9 dB more gain than (i) at
+  28 GHz; on the tensor grid it reads 0.17 dB less. The tensor grid costs 1.4 to 1.5 times the unknowns.
+- C1 and C2 are cut in both setups because of mesh size: as copper, their Vmim arrays mesh to about 51,000 unknowns.
 - There is no DC row, so the bias is held at Q1's pins through 1 mH. The benches' ICC and IB are not the device's.
-- The 34 and 40 GHz rows are not passive; the grid steps over the coils' 19 GHz row, a known solver artefact.
+- The 34 and 40 GHz rows are not passive.
 - Planar only on this die: in 3D, each cut port is a lumped sheet down to the backside, about 755 µm tall.
 - Ports are uncalibrated and return to the backside; the plane reaches it only through port 3, which the bench shorts.

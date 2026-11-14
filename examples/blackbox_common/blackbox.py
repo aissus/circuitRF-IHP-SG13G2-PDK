@@ -31,7 +31,11 @@ XS = 152.5          # L2's origin: 46.25 (L1's coil edge) + 75 um (the spacing, 
 
 FREQ = {"StartExpr": "1", "StopExpr": "40", "NumPoints": 14, "Mode": "PointCount", "Kind": "Linear",
         "StartUnit": "GHz", "StopUnit": "GHz"}                         # 1, 4, 7, ... 40 GHz
-PMESH = {"Auto": True, "CellsPerWavelength": 20, "EdgeMesh": False, "EdgeCells": 3, "MinCellsAcrossConductor": 2}
+# Every planar setup meshes on the plain tensor grid ("LocalGrid": False). circuitRF 1.8.4's local grid cuts its base
+# blocks at lambda_g/20 of the sweep's top frequency, so its block partition, and with it a coil's L, moves with the
+# sweep: the big coil reads 690 pH at 16 GHz on the 1-40 GHz partition and 603 pH on the tensor grid.
+PMESH = {"Auto": True, "CellsPerWavelength": 20, "EdgeMesh": False, "EdgeCells": 3, "MinCellsAcrossConductor": 2,
+         "LocalGrid": False}
 TOP = ["TopMetal1", "TopMetal2"]
 ALL = ["Metal1", "Metal2", "Metal3", "Metal4", "Metal5", "MIM", "TopMetal1", "TopMetal2"]
 _WS = None
