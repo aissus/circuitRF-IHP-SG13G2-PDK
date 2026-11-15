@@ -151,8 +151,8 @@ How to read it:
 
 `PORTS.md` has one table per EM result, built the same way as in `../inductor_coupling`: index and `Pnn` name, the
 drawn label or cut pin, the schematic net, what the port returns through, calibration, and the `_cosim` node with the
-model terminal on it. Each table is followed by circuitRF's own header lines and the one-line-per-port form this
-example proposes. From `core_ii`:
+model terminal on it. Each table is followed by circuitRF's own header lines and the one-line-per-port form, which circuitRF
+built from `main` writes into the result itself (for a 1.8.4 result, `portmap.py` adds it). From `core_ii`:
 
 ```
 ! Port 4 = P04  Q1.C      net=c      ref=ground  uncalibrated
@@ -177,9 +177,15 @@ second.
   in its `PlanarMesh`, written by `../blackbox_common/blackbox.py`). circuitRF 1.8.4's default local grid sizes its
   base blocks from the sweep's top frequency; on the 1–40 GHz sweep that read the big coil's L 14 % high from 10 to
   16 GHz (`../inductor_coupling`, Known limits). On those coil models (ii) read 0.9 dB more gain than (i) at
-  28 GHz; on the tensor grid it reads 0.17 dB less. The tensor grid costs 1.4 to 1.5 times the unknowns.
-- C1 and C2 are cut in both setups because of mesh size: as copper, their Vmim arrays mesh to about 51,000 unknowns.
+  28 GHz; on the tensor grid it reads 0.17 dB less. The tensor grid costs 1.4 to 1.5 times the unknowns. On
+  circuitRF built from `main` the tensor grid is unchanged to within 2 pH (`../inductor_coupling`, Known limits).
+- C1 and C2 are cut in both setups because of mesh size: as copper, their Vmim arrays mesh to about 51,000 unknowns
+  on 1.8.4. circuitRF built from `main` merges each Vmim array into one region, which takes `core_i` with both caps
+  in to 48,753 unknowns (79 GB a point), still too big for an example.
 - There is no DC row, so the bias is held at Q1's pins through 1 mH. The benches' ICC and IB are not the device's.
-- The 34 and 40 GHz rows are not passive.
-- Planar only on this die: in 3D, each cut port is a lumped sheet down to the backside, about 755 µm tall.
+- The 34 and 40 GHz rows are not passive. The cause is the uncalibrated ports, grounded through about 760 µm of
+  silicon: past a quarter wavelength in the substrate (about 29 GHz) they are no longer short, and circuitRF built
+  from `main` warns about it.
+- Planar only on this die: in 3D, each cut port is a lumped sheet down to the backside, about 755 µm tall. A cut
+  entry's `"Return"` (circuitRF `main`) needs metal drawn across the pin's face, and this layout has none there.
 - Ports are uncalibrated and return to the backside; the plane reaches it only through port 3, which the bench shorts.

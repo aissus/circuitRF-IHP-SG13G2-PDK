@@ -150,7 +150,8 @@ is, a drawn label (with the schematic Term it is linked to) or a cut pin `instan
 `explain --component-ports`; the schematic net it is on; what it returns through (here every port returns through
 the backside, the stackup's ground); calibrated or uncalibrated; and, for a run with cut instances, the node of
 `<setup>_cosim.cnl` on it and the model terminal circuitRF put there. Under each table are circuitRF's own header
-lines and, for comparison, the same information one line per port as this example proposes. From `pair_A`:
+lines and the same information one line per port. circuitRF built from `main` writes that form into the result
+itself; for a 1.8.4 result, `portmap.py` adds it. From `pair_A`:
 
 ```
 ! Port 5 = P05  5         net=plane  ref=ground  uncalibrated
@@ -176,8 +177,18 @@ take a second each.
   1–40 GHz partition and 603 pH on the tensor grid. That partition also gave each coil's own run a wrong row at
   19 GHz and a 10 % step in L between 1 and 4 GHz; on the tensor grid both are gone. The tensor grid costs 1.1 to
   1.5 times the unknowns (`pair_B`: 16,425 against 11,464).
+  On circuitRF built from `main` (c855f0b7d), whose local grid no longer follows the sweep on artwork this small,
+  the tensor grid gives the same L to within 2 pH. The other two meshes are worse on these coils. The local grid
+  with these settings (edge mesh off, 2 cells across) reads the big coil at 2,226 pH at 1 GHz and 352 pH at
+  19 GHz, against 579 and 618. The full defaults (edge mesh on, 4 across) mesh about four times the unknowns
+  (`pair_B`: 63,838) and read about 5 % high at 1 GHz. So the tensor grid stays.
 - There is no DC row (the lowest is 1 GHz), and rows from 31–34 GHz up are flagged as not passive: do not read them.
-- Planar only on this die: in 3D, each cut port is a lumped sheet down to the backside, about 755 µm tall.
+  The cause is the uncalibrated port itself. It is grounded through about 760 µm of silicon, which stops being
+  short once that height passes a quarter wavelength in the substrate (from about 29 GHz); circuitRF built from
+  `main` warns about it.
+- Planar only on this die: in 3D, each cut port is a lumped sheet down to the backside, about 755 µm tall. A cut
+  entry's `"Return"` (circuitRF `main`) lands a sheet on nearer metal only where that metal is drawn across the
+  pin's face, and these layouts draw none there.
 - Ports are uncalibrated and return to the backside; edge mesh is off, so Q reads low.
 - A and B still differ in more than the coupling. Each coil's model is meshed on its own layout's grid, and in the
   pair on the pair's. A also has an uncalibrated port's launch twice at each lead face, once in `pair_A` and once

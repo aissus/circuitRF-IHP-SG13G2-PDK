@@ -33,7 +33,9 @@ FREQ = {"StartExpr": "1", "StopExpr": "40", "NumPoints": 14, "Mode": "PointCount
         "StartUnit": "GHz", "StopUnit": "GHz"}                         # 1, 4, 7, ... 40 GHz
 # Every planar setup meshes on the plain tensor grid ("LocalGrid": False). circuitRF 1.8.4's local grid cuts its base
 # blocks at lambda_g/20 of the sweep's top frequency, so its block partition, and with it a coil's L, moves with the
-# sweep: the big coil reads 690 pH at 16 GHz on the 1-40 GHz partition and 603 pH on the tensor grid.
+# sweep: the big coil reads 690 pH at 16 GHz on the 1-40 GHz partition and 603 pH on the tensor grid. On circuitRF
+# built from main (c855f0b7d) the tensor grid gives the same L to 2 pH, while the local grid with these settings
+# misreads the big coil at 1 and 19 GHz and the full defaults mesh about four times the unknowns.
 PMESH = {"Auto": True, "CellsPerWavelength": 20, "EdgeMesh": False, "EdgeCells": 3, "MinCellsAcrossConductor": 2,
          "LocalGrid": False}
 TOP = ["TopMetal1", "TopMetal2"]
