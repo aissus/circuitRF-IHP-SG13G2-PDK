@@ -3,7 +3,7 @@ coil cells and the TopMetal1 ground plane both use, and the Touchstone arithmeti
 
 A generator calls ws(<its folder>) first; every writer then writes into that workspace. Coordinates in um.
 """
-import copy, json, os, subprocess, sys
+import json, os, subprocess, sys
 import numpy as np
 
 KITREPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')     # the repository's top folder
@@ -229,29 +229,15 @@ def row(name, f, v, fmt, at):
 
 
 def display(name, files, pairs):
-    """name.cdd: one plot per (i, j), |S(i,j)| in dB of every file in it, and its picture pictures/name.png
-    (inside the image: it runs circuitrf plot and render)."""
+    """name.cdd and its picture pictures/name.png: one plot, |S(i,j)| in dB of every file for each (i, j), each trace
+    reading its own file (inside the image: it runs circuitrf plot)."""
     os.makedirs('pictures', exist_ok=True)
-    args = ['circuitrf', 'plot', files[0][1], '-o', f'pictures/{name}.png', '--write-cdd', f'{name}.cdd']
+    args = ['circuitrf', 'plot', files[0][1], '-o', f'pictures/{name}.png', '--write-cdd', f'{name}.cdd',
+            '--legend', 'below', '--ylabel', 'dB']
     for i, j in pairs:
-        args += ['--trace', f'cube=S,i={i},j={j},y=db20,label=S{i}{j}']
+        for label, path in files:
+            args += ['--trace', f'cube=S,i={i},j={j},y=db20,label={label} S{i}{j},file={path}']
     subprocess.run(args, check=True, capture_output=True)
-    doc = json.load(open(f'{name}.cdd'))
-    p0 = doc['Tabs'][0]['Plots'][0]
-    plots = []
-    for q, t0 in enumerate(p0['Traces']):
-        p = copy.deepcopy(p0)
-        p['Left'], p['Top'], p['Traces'] = q % 2 * (p0['Width'] + 20), q // 2 * (p0['Height'] + 20), []
-        for c, (label, path) in enumerate(files):
-            t = copy.deepcopy(t0)
-            t['SourcePath'], t['Label'] = path, f'{label} {t0["Label"]}'
-            t['Properties']['LineColorIndex'] = t['Properties']['MarkerColorIndex'] = (1, 2, 6)[c]          # blue, red, green
-            p['Traces'].append(t)
-        plots.append(p)
-    doc['Tabs'][0]['Plots'] = plots
-    json.dump(doc, open(f'{name}.cdd', 'w'), indent=1)
-    subprocess.run(['circuitrf', 'render', f'{name}.cdd', '-o', f'pictures/{name}.png'], check=True,
-                   capture_output=True)
 
 
 if __name__ == '__main__':

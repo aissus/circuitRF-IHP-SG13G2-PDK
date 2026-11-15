@@ -42,6 +42,9 @@ each coil's own 2-port (`IND_BIG`, `IND_SMALL`) on its lead faces.
 
 - **circuitRF 1.8.4 or newer**: cutting out cell instances (`ComponentPorts` naming a kit transistor, a PCell) and
   drawn ports marked `"PortUncalibrated": true` are 1.8.4's.
+- **`compare.py display`** draws its one plot with `circuitrf plot --trace …,file=<result>`, each trace reading its
+  own result, which needs circuitRF built from `main` at c855f0b7d or later, until the next release. Everything else
+  here runs on 1.8.4.
 - **The kit**, built in this repository with its image: `./kit.sh generator/build.sh`. `./kit.sh <command>` runs a
   command in the image from the repository's top folder; every path below is relative to that folder.
 - **The workspace.** This folder is a circuitRF workspace of its own. Its `.cws`, technology copy and PCell
@@ -142,7 +145,7 @@ How to read it:
 - **The stage is potentially unstable in all three** (μ < 1, K < 1 at every point): the matching is rudimentary
   and nothing stabilises the single finger. Black-boxing the coils does not change that verdict.
 
-![|S21|, |S11| and |S22| of (i) blue, (ii) red and the schematic green](pictures/core.png)
+![|S21|, |S11| and |S22| of (i), (ii) and the schematic](pictures/core.png)
 
 ### The port map
 

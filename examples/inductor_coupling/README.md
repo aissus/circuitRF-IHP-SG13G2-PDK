@@ -35,6 +35,9 @@ the same two coils, plane and spacing as the matching of an HBT core.
 
 - **circuitRF 1.8.4 or newer**: cutting out cell instances (`ComponentPorts` naming a PCell instance) and drawn
   ports marked `"PortUncalibrated": true` are 1.8.4's.
+- **`compare.py display`** draws its one plot with `circuitrf plot --trace …,file=<result>`, each trace reading its
+  own result, which needs circuitRF built from `main` at c855f0b7d or later, until the next release. Everything else
+  here runs on 1.8.4.
 - **The kit**, built in this repository with its image: `./kit.sh generator/build.sh`. `./kit.sh <command>` runs a
   command in the image from the repository's top folder; every path below is relative to that folder.
 - **The workspace.** This folder is a circuitRF workspace of its own. Its `.cws`, technology copy and PCell
@@ -138,7 +141,7 @@ How to read it:
 - **Every row is used.** On the tensor grid (Known limits) the coils' own runs have no outlier row from 1 to 40 GHz,
   19 GHz included, and L is flat from 1 to 4 GHz in B, A and S.
 
-![|S31|, |S42| and |S21| of pair_B (blue) and pair_A (red), the tie shorted](pictures/coupling.png)
+![|S31|, |S42| and |S21| of pair_B (B) and pair_A (A), the tie shorted](pictures/coupling.png)
 
 ### The port map
 
