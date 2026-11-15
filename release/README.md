@@ -50,7 +50,9 @@ The corner parameter is 0 for typ, 1 for bcs and 2 for wcs (MOSFETs: tt, ff, ss)
    generator/circuitrf-ihp-workspace my_project
    ```
 
-The resistors, the MIM capacitor, the MOSFETs and the technology work without step 2.
+The resistors, the MIM capacitor, the MOSFETs and the technology work without step 2. The MOSFETs' PSP 103
+and the resistors' R3 come compiled for Linux and Windows on x86-64 (`kit/IHP_SG13G2/models/osdi/linux-x64/`,
+`win-x64/`); there is no build for macOS or Arm yet.
 
 IHP's KLayout PCells (38 devices; `kit/IHP_SG13G2/PCELLS`) come with circuitRF's import of the IHP PDK,
 which `examples/` records at `/foss/pdks/ihp-sg13g2`, the IIC-OSIC-TOOLS location (with the PDK elsewhere:

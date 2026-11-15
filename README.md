@@ -132,7 +132,7 @@ no layout view of its own: design with the imported part, or place the PCell wit
 ```text
 📁 circuitRF-IHP-SG13G2-PDK/
 ├─ 📁 .claude/skills/ihp-sg13g2-kit/  Claude Code skill: designing with the kit
-├─ 📁 .github/workflows/              release.yml: build, validate and publish
+├─ 📁 .github/workflows/              release.yml: build, validate and publish; osdi.yml: macOS and Arm models
 ├─ 📁 ci/                             build-release.sh: the release build
 ├─ 📁 docs/
 │  ├─ 📁 images/                      figures (white/: as used on these pages; gui/: circuitRF window)
@@ -143,6 +143,7 @@ no layout view of its own: design with the imported part, or place the PCell wit
 ├─ 📁 examples/                       example workspace (examples/README.md)
 ├─ 📁 generator/                      builds the kit from the PDK
 │  ├─ build.sh                        the complete build: generate, compile, validate, check
+│  ├─ build-osdi.sh                   compiles PSP 103 and R3 for each platform
 │  ├─ build-vbic.sh                   compiles the VBIC models with OpenVAF
 │  ├─ ihp2crf.py                      cells, technology and the kit's .cws
 │  ├─ ihp2va.py                       VBIC parameter files per HBT and Nx
@@ -155,6 +156,7 @@ no layout view of its own: design with the imported part, or place the PCell wit
 │  ├─ va2cnl.py                       a parameter file as .cnl instance parameters
 │  └─ circuitrf-ihp-workspace         creates a workspace on the kit and the imported PDK
 ├─ 📁 kit/                            build output (not tracked)
+├─ 📁 osdi/                           PSP 103 and R3 compiled for each platform
 ├─ 📁 release/                        README, CLAUDE.md and .mcp.json of the release archive
 ├─ CITATION.cff
 ├─ CLAUDE.md                          instructions for AI coding agents in this repository
@@ -183,6 +185,12 @@ Each [release](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/releases) prov
 3. **Open** `examples/.cws` in circuitRF, or create a workspace of your own (below).
 
 The resistors, the MIM capacitor, the MOSFETs and the technology can be used without step 2.
+
+The MOSFETs run PSP 103 and the resistors R3 (CMC), both compiled from the PDK's sources. The kit ships them
+for Linux and Windows on x86-64, in `kit/IHP_SG13G2/models/osdi/<platform>/` (`linux-x64`, `win-x64`), where
+circuitRF looks for the running platform's build first. macOS and Arm (`osx-arm64`, `osx-x64`, `linux-arm64`,
+`win-arm64`) have no build yet. The HBTs' VBIC 1.3 models are compiled with OpenVAF on every platform (step 2),
+because their source states no license of its own (see NOTICE).
 
 ### From source
 
@@ -246,7 +254,7 @@ version and the validation result.
 
 | Step | Reads | Writes |
 |---|---|---|
-| R3 and PSP 103 models | the PDK's `r3_cmc.osdi` and `psp103.osdi` | `models/osdi/` |
+| R3 and PSP 103 models | the PDK's `r3_cmc.osdi` and `psp103.osdi`; `osdi/<platform>/`, made by `build-osdi.sh` from the PDK's `psp103.va` and `r3_cmc.va` | `models/osdi/`, `models/osdi/<platform>/` |
 | `ihp2va.py` | `sg13g2_hbt_mod.lib`, `cornerHBT.lib` | `models/ihp/<hbt>_nx<N>.va`: VBIC parameter files |
 | `ihp2crf.py` | the PDK's model and corner libraries, `sg13g2.lyp`, the ITF | one cell per device; `tech/IHP_SG13G2.ctech`; the kit's `.cws` and `README.md` |
 | `qucs2csym.py` | the PDK's Qucs-S `user_lib` | each cell's symbol, pins in the PDK's terminal order |
