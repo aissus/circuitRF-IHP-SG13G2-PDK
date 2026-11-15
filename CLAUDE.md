@@ -9,6 +9,7 @@ To design or simulate with the kit, use the skill in `.claude/skills/ihp-sg13g2-
 | Path | Contents |
 |---|---|
 | `generator/` | `build.sh` runs the whole build: `ihp2va.py`, `ihp2crf.py` (cells, technology, the kit's `.cws`), `qucs2csym.py` (symbols), `build-vbic.sh` (VBIC 1.3 to OSDI, and harmonicaRF's devices through `harmonica_ihp.py`), `validate_ihp_kit.py`. `circuitrf-ihp-workspace` starts a workspace on the kit. |
+| `osdi/` | PSP 103 and R3 compiled for each platform (`osdi/<platform>/`), made by `generator/build-osdi.sh`, which says what each platform needs; `osdi/SOURCES` holds the checksums of the PDK sources, which `build.sh` checks. Rerun it when the PDK commit changes. |
 | `kit/IHP_SG13G2/` | Build output, git-ignored: the cells, `tech/IHP_SG13G2.ctech`, `models/`, `VALIDATION`, `BUILD`. Never edit it; change the generator and rebuild. |
 | `examples/` | One circuitRF workspace on the kit (`examples/.cws` references `../kit/IHP_SG13G2`) and on the IHP PDK as circuitRF imports it (`PdkRefs`, and the PCell declaration in `ihp-sg13g2-pcells/`, both written by `circuitrf import pdk`). `tech/`, `harmonica/` and `results/*` (except `*.cdd`) are written by the build and the runs. The EM black-boxing examples `inductor_coupling/` and `hbt_core_matching/` are workspaces of their own (shared code in `blackbox_common/`); their `.cws`, `tech/` and `ihp-sg13g2-pcells/` carry machine paths, so the build makes them and git ignores them. |
 | `generator/` (PCells, overview) | `check_ihp_pcells.py` (each of the PDK's PCells, drawn by circuitRF from its import, against KLayout), `qucs2csch.py` (the Qucs-S gallery as `examples/Kit_cells`), `qucs_cells.json` (what works, with notes). |
@@ -79,8 +80,9 @@ OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.8.4.
   is AGPL-3.0. `generator/build-vbic.sh` compiles these files wherever the kit is used. `kit/` is git-ignored,
   and `ci/build-release.sh` strips them from the release and fails if one is left.
 - These files are fine to ship: `r3_cmc.osdi` (the PDK's own R3 CMC build), `psp103.osdi` (the PDK's PSP 103
-  build; NOTICE carries its CMC statement, which a binary release must reproduce) and `models/ihp/*.va` (PDK parameter
-  values, not model code).
+  build; NOTICE carries its CMC statement, which a binary release must reproduce), the same two sources compiled
+  for each platform (`osdi/<platform>/`), and `models/ihp/*.va` (PDK parameter values, not model code). VBIC stays
+  out of every platform folder too.
 - No GPL-3.0 material. The PDK's `libs.tech/palace` is GPL-3.0. The EM stackup comes from the Apache-2.0 ITF and
   process specification.
 
