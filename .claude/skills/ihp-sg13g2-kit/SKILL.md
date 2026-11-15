@@ -32,7 +32,7 @@ To fix it, run `generator/build-vbic.sh` once from the top folder:
 - With `PDKPATH` set (IIC-OSIC-TOOLS), it also builds harmonicaRF's devices `npn13G2{,l,v}.osdi`.
 
 Resistors, `cap_cmim`, the technology and EM work without it. The MOSFETs' `psp103.osdi` and the resistors'
-`r3_cmc.osdi` ship built for `linux-x64` and `win-x64` (`models/osdi/<platform>/`); on another platform, the same
+`r3_cmc.osdi` ship built for `linux-x64` (`models/osdi/<platform>/`); on another platform, the same
 "There is no build" message names them. In the repository, `generator/build.sh` runs it.
 
 ## The cells

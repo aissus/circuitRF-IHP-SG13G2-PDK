@@ -18,7 +18,12 @@ jobs:
             rids: linux-arm64 osx-x64 osx-arm64
             openvaf: linux_x64.tar.gz
             sha256: 82ce7587c7e5f54faac997aefb91de99a30a6d2ac4eb6bd2dbbff17ddcd1b1a3
-          # MSVC's link.exe links win-arm64; the x64 OpenVAF runs under Windows' emulation.
+          # MSVC's link.exe links both Windows builds (MinGW would put GCC's GPL-3.0 runtime into the DLL).
+          - os: windows-latest
+            rids: win-x64
+            openvaf: win_x64.zip
+            sha256: 7ebe8923faa0f1e70d462b958a91d0d681a06c2d63b4a07af0a8e16f45453f69
+          # The x64 OpenVAF runs under Windows' emulation on Arm.
           - os: windows-11-arm
             rids: win-arm64
             openvaf: win_x64.zip

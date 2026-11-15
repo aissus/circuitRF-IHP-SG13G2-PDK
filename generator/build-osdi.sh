@@ -7,12 +7,13 @@
 # loads models/osdi/<platform>/<name>.osdi first and models/osdi/<name>.osdi (the PDK's Linux x86-64 build)
 # otherwise. RIDS= selects platforms (default: all six) and OPENVAF= names the compiler.
 #
-# OpenVAF links by running `ld` (link.exe for win-arm64). For each other operating system, this script
+# OpenVAF links by running `ld` (MSVC's link.exe on Windows). For each other operating system, this script
 # puts a stand-in first on PATH that runs that platform's linker:
-#   win-x64              x86_64-w64-mingw32-gcc (MinGW-w64)
 #   linux-arm64          ld.lld
 #   osx-x64, osx-arm64   ld64.lld; the C library resolves in the loading process, as in a Linux build
-#   win-arm64            MSVC's link.exe, so it is built on Windows
+#   win-x64, win-arm64   MSVC's link.exe, so they are built on Windows. MinGW-w64 could link win-x64 here, but
+#                        it puts GCC's runtime library (GPL-3.0, with its exception) into the DLL, and the kit
+#                        ships no GPL-3.0 material.
 # The arm64 platforms also need an OpenVAF built with LLVM's AArch64 target. The image's OpenVAF has
 # only x86-64. A platform that does not build is reported and left as it was, and the exit status is 1.
 set -euo pipefail
@@ -22,14 +23,13 @@ V=${PDK_VA:-$PDKPATH/libs.tech/verilog-a}
 OPENVAF=${OPENVAF:-openvaf-r}
 declare -A T=([linux-x64]=x86_64-unknown-linux [linux-arm64]=aarch64-unknown-linux
               [osx-x64]=x86_64-apple-darwin [osx-arm64]=aarch64-apple-darwin
-              [win-x64]=x86_64-pc-windows-gnu [win-arm64]=aarch64-pc-windows)
+              [win-x64]=x86_64-pc-windows [win-arm64]=aarch64-pc-windows)
 W=$(mktemp -d); trap 'rm -rf "$W"' EXIT
 failed=()
 
 for rid in ${RIDS:-linux-x64 linux-arm64 osx-x64 osx-arm64 win-x64 win-arm64}; do
     mkdir -p "$W/$rid/bin"
     case $rid in
-        win-x64)     printf '#!/bin/sh\nexec x86_64-w64-mingw32-gcc -Wl,--no-insert-timestamp,--disable-auto-image-base "$@"\n' ;;
         linux-arm64) printf '#!/bin/sh\nexec ld.lld "$@"\n' ;;
         osx-*)       a=${T[$rid]%%-*}; [ "$a" = aarch64 ] && a="arm64 -platform_version macos 11.0 11.0" \
                          || a="x86_64 -platform_version macos 10.15 10.15"

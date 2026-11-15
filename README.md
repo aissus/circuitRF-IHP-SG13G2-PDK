@@ -187,9 +187,9 @@ Each [release](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/releases) prov
 The resistors, the MIM capacitor, the MOSFETs and the technology can be used without step 2.
 
 The MOSFETs run PSP 103 and the resistors R3 (CMC), both compiled from the PDK's sources. The kit ships them
-for Linux and Windows on x86-64, in `kit/IHP_SG13G2/models/osdi/<platform>/` (`linux-x64`, `win-x64`), where
-circuitRF looks for the running platform's build first. macOS and Arm (`osx-arm64`, `osx-x64`, `linux-arm64`,
-`win-arm64`) have no build yet. The HBTs' VBIC 1.3 models are compiled with OpenVAF on every platform (step 2),
+for Linux on x86-64, in `kit/IHP_SG13G2/models/osdi/linux-x64/`, where circuitRF looks for the running
+platform's build first. Windows, macOS and Arm (`win-x64`, `win-arm64`, `osx-arm64`, `osx-x64`, `linux-arm64`)
+have no build yet. The HBTs' VBIC 1.3 models are compiled with OpenVAF on every platform (step 2),
 because their source states no license of its own (see NOTICE).
 
 ### From source
