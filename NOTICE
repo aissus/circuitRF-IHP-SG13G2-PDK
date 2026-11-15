@@ -13,11 +13,16 @@ from the PDK:
 - the geometry of its inductor2 KLayout PCell (sg13g2_pycell_lib), which draws the example
   inductor.
 
-The built kit (kit/, not part of this repository) and the release archives also hold the R3 (CMC)
-compiled model, the PDK's r3_cmc.osdi. The PDK's r3_cmc.va is licensed under the Apache License,
-Version 2.0, and derives from the Si2 CMC model under the Educational Community License, Version 2.0.
+This repository (osdi/<platform>/), the built kit (kit/, not part of this repository) and the release
+archives also hold the R3 (CMC) compiled model: the PDK's r3_cmc.osdi, and the PDK's r3_cmc.va compiled
+for each platform. The PDK's r3_cmc.va is licensed under the Apache License, Version 2.0, and derives
+from the Si2 CMC model, Copyright (c) 2020 Silicon Integration Initiative, Inc., licensed under the
+Educational Community License, Version 2.0 (http://opensource.org/licenses/ECL-2.0). The R3_CMC
+standard has been developed by the Silicon Integration Initiative's Compact Model Coalition
+(http://www.si2.org/cmc).
 
-They also hold the PSP 103 compiled model, the PDK's psp103.osdi, which the MOS cells run. PSP was
+They also hold the PSP 103 compiled model, the PDK's psp103.osdi and the PDK's psp103.va compiled for
+each platform, which the MOS cells run. PSP was
 developed by NXP Semiconductors, Delft University of Technology and CEA, and is distributed under
 the statement below:
 

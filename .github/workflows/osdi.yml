@@ -1,0 +1,67 @@
+# Builds PSP 103 and R3 for the platforms the kit's image cannot build (generator/build-osdi.sh says why:
+# its OpenVAF has no AArch64 target, and the image has no Mach-O linker). Run by hand; the artifact's
+# folders go into osdi/ and are committed. build.sh checks osdi/SOURCES against the PDK.
+name: osdi
+
+on:
+  workflow_dispatch:
+
+env:
+  OPENVAF: https://fides.fe.uni-lj.si/openvaf/download/openvaf-reloaded-20260616-3-g0e83f1ed
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            rids: linux-arm64 osx-x64 osx-arm64
+            openvaf: linux_x64.tar.gz
+            sha256: 82ce7587c7e5f54faac997aefb91de99a30a6d2ac4eb6bd2dbbff17ddcd1b1a3
+          # MSVC's link.exe links both Windows builds (MinGW would put GCC's GPL-3.0 runtime into the DLL).
+          - os: windows-latest
+            rids: win-x64
+            openvaf: win_x64.zip
+            sha256: 7ebe8923faa0f1e70d462b958a91d0d681a06c2d63b4a07af0a8e16f45453f69
+          # The x64 OpenVAF runs under Windows' emulation on Arm.
+          - os: windows-11-arm
+            rids: win-arm64
+            openvaf: win_x64.zip
+            sha256: 7ebe8923faa0f1e70d462b958a91d0d681a06c2d63b4a07af0a8e16f45453f69
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      # The PDK's model sources at the commit kit.def builds the kit from
+      - name: PDK sources
+        run: |
+          c=$(sed -n 's/.*COMMIT)" = \([0-9a-f]*\)$/\1/p' kit.def)
+          git clone -q --filter=blob:none --no-checkout https://github.com/IHP-GmbH/IHP-Open-PDK.git pdk
+          git -C pdk sparse-checkout set ihp-sg13g2/libs.tech/verilog-a
+          git -C pdk checkout -q "$c"
+
+      - name: OpenVAF and the linkers
+        run: |
+          f=openvaf.${{ matrix.openvaf }}
+          curl -fsSL -o "$f" "$OPENVAF-${{ matrix.openvaf }}"
+          echo "${{ matrix.sha256 }}  $f" | sha256sum -c
+          mkdir ov && case $f in *.zip) unzip -q "$f" -d ov ;; *) tar -xzf "$f" -C ov ;; esac
+          if [ "$RUNNER_OS" = Linux ]; then
+            sudo apt-get update -q && sudo apt-get install -y -q lld
+            echo /usr/lib/llvm-18/bin >> "$GITHUB_PATH"
+          fi
+
+      - name: Build
+        run: |
+          RIDS="${{ matrix.rids }}" OPENVAF="$PWD/ov/openvaf-r" PDK_VA="$PWD/pdk/ihp-sg13g2/libs.tech/verilog-a" \
+            generator/build-osdi.sh out
+          file out/*/*.osdi || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: osdi-${{ matrix.os }}
+          path: out/*/*.osdi
+          if-no-files-found: error

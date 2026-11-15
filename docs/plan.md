@@ -6,6 +6,28 @@ Drafted 2026-11-05 (set aside). Revised 2026-11-07:
 - the inductor is also checked with circuitRF's planar MoM;
 - the README documents the flow.
 
+## Status (2026-11-16): PSP 103 and R3 for each platform
+
+As the circuitRF maintainer recommended (upstream issue #69), the kit ships its compiled models in the
+platform folders circuitRF looks in first (`models/osdi/<platform>/`); the flat `models/osdi/<name>.osdi` stays
+for older circuitRF versions. `generator/build-osdi.sh` compiles the PDK's `psp103.va` and `r3_cmc.va` with the
+PDK's own options for a generic processor into `osdi/<platform>/`, and `build.sh` copies them into the kit after
+checking `osdi/SOURCES` against the PDK.
+
+| Platform | OpenVAF target | Status |
+|---|---|---|
+| `linux-x64` | `x86_64-unknown-linux` | shipped; byte-identical to the PDK's own builds |
+| `win-x64` | `x86_64-pc-windows` | built on Windows with MSVC's `link.exe` (`osdi.yml`). MinGW-w64 links it here, but puts GCC's runtime library (GPL-3.0) into the DLL, which the kit does not ship |
+| `linux-arm64`, `osx-arm64`, `win-arm64` | `aarch64-*` | not built: the image's OpenVAF has no AArch64 code generator |
+| `osx-x64` | `x86_64-apple-darwin` | not built: no Mach-O linker in the image or on the build host |
+| `win-x86` | none | OpenVAF has no 32-bit Windows target |
+
+`.github/workflows/osdi.yml` (run by hand) builds the five missing platforms with the OpenVAF release from its
+author's site and LLVM's linkers (MSVC's `link.exe` for Windows). VBIC stays a local OpenVAF step on every
+platform: its source states no license, so no build of it is shipped.
+
+Next: run `osdi.yml` and commit its builds; a job per OS that runs `circuitrf check` on the release.
+
 ## Status (2026-11-14): circuitRF 1.8.4, kit v0.6.0
 
 circuitRF 1.8.4 cuts placed cells out of an EM run as component ports and puts their models back in a
