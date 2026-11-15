@@ -40,12 +40,13 @@ n=circuitRF-IHP-SG13G2-$v
 R=dist/$n
 rm -rf dist && mkdir -p "$R/kit" "$R/examples/tech"
 cp -r kit/IHP_SG13G2 "$R/kit/"
-rm -f "$R"/kit/IHP_SG13G2/models/osdi/{vbic_1p3_5t,vbic_1p3_bce,npn13G2,npn13G2l,npn13G2v}.osdi
+# The VBIC-derived models, flat and in any platform folder (models/osdi/<platform>/)
+find "$R/kit" -name '*.osdi' \( -name 'vbic*' -o -name 'npn13G2*' \) -delete
 git ls-files -z generator examples .claude | xargs -0 cp --parents -t "$R"
 cp examples/tech/*.ctech "$R/examples/tech/"
 cp LICENSE NOTICE "$R/"
 cp release/README.md release/CLAUDE.md release/.mcp.json "$R/"
-if ls "$R"/kit/IHP_SG13G2/models/osdi | grep -q -E 'vbic|npn13G2'; then
+if find "$R" -name '*.osdi' | grep -q -E 'vbic|npn13G2'; then
     echo "a VBIC-derived model is in the release" >&2; exit 1
 fi
 (cd dist && zip -qrX "$n.zip" "$n" && rm -rf "$n" && sha256sum "$n.zip" > "$n.zip.sha256")
