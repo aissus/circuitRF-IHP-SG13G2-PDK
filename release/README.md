@@ -52,8 +52,9 @@ The corner parameter is 0 for typ, 1 for bcs and 2 for wcs (MOSFETs: tt, ff, ss)
    ```
 
 The resistors, the MIM capacitor, the MOSFETs and the technology work without step 2. The MOSFETs' PSP 103,
-the resistors' R3 and the HBTs' VBIC 1.3 come compiled for Linux on x86-64
-(`kit/IHP_SG13G2/models/osdi/linux-x64/`); there is no build for Windows, macOS or Arm yet.
+the resistors' R3 and the HBTs' VBIC 1.3 come compiled for x86-64 Linux, Windows and Intel macOS
+(`kit/IHP_SG13G2/models/osdi/{linux-x64,win-x64,osx-x64}/`; on Windows they need Microsoft's Visual C++
+runtime, `VCRUNTIME140.dll`, which most installs have). There is no build for Arm yet.
 
 IHP's KLayout PCells (38 devices; `kit/IHP_SG13G2/PCELLS`) come with circuitRF's import of the IHP PDK,
 which `examples/` records at `/foss/pdks/ihp-sg13g2`, the IIC-OSIC-TOOLS location (with the PDK elsewhere:

@@ -22,8 +22,8 @@ example workspace. To design, simulate or run EM with it, use the skill in
    - `circuitrf serve --root . --print-config` prints the right configuration.
    - The server root is this folder. The server reaches the kit, the examples and any workspace you create here,
      and nothing outside.
-2. **The HBT model, only on a platform without a build.** The kit ships VBIC 1.3 compiled for Linux on x86-64
-   (`kit/IHP_SG13G2/models/osdi/linux-x64/`). On another platform every HBT bench fails, naming
+2. **The HBT model, only on a platform without a build.** The kit ships VBIC 1.3 compiled for x86-64 Linux,
+   Windows and Intel macOS (`kit/IHP_SG13G2/models/osdi/{linux-x64,win-x64,osx-x64}/`). On another platform every HBT bench fails, naming
    `vbic_1p3_5t.osdi`. Run `generator/build-vbic.sh` from this folder, once:
    - It needs `openvaf` on `PATH`, or `OPENVAF=`.
    - With `PDKPATH` set to the IHP PDK, it also builds harmonicaRF's devices.

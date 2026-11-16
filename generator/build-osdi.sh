@@ -16,8 +16,8 @@
 #   win-x64, win-arm64   MSVC's link.exe, so they are built on Windows. MinGW-w64 could link win-x64 here, but
 #                        it puts GCC's runtime library (GPL-3.0, with its exception) into the DLL, and the kit
 #                        ships no GPL-3.0 material.
-# The arm64 platforms also need an OpenVAF built with LLVM's AArch64 target. The image's OpenVAF has
-# only x86-64. A platform counts as built when all three models build; one that does not is reported and
+# The arm64 platforms also need an OpenVAF built with LLVM's AArch64 target. The image's OpenVAF, like
+# OpenVAF's published builds, has only x86-64. A platform counts as built when all three models build; one that does not is reported and
 # left as it was, and the exit status is 1.
 set -euo pipefail
 S=$(dirname "$(readlink -f "$0")")

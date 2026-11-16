@@ -17,17 +17,19 @@ PDK's own options, and VBIC 1.3 from `generator/vbic/`, for a generic processor 
 | Platform | OpenVAF target | Status |
 |---|---|---|
 | `linux-x64` | `x86_64-unknown-linux` | shipped; byte-identical to the PDK's own builds |
-| `win-x64` | `x86_64-pc-windows` | built on Windows with MSVC's `link.exe` (`osdi.yml`). MinGW-w64 links it here, but puts GCC's runtime library (GPL-3.0) into the DLL, which the kit does not ship |
-| `linux-arm64`, `osx-arm64`, `win-arm64` | `aarch64-*` | not built: the image's OpenVAF has no AArch64 code generator |
-| `osx-x64` | `x86_64-apple-darwin` | not built: no Mach-O linker in the image or on the build host |
+| `win-x64` | `x86_64-pc-windows` | shipped; built on Windows with MSVC's `link.exe` by `osdi.yml` and loaded there (needs `VCRUNTIME140.dll`). MinGW-w64 links it here, but puts GCC's runtime library (GPL-3.0) into the DLL, which the kit does not ship |
+| `linux-arm64`, `osx-arm64`, `win-arm64` | `aarch64-*` | not built: neither the image's OpenVAF nor OpenVAF's published builds have an AArch64 code generator |
+| `osx-x64` | `x86_64-apple-darwin` | shipped; cross-linked with `ld64.lld` by `osdi.yml` and loaded on an Intel Mac |
 | `win-x86` | none | OpenVAF has no 32-bit Windows target |
 
-`.github/workflows/osdi.yml` (run by hand) builds the five missing platforms with the OpenVAF release from its
-author's site and LLVM's linkers (MSVC's `link.exe` for Windows). VBIC ships too: it is public domain, and
+`.github/workflows/osdi.yml` (run by hand) builds `win-x64` and `osx-x64` with the OpenVAF release from its
+author's site (MSVC's `link.exe` for Windows, `ld64.lld` for macOS), and loads each on its own system
+(`ci/osdi-load.py`). VBIC ships too: it is public domain, and
 `generator/vbic/` is a verbatim copy of Dietmar Warning's VA-Models at a pinned commit (NOTICE). `build-vbic.sh`
 stays for a platform with no build in its folder.
 
-Next: run `osdi.yml` and commit its builds; a job per OS that runs `circuitrf check` on the release.
+Next: the arm64 platforms, with an OpenVAF built from source for AArch64; a job per OS that runs
+`circuitrf check` on the release.
 
 ## Status (2026-11-14): circuitRF 1.8.4, kit v0.6.0
 
