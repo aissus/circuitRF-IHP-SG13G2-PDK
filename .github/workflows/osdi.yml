@@ -34,6 +34,8 @@ jobs:
       run:
         shell: bash
     steps:
+      # Windows runners check out with CRLF line ends; the models' macros continue lines with a backslash.
+      - run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
 
       # The PDK's model sources at the commit kit.def builds the kit from
