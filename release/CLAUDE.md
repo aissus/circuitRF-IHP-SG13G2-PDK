@@ -10,7 +10,7 @@ example workspace. To design, simulate or run EM with it, use the skill in
 |---|---|
 | `kit/IHP_SG13G2/` | The kit: one folder per cell, `tech/IHP_SG13G2.ctech`, `models/osdi/`, `README.md`, `BUILD`, `VALIDATION`. It is generated, so do not edit it. |
 | `examples/` | A circuitRF workspace on the kit (`examples/.cws`), with one bench per task. |
-| `generator/` | The kit's generator. `build-vbic.sh` compiles the VBIC models. `circuitrf-ihp-workspace` starts a workspace. |
+| `generator/` | The kit's generator. `build-vbic.sh` compiles the VBIC models from `generator/vbic/`. `circuitrf-ihp-workspace` starts a workspace. |
 | `.mcp.json` | circuitRF's MCP server: `circuitrf serve --root .`. |
 | `README.md`, `LICENSE`, `NOTICE` | The user guide and the license (Apache-2.0, like the IHP PDK). |
 
@@ -22,8 +22,9 @@ example workspace. To design, simulate or run EM with it, use the skill in
    - `circuitrf serve --root . --print-config` prints the right configuration.
    - The server root is this folder. The server reaches the kit, the examples and any workspace you create here,
      and nothing outside.
-2. **The HBT model, once.** If `kit/IHP_SG13G2/models/osdi/vbic_1p3_5t.osdi` is missing, every HBT bench fails
-   with `There is no build of 'vbic_1p3_5t.osdi'`. Run `generator/build-vbic.sh` from this folder:
+2. **The HBT model, only on a platform without a build.** The kit ships VBIC 1.3 compiled for Linux on x86-64
+   (`kit/IHP_SG13G2/models/osdi/linux-x64/`). On another platform every HBT bench fails, naming
+   `vbic_1p3_5t.osdi`. Run `generator/build-vbic.sh` from this folder, once:
    - It needs `openvaf` on `PATH`, or `OPENVAF=`.
    - With `PDKPATH` set to the IHP PDK, it also builds harmonicaRF's devices.
    - Resistors, the MIM capacitor and EM work without it.
@@ -51,5 +52,6 @@ example workspace. To design, simulate or run EM with it, use the skill in
   - Palace and openEMS come from your own install, or from IIC-OSIC-TOOLS.
   - Check an EM setup's cost before running it: `circuitrf em <setup.cem> --dry-run`. On-chip runs take hours
     (Palace 1 h 18 min, planar MoM about 2 h for the example inductor on 16 cores).
-- **Licensing:** the compiled VBIC models (`vbic_1p3*.osdi`, `npn13G2*.osdi`) are built on your machine from
-  VBIC's source and are not part of this release. If you pass the kit on, leave them out (see NOTICE).
+- **Licensing:** VBIC 1.3 is public domain, and its compiled models (`vbic_1p3*.osdi`, `npn13G2*.osdi`) may be
+  passed on with the kit. Keep NOTICE with them: it credits the Verilog-A source (VA-Models) and the CMC and
+  Accellera files that source includes.

@@ -1,6 +1,7 @@
-# Builds PSP 103 and R3 for the platforms the kit's image cannot build (generator/build-osdi.sh says why:
-# its OpenVAF has no AArch64 target, and the image has no Mach-O linker). Run by hand; the artifact's
-# folders go into osdi/ and are committed. build.sh checks osdi/SOURCES against the PDK.
+# Builds PSP 103, R3 and VBIC 1.3 for the platforms the kit's image cannot build (generator/build-osdi.sh
+# says why: its OpenVAF has no AArch64 target, and the image has no Mach-O linker). PSP 103 and R3 come from
+# the PDK's sources, VBIC from generator/vbic/. Run by hand; the artifact's folders go into osdi/ and are
+# committed. build.sh checks osdi/SOURCES against the PDK.
 name: osdi
 
 on:
@@ -33,6 +34,8 @@ jobs:
       run:
         shell: bash
     steps:
+      # Windows runners check out with CRLF line ends; the models' macros continue lines with a backslash.
+      - run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
 
       # The PDK's model sources at the commit kit.def builds the kit from

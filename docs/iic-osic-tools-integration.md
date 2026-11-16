@@ -10,8 +10,8 @@ launcher (`run.sh`). That image builds its own copy of this kit, from an older c
 This plan moves that image to the kit as this repository releases it: compiled and validated by
 `.github/workflows/release.yml`, and published as `circuitRF-IHP-SG13G2-<tag>.zip` with a `.sha256`. The
 archive holds one folder with `kit/IHP_SG13G2/`, the example workspace, `generator/`, `LICENSE` and
-`NOTICE`. The release is Apache-2.0 throughout, so it does not carry the VBIC models: the image compiles
-them once, with its own OpenVAF (`generator/build-vbic.sh`). The image then no longer builds the kit.
+`NOTICE`. The release carries every compiled model the kit runs, VBIC included (see `NOTICE`). The image
+then no longer builds the kit.
 
 ## Where things stand
 
@@ -134,9 +134,6 @@ if step kits/IHP_SG13G2; then
     # /foss/tools/circuitrf/tools and circuitrf-ihp-workspace links point.
     cp -r "$T/$n/generator" kits/IHP_SG13G2/tools
     rm -rf "$T"
-    # The VBIC models are not distributed: compile them with the image's OpenVAF, and with its PDK
-    # also harmonicaRF's devices.
-    ./run.sh /foss/tools/circuitrf/kits/IHP_SG13G2/tools/build-vbic.sh /foss/tools/circuitrf/kits/IHP_SG13G2
 fi
 grep -qx "PDK commit $(cat PDKs/ihp-sg13g2/COMMIT)" kits/IHP_SG13G2/BUILD ||
     { echo "kits/IHP_SG13G2 was built from another PDK than the image's (see its BUILD)" >&2; exit 1; }
@@ -174,7 +171,7 @@ What still needs the path is everything that points at the kit from outside:
   `/foss/tools/circuitrf/kits/IHP_SG13G2/…`, most of them generated `.cnl` netlists that name the
   kit's `.osdi` files. List them with `grep -rlI /foss/tools/circuitrf/kits designs/`.
 - **The recipe's two links into the kit:** `/foss/tools/circuitrf/tools` → `kits/IHP_SG13G2/tools`, and
-  `models/osdi/vbic_1p3_bce.osdi`. The setup step above restores `tools/`, and `build-vbic.sh` makes that file.
+  `models/osdi/vbic_1p3_bce.osdi`. The setup step above restores `tools/`, and the release carries that file.
 - **Existing `.charm` documents.**
 
 So `run.sh` stays as it is. Relocatability still buys several things:
@@ -288,12 +285,11 @@ git clone -q --depth 1 --branch <tag> https://github.com/aissus/circuitRF-IHP-SG
   kept if anything fails. It also writes the harmonicaRF `.charm` documents for this kit path into the
   checkout's `examples/harmonica/`.
 
-Prefer this path in four cases:
+Prefer this path in three cases:
 
 - **PDK bump:** the IIC-OSIC-TOOLS tag moves before a kit release for it exists. The `BUILD` check in
   step 2 stops the setup script in that case.
 - **Local generator changes:** trying a generator change before it is released.
-- **Licensing:** you would rather compile the VBIC-derived models locally than download them (see Risks).
 - **harmonicaRF:** you want the `.charm` documents.
 
 To make this path the setup script's default, keep the old "rebuild when the image is newer than
@@ -361,13 +357,11 @@ mkdir designs/kit-check/examples/tech && cp kits/IHP_SG13G2/tech/IHP_SG13G2.ctec
   between 1.6.0 and 1.7.3 show up only by rerunning the designs that matter.
 - **harmonicaRF `.charm`:** a document identifies its DUT by the `.osdi`'s absolute path. Existing
   documents name `/foss/tools/circuitrf/kits/IHP_SG13G2/models/osdi/<device>.osdi`. They work while the
-  kit stays there, and `build-vbic.sh` writes the same file names. The release carries no `.charm`. Make new
+  kit stays there, and the release carries the same file names. The release carries no `.charm`. Make new
   ones with `tools/harmonica_ihp.py charm <out> --device … --osdi $K/models/osdi/<device>.osdi`, and
   always pass `--osdi`, because the default looks for `../kit/`.
 - **The VBIC models** (`vbic_1p3_5t.osdi`, and for harmonicaRF `vbic_1p3_bce.osdi` and `npn13G2{,l,v}.osdi`)
-  are compiled in the image by `build-vbic.sh` from VBIC 1.3's Verilog-A source, which IIC-OSIC-TOOLS
-  carries at the commit the script pins. The kit's validation uses the same script, so the models match
-  the validated ones. Rerun it after an image rebuild that changes OpenVAF.
+  come with the release, compiled from `generator/vbic/` by the build the release validates.
 - **A PDK bump** means a new kit release built on the new base (`kit.def`'s `From:` and `COMMIT` check),
   or the alternative path. Until then, the `BUILD` check stops the setup script.
 - **Not run:** none of the above was executed in that image. The Palace and EMerge conclusions come from

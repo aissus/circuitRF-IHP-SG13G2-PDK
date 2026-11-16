@@ -6,13 +6,13 @@ Drafted 2026-11-05 (set aside). Revised 2026-11-07:
 - the inductor is also checked with circuitRF's planar MoM;
 - the README documents the flow.
 
-## Status (2026-11-16): PSP 103 and R3 for each platform
+## Status (2026-11-16): PSP 103, R3 and VBIC 1.3 for each platform
 
 As the circuitRF maintainer recommended (upstream issue #69), the kit ships its compiled models in the
 platform folders circuitRF looks in first (`models/osdi/<platform>/`); the flat `models/osdi/<name>.osdi` stays
 for older circuitRF versions. `generator/build-osdi.sh` compiles the PDK's `psp103.va` and `r3_cmc.va` with the
-PDK's own options for a generic processor into `osdi/<platform>/`, and `build.sh` copies them into the kit after
-checking `osdi/SOURCES` against the PDK.
+PDK's own options, and VBIC 1.3 from `generator/vbic/`, for a generic processor into `osdi/<platform>/`, and
+`build.sh` copies them into the kit after checking `osdi/SOURCES` against the PDK.
 
 | Platform | OpenVAF target | Status |
 |---|---|---|
@@ -23,8 +23,9 @@ checking `osdi/SOURCES` against the PDK.
 | `win-x86` | none | OpenVAF has no 32-bit Windows target |
 
 `.github/workflows/osdi.yml` (run by hand) builds the five missing platforms with the OpenVAF release from its
-author's site and LLVM's linkers (MSVC's `link.exe` for Windows). VBIC stays a local OpenVAF step on every
-platform: its source states no license, so no build of it is shipped.
+author's site and LLVM's linkers (MSVC's `link.exe` for Windows). VBIC ships too: it is public domain, and
+`generator/vbic/` is a verbatim copy of Dietmar Warning's VA-Models at a pinned commit (NOTICE). `build-vbic.sh`
+stays for a platform with no build in its folder.
 
 Next: run `osdi.yml` and commit its builds; a job per OS that runs `circuitrf check` on the release.
 
@@ -146,7 +147,6 @@ OpenVAF. It also adds the IHP technology with an EM stackup.
 The IIC-OSIC-TOOLS-based image stays untouched, since other work uses it. The kit gets an image of its own from the **same public
 base**, `hpretl/iic-osic-tools:2026.09`. That base already holds everything the generator calls:
 - ngspice, Xyce and OpenVAF;
-- VACASK's VBIC sources at `/foss/tools/vacask`;
 - the IHP PDK at `/foss/pdks/ihp-sg13g2`, commit `c271a7e97`. That is the commit the kit was built and validated
   from: the sandbox's `PDKs/` is a copy of this base's PDK.
 
@@ -232,9 +232,10 @@ changes is every path that ends up in a file a user opens, plus the output locat
   - the IHP PDK Authors (Apache-2.0): model expressions, layer table, ITF stackup, inductor PCell geometry;
   - the Qucs-S `user_lib` symbols (Mike Brinson);
   - R3 CMC (ECL-2.0, Si2), in the built kit only;
-  - VBIC 1.3 from VACASK, in the built kit only.
-- **VBIC-derived `.osdi` files are built, never committed.** The `vbic_1p3.va` in VACASK has no license header and
-  VACASK is AGPL-3.0, so the repo carries only the scripts that build them. That is why `kit/` is git-ignored.
+  - VBIC 1.3: public domain, its Verilog-A source from VA-Models (Dietmar Warning) in `generator/vbic/`, with
+    the CMC macros and the Accellera headers it includes.
+- **VBIC builds ship** (`osdi/<platform>/`, the kit, the release), as PSP 103 and R3 do. `generator/vbic/` is
+  never patched in place.
 - **No GPL-3.0 material.** The PDK's `libs.tech/palace` is GPL-3.0. Today it supplies the `.ctech` EM stackup
   (`workflow/SG13G2_200um.xml`), the inductor GDS and the gds2palace `.s2p`. Both get replaced:
   - **Stackup:** `ihp2crf.py`'s tech step (`ihp2crf.py:408-467`) reads `libs.tech/parasitics/itf/sg13g2_typ.itf`.

@@ -1,4 +1,4 @@
-# Build output: generator/build.sh writes it; the VBIC-derived .osdi in it are not to be committed.
+# Build output: generator/build.sh writes it.
 kit/
 # The release archives ci/build-release.sh packs from it.
 dist/
