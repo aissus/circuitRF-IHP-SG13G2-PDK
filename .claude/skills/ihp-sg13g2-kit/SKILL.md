@@ -19,21 +19,21 @@ description: Design and simulate circuits on IHP SG13G2 (130 nm SiGe BiCMOS) in 
 - **MCP server root:** the unzipped folder in a release, and `examples/` in the repository. Every tool path is
   relative to the root, and outputs must stay inside it.
 
-## The HBTs need their VBIC model (once)
+## The HBTs' VBIC model on a platform without a build
 
-The HBT cells run `kit/IHP_SG13G2/models/osdi/vbic_1p3_5t.osdi`. The release does not ship it (licensing). If it
-is missing, `check` and every run fail with:
+The HBT cells run `vbic_1p3_5t.osdi`. The kit ships it compiled for `linux-x64`, with the MOSFETs' `psp103.osdi`
+and the resistors' `r3_cmc.osdi`, in `kit/IHP_SG13G2/models/osdi/<platform>/`; circuitRF looks there first, then
+in `models/osdi/`. On a platform with no build, `check` and every HBT run fail with a message like:
 
-    There is no build of 'vbic_1p3_5t.osdi' for linux-x64: neither '.../models/osdi/linux-x64/vbic_1p3_5t.osdi' nor '.../models/osdi/vbic_1p3_5t.osdi' exists
+    There is no build of 'vbic_1p3_5t.osdi' for osx-arm64: ...
 
 To fix it, run `generator/build-vbic.sh` once from the top folder:
 - It needs `openvaf` on `PATH`, or `OPENVAF=/path/to/openvaf`.
-- It compiles VBIC 1.3 from its public source.
+- It compiles VBIC 1.3 from `generator/vbic/` into `models/osdi/vbic_1p3_5t.osdi`.
 - With `PDKPATH` set (IIC-OSIC-TOOLS), it also builds harmonicaRF's devices `npn13G2{,l,v}.osdi`.
 
-Resistors, `cap_cmim`, the technology and EM work without it. The MOSFETs' `psp103.osdi` and the resistors'
-`r3_cmc.osdi` ship built for `linux-x64` (`models/osdi/<platform>/`); on another platform, the same
-"There is no build" message names them. In the repository, `generator/build.sh` runs it.
+Resistors, `cap_cmim`, the technology and EM work without it. PSP 103 and R3 have no such step: on another
+platform, the same "There is no build" message names them. In the repository, `generator/build.sh` runs it.
 
 ## The cells
 
@@ -332,7 +332,8 @@ Server behaviour to expect:
   a small SiGe HBT. Ignore it.
 - **Expected warnings:** `check examples` gives 0 errors and 5 warnings. Two schematics declare no analysis, and
   three layouts have no DRC rules in the technology.
-- **The missing VBIC model:** this is the error shown above. Run `generator/build-vbic.sh`.
+- **The missing VBIC model:** this is the error shown above, on a platform the kit has no build for. Run
+  `generator/build-vbic.sh`.
 - **EMerge:** at circuitRF's default mesh it under-reads on-chip inductance.
 - **Results:** `results/*` is git-ignored except the data displays (`*.cdd`). `inductor_TB` needs the EM runs
   first.
