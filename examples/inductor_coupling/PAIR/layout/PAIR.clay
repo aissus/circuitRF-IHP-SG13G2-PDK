@@ -1,249 +1,236 @@
 {
- "FormatVersion": 1,
- "DbuPerMicron": 1000,
- "DisplayUnit": "Um",
- "SnapDbu": 5,
- "AngleMode": "AnyAngle",
- "TechRef": "../../tech/IHP_SG13G2.ctech",
- "PCellSnapshots": {
-  "inductor2_0d8ac11f9f1f": {
-   "GeneratorId": "inductor2",
-   "Parameters": {
-    "w": "5.4u",
-    "s": "4.1u",
-    "d": "62.63u",
-    "nr_r": {
-     "int": 2
-    }
-   },
-   "TechIdentity": "tech/IHP_SG13G2.ctech"
-  },
-  "inductor2_e25e3f1e4ecf": {
-   "GeneratorId": "inductor2",
-   "Parameters": {
-    "w": "4u",
-    "s": "2.1u",
-    "d": "35u",
-    "nr_r": {
-     "int": 2
-    }
-   },
-   "TechIdentity": "tech/IHP_SG13G2.ctech"
-  }
- },
- "Shapes": [
-  {
-   "$type": "Poly",
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "Xy": [
-    -100000,
-    -100000,
-    237500,
-    -100000,
-    237500,
-    175000,
-    -100000,
-    175000
-   ],
-   "Holes": [
-    [
-     -76250,
-     -70000,
-     213750,
-     -70000,
-     213750,
-     122500,
-     91250,
-     122500,
-     91250,
-     0,
-     76250,
-     0,
-     76250,
-     152500,
-     -76250,
-     152500
-    ]
-   ]
-  },
-  {
-   "$type": "Rect",
-   "X1": -7450,
-   "Y1": -31000,
-   "X2": -2050,
-   "Y2": -1000,
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   }
-  },
-  {
-   "$type": "Label",
-   "X": -4750,
-   "Y": -31000,
-   "Text": "1",
-   "Height": 2000,
-   "Rotation": "R0",
-   "IsPort": true,
-   "PortDirection": "R90",
-   "PortLayer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "Style": "Regular",
-   "PortUncalibrated": true,
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "SchematicId": "P1"
-  },
-  {
-   "$type": "Rect",
-   "X1": 2050,
-   "Y1": -31000,
-   "X2": 7450,
-   "Y2": -1000,
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   }
-  },
-  {
-   "$type": "Label",
-   "X": 4750,
-   "Y": -31000,
-   "Text": "2",
-   "Height": 2000,
-   "Rotation": "R0",
-   "IsPort": true,
-   "PortDirection": "R90",
-   "PortLayer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "Style": "Regular",
-   "PortUncalibrated": true,
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "SchematicId": "P2"
-  },
-  {
-   "$type": "Rect",
-   "X1": 147450,
-   "Y1": -31000,
-   "X2": 151450,
-   "Y2": -1000,
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   }
-  },
-  {
-   "$type": "Label",
-   "X": 149450,
-   "Y": -31000,
-   "Text": "3",
-   "Height": 2000,
-   "Rotation": "R0",
-   "IsPort": true,
-   "PortDirection": "R90",
-   "PortLayer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "Style": "Regular",
-   "PortUncalibrated": true,
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "SchematicId": "P3"
-  },
-  {
-   "$type": "Rect",
-   "X1": 153550,
-   "Y1": -31000,
-   "X2": 157550,
-   "Y2": -1000,
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   }
-  },
-  {
-   "$type": "Label",
-   "X": 155550,
-   "Y": -31000,
-   "Text": "4",
-   "Height": 2000,
-   "Rotation": "R0",
-   "IsPort": true,
-   "PortDirection": "R90",
-   "PortLayer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "Style": "Regular",
-   "PortUncalibrated": true,
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "SchematicId": "P4"
-  },
-  {
-   "$type": "Label",
-   "X": -100000,
-   "Y": 37500,
-   "Text": "5",
-   "Height": 2000,
-   "Rotation": "R0",
-   "IsPort": true,
-   "PortDirection": "R0",
-   "PortLayer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "Style": "Regular",
-   "PortUncalibrated": true,
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   }
-  }
- ],
- "Instances": [
-  {
-   "CellRef": "../../.generated-cells/inductor2_0d8ac11f9f1f",
-   "X": 0,
-   "Y": 0,
-   "Rot": "R0",
-   "MirrorX": false,
-   "Mag": 1,
-   "Rows": 1,
-   "Cols": 1,
-   "PitchX": 0,
-   "PitchY": 0,
-   "SchematicId": "L1"
-  },
-  {
-   "CellRef": "../../.generated-cells/inductor2_e25e3f1e4ecf",
-   "X": 152500,
-   "Y": 0,
-   "Rot": "R0",
-   "MirrorX": false,
-   "Mag": 1,
-   "Rows": 1,
-   "Cols": 1,
-   "PitchX": 0,
-   "PitchY": 0,
-   "SchematicId": "L2"
-  }
- ]
+	"FormatVersion": 1,
+	"DbuPerMicron": 1000,
+	"DisplayUnit": "Um",
+	"SnapDbu": 5,
+	"AngleMode": "AnyAngle",
+	"TechRef": "../../tech/IHP_SG13G2.ctech",
+	"PCellSnapshots": {
+		"inductor2_3a5306d17a63": {
+			"GeneratorId": "inductor2",
+			"Parameters": {
+				"w": "5.4u",
+				"s": "4.1u",
+				"d": "62.63u",
+				"nr_r": {
+					"int": 2
+				}
+			},
+			"TechIdentity": "tech/IHP_SG13G2.ctech"
+		},
+		"inductor2_a3a224738c97": {
+			"GeneratorId": "inductor2",
+			"Parameters": {
+				"w": "4u",
+				"s": "2.1u",
+				"d": "35u",
+				"nr_r": {
+					"int": 2
+				}
+			},
+			"TechIdentity": "tech/IHP_SG13G2.ctech"
+		}
+	},
+	"Shapes": [
+		{
+			"$type": "Poly",
+			"Xy": [
+				-100000, -100000,
+				237500, -100000,
+				237500, 175000,
+				-100000, 175000
+			],
+			"Holes": [[
+					-76250, -70000,
+					213750, -70000,
+					213750, 122500,
+					91250, 122500,
+					91250, 0,
+					76250, 0,
+					76250, 152500,
+					-76250, 152500
+				]
+			],
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		},
+		{
+			"$type": "Rect",
+			"X1": -7450,
+			"Y1": -31000,
+			"X2": -2050,
+			"Y2": -1000,
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		},
+		{
+			"$type": "Label",
+			"X": -4750,
+			"Y": -31000,
+			"Text": "1",
+			"Height": 2000,
+			"Rotation": "R0",
+			"IsPort": true,
+			"SchematicId": "P1",
+			"PortDirection": "R90",
+			"PortLayer": {
+				"Layer": 126,
+				"Datatype": 0
+			},
+			"PortUncalibrated": true,
+			"Style": "Regular",
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		},
+		{
+			"$type": "Rect",
+			"X1": 2050,
+			"Y1": -31000,
+			"X2": 7450,
+			"Y2": -1000,
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		},
+		{
+			"$type": "Label",
+			"X": 4750,
+			"Y": -31000,
+			"Text": "2",
+			"Height": 2000,
+			"Rotation": "R0",
+			"IsPort": true,
+			"SchematicId": "P2",
+			"PortDirection": "R90",
+			"PortLayer": {
+				"Layer": 126,
+				"Datatype": 0
+			},
+			"PortUncalibrated": true,
+			"Style": "Regular",
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		},
+		{
+			"$type": "Rect",
+			"X1": 147450,
+			"Y1": -31000,
+			"X2": 151450,
+			"Y2": -1000,
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		},
+		{
+			"$type": "Label",
+			"X": 149450,
+			"Y": -31000,
+			"Text": "3",
+			"Height": 2000,
+			"Rotation": "R0",
+			"IsPort": true,
+			"SchematicId": "P3",
+			"PortDirection": "R90",
+			"PortLayer": {
+				"Layer": 126,
+				"Datatype": 0
+			},
+			"PortUncalibrated": true,
+			"Style": "Regular",
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		},
+		{
+			"$type": "Rect",
+			"X1": 153550,
+			"Y1": -31000,
+			"X2": 157550,
+			"Y2": -1000,
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		},
+		{
+			"$type": "Label",
+			"X": 155550,
+			"Y": -31000,
+			"Text": "4",
+			"Height": 2000,
+			"Rotation": "R0",
+			"IsPort": true,
+			"SchematicId": "P4",
+			"PortDirection": "R90",
+			"PortLayer": {
+				"Layer": 126,
+				"Datatype": 0
+			},
+			"PortUncalibrated": true,
+			"Style": "Regular",
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		},
+		{
+			"$type": "Label",
+			"X": -100000,
+			"Y": 37500,
+			"Text": "5",
+			"Height": 2000,
+			"Rotation": "R0",
+			"IsPort": true,
+			"PortDirection": "R0",
+			"PortLayer": {
+				"Layer": 126,
+				"Datatype": 0
+			},
+			"PortUncalibrated": true,
+			"Style": "Regular",
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		}
+	],
+	"Instances": [
+		{
+			"CellRef": "../../.generated-cells/inductor2_3a5306d17a63",
+			"X": 0,
+			"Y": 0,
+			"Rot": "R0",
+			"MirrorX": false,
+			"Mag": 1,
+			"Rows": 1,
+			"Cols": 1,
+			"PitchX": 0,
+			"PitchY": 0,
+			"SchematicId": "L1"
+		},
+		{
+			"CellRef": "../../.generated-cells/inductor2_a3a224738c97",
+			"X": 152500,
+			"Y": 0,
+			"Rot": "R0",
+			"MirrorX": false,
+			"Mag": 1,
+			"Rows": 1,
+			"Cols": 1,
+			"PitchX": 0,
+			"PitchY": 0,
+			"SchematicId": "L2"
+		}
+	]
 }

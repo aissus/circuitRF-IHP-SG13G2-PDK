@@ -1,79 +1,79 @@
 {
- "FormatVersion": 1,
- "DbuPerMicron": 1000,
- "DisplayUnit": "Um",
- "SnapDbu": 5,
- "AngleMode": "AnyAngle",
- "TechRef": "../../tech/IHP_SG13G2.ctech",
- "PCellSnapshots": {
-  "inductor2_0d8ac11f9f1f": {
-   "GeneratorId": "inductor2",
-   "Parameters": {
-    "w": "5.4u",
-    "s": "4.1u",
-    "d": "62.63u",
-    "nr_r": {
-     "int": 2
-    }
-   },
-   "TechIdentity": "tech/IHP_SG13G2.ctech"
-  }
- },
- "Shapes": [
-  {
-   "$type": "Label",
-   "X": -4750,
-   "Y": -1000,
-   "Text": "1",
-   "Height": 2000,
-   "Rotation": "R0",
-   "IsPort": true,
-   "PortDirection": "R90",
-   "PortLayer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "Style": "Regular",
-   "PortUncalibrated": true,
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   }
-  },
-  {
-   "$type": "Label",
-   "X": 4750,
-   "Y": -1000,
-   "Text": "2",
-   "Height": 2000,
-   "Rotation": "R0",
-   "IsPort": true,
-   "PortDirection": "R90",
-   "PortLayer": {
-    "Layer": 126,
-    "Datatype": 0
-   },
-   "Style": "Regular",
-   "PortUncalibrated": true,
-   "Layer": {
-    "Layer": 126,
-    "Datatype": 0
-   }
-  }
- ],
- "Instances": [
-  {
-   "CellRef": "../../.generated-cells/inductor2_0d8ac11f9f1f",
-   "X": 0,
-   "Y": 0,
-   "Rot": "R0",
-   "MirrorX": false,
-   "Mag": 1,
-   "Rows": 1,
-   "Cols": 1,
-   "PitchX": 0,
-   "PitchY": 0,
-   "SchematicId": "L"
-  }
- ]
+	"FormatVersion": 1,
+	"DbuPerMicron": 1000,
+	"DisplayUnit": "Um",
+	"SnapDbu": 5,
+	"AngleMode": "AnyAngle",
+	"TechRef": "../../tech/IHP_SG13G2.ctech",
+	"PCellSnapshots": {
+		"inductor2_3a5306d17a63": {
+			"GeneratorId": "inductor2",
+			"Parameters": {
+				"w": "5.4u",
+				"s": "4.1u",
+				"d": "62.63u",
+				"nr_r": {
+					"int": 2
+				}
+			},
+			"TechIdentity": "tech/IHP_SG13G2.ctech"
+		}
+	},
+	"Shapes": [
+		{
+			"$type": "Label",
+			"X": -4750,
+			"Y": -1000,
+			"Text": "1",
+			"Height": 2000,
+			"Rotation": "R0",
+			"IsPort": true,
+			"PortDirection": "R90",
+			"PortLayer": {
+				"Layer": 126,
+				"Datatype": 0
+			},
+			"PortUncalibrated": true,
+			"Style": "Regular",
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		},
+		{
+			"$type": "Label",
+			"X": 4750,
+			"Y": -1000,
+			"Text": "2",
+			"Height": 2000,
+			"Rotation": "R0",
+			"IsPort": true,
+			"PortDirection": "R90",
+			"PortLayer": {
+				"Layer": 126,
+				"Datatype": 0
+			},
+			"PortUncalibrated": true,
+			"Style": "Regular",
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 0
+			}
+		}
+	],
+	"Instances": [
+		{
+			"CellRef": "../../.generated-cells/inductor2_3a5306d17a63",
+			"X": 0,
+			"Y": 0,
+			"Rot": "R0",
+			"MirrorX": false,
+			"Mag": 1,
+			"Rows": 1,
+			"Cols": 1,
+			"PitchX": 0,
+			"PitchY": 0,
+			"SchematicId": "L"
+		}
+	]
 }
