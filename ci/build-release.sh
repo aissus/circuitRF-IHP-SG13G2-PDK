@@ -33,22 +33,17 @@ have=$(cat "$PDKPATH/COMMIT")
 
 generator/build.sh
 
-# The release is Apache-2.0 throughout, as the PDK: the VBIC-derived models stay out, and
-# generator/build-vbic.sh compiles them where the kit is used (see NOTICE). The example workspace comes
-# with its technology copy; its harmonicaRF documents name this machine's paths, so they stay out too.
+# The kit ships with every compiled model it runs (see NOTICE): VBIC 1.3 too, flat and in each platform
+# folder, and harmonicaRF's devices. The example workspace comes with its technology copy; its harmonicaRF
+# documents name this machine's paths, so they stay out.
 n=circuitRF-IHP-SG13G2-$v
 R=dist/$n
 rm -rf dist && mkdir -p "$R/kit" "$R/examples/tech"
 cp -r kit/IHP_SG13G2 "$R/kit/"
-# The VBIC-derived models, flat and in any platform folder (models/osdi/<platform>/)
-find "$R/kit" -name '*.osdi' \( -name 'vbic*' -o -name 'npn13G2*' \) -delete
 git ls-files -z generator examples .claude | xargs -0 cp --parents -t "$R"
 cp examples/tech/*.ctech "$R/examples/tech/"
 cp LICENSE NOTICE "$R/"
 cp release/README.md release/CLAUDE.md release/.mcp.json "$R/"
-if find "$R" -name '*.osdi' | grep -q -E 'vbic|npn13G2'; then
-    echo "a VBIC-derived model is in the release" >&2; exit 1
-fi
 (cd dist && zip -qrX "$n.zip" "$n" && rm -rf "$n" && sha256sum "$n.zip" > "$n.zip.sha256")
 ls -l dist
 cat kit/IHP_SG13G2/BUILD
