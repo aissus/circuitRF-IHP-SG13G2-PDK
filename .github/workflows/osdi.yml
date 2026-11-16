@@ -1,7 +1,9 @@
 # Builds PSP 103, R3 and VBIC 1.3 for the platforms the kit's image cannot build (generator/build-osdi.sh
-# says why: its OpenVAF has no AArch64 target, and the image has no Mach-O linker). PSP 103 and R3 come from
-# the PDK's sources, VBIC from generator/vbic/. Run by hand; the artifact's folders go into osdi/ and are
-# committed. build.sh checks osdi/SOURCES against the PDK.
+# says why: the image has no Mach-O linker, and Windows links with MSVC). PSP 103 and R3 come from the PDK's
+# sources, VBIC from generator/vbic/. Each build is then loaded on its own operating system (ci/osdi-load.py).
+# Run by hand; the artifact's folders go into osdi/ and are committed. build.sh checks osdi/SOURCES against
+# the PDK. The arm64 platforms are not built: OpenVAF's published builds, like the image's, have no AArch64
+# code generator.
 name: osdi
 
 on:
@@ -17,18 +19,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # osx-x64 is cross-linked here with ld64.lld; the macos-load job loads it on a Mac.
           - os: ubuntu-24.04
-            rids: linux-arm64 osx-x64 osx-arm64
+            rids: osx-x64
             openvaf: linux_x64.tar.gz
             sha256: 82ce7587c7e5f54faac997aefb91de99a30a6d2ac4eb6bd2dbbff17ddcd1b1a3
-          # MSVC's link.exe links both Windows builds (MinGW would put GCC's GPL-3.0 runtime into the DLL).
+          # MSVC's link.exe links the Windows build (MinGW would put GCC's GPL-3.0 runtime into the DLL).
           - os: windows-latest
             rids: win-x64
-            openvaf: win_x64.zip
-            sha256: 7ebe8923faa0f1e70d462b958a91d0d681a06c2d63b4a07af0a8e16f45453f69
-          # The x64 OpenVAF runs under Windows' emulation on Arm.
-          - os: windows-11-arm
-            rids: win-arm64
             openvaf: win_x64.zip
             sha256: 7ebe8923faa0f1e70d462b958a91d0d681a06c2d63b4a07af0a8e16f45453f69
     runs-on: ${{ matrix.os }}
@@ -65,8 +63,23 @@ jobs:
             generator/build-osdi.sh out
           file out/*/*.osdi || true
 
+      - name: Load on Windows
+        if: runner.os == 'Windows'
+        run: python ci/osdi-load.py 'out/*/*.osdi'
+
       - uses: actions/upload-artifact@v4
         with:
           name: osdi-${{ matrix.os }}
           path: out/*/*.osdi
           if-no-files-found: error
+
+  macos-load:
+    needs: build
+    runs-on: macos-15-intel
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: osdi-ubuntu-24.04
+          path: out
+      - run: python3 ci/osdi-load.py 'out/osx-x64/*.osdi'
