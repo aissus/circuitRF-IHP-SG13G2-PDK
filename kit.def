@@ -1,6 +1,6 @@
 # The image the kit is built and checked in:
 #     apptainer build --fakeroot kit.sif kit.def
-# The base already holds what the generator calls: ngspice, Xyce, OpenVAF, VACASK's VBIC
+# The base already holds what the generator calls: ngspice, Xyce, OpenVAF
 # and the IHP SG13G2 PDK. This adds circuitRF from its release.
 
 Bootstrap: docker

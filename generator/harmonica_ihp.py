@@ -23,7 +23,7 @@ network (Rsub || Csub from the substrate node to ground) built in.
 import argparse, json, math, os, re, shutil, subprocess, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VBIC_SRC = os.environ.get('VBIC_SRC', '/foss/tools/vacask/src/vacask/devices/vbic')   # build-vbic.sh sets it
+VBIC_SRC = os.environ.get('VBIC_SRC', os.path.join(HERE, 'vbic'))
 OPENVAF = os.environ.get('OPENVAF', 'openvaf')
 OSDI = os.path.join(HERE, '..', 'kit', 'IHP_SG13G2', 'models', 'osdi')
 

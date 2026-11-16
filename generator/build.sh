@@ -20,9 +20,9 @@ rm -rf "$K".prev* 2>/dev/null || true
 trap 'echo "kit build FAILED; the previous kit is kept" >&2; rm -rf "$K"; [ -e "$P" ] && mv "$P" "$K"' ERR
 
 mkdir -p "$K/models/osdi" "$K/models/ihp"
-# The compact models the cells run: CMC R3 and PSP 103, the PDK's own builds, and the same sources built for
-# each platform (osdi/<platform>/, made by build-osdi.sh), which circuitRF loads first; VBIC 1.3, compiled here
-# by build-vbic.sh (with harmonicaRF's devices), as every user of a released kit compiles it.
+# The compact models the cells run: CMC R3 and PSP 103, the PDK's own builds, and VBIC 1.3, compiled here by
+# build-vbic.sh (with harmonicaRF's devices); and the three built for each platform (osdi/<platform>/, made by
+# build-osdi.sh), which circuitRF loads first.
 cp "$PDKPATH"/libs.tech/ngspice/osdi/{r3_cmc,psp103}.osdi "$K/models/osdi/"
 (cd "$PDKPATH/libs.tech/verilog-a" && sha256sum --quiet -c "$S/../osdi/SOURCES") ||
     { echo "the PDK's PSP 103 or R3 source differs from osdi/SOURCES: rerun generator/build-osdi.sh" >&2; false; }
