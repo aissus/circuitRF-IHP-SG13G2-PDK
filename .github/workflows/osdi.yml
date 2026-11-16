@@ -1,6 +1,7 @@
-# Builds PSP 103, R3 and VBIC 1.3 for the platforms the kit's image cannot build (generator/build-osdi.sh
-# says why: the image has no Mach-O linker, and Windows links with MSVC). PSP 103 and R3 come from the PDK's
-# sources, VBIC from generator/vbic/. Each build is then loaded on its own operating system (ci/osdi-load.py).
+# Builds PSP 103, R3, VBIC 1.3 and harmonicaRF's HBTs for the platforms the kit's image cannot build
+# (generator/build-osdi.sh says why: the image has no Mach-O linker, and Windows links with MSVC). PSP 103 and
+# R3 come from the PDK's sources, VBIC from generator/vbic/, harmonicaRF's HBTs from both. Each build is then
+# loaded on its own operating system (ci/osdi-load.py).
 # Run by hand; the artifact's folders go into osdi/ and are committed. build.sh checks osdi/SOURCES against
 # the PDK. The arm64 platforms are not built: OpenVAF's published builds, like the image's, have no AArch64
 # code generator.
@@ -38,12 +39,12 @@ jobs:
       - run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
 
-      # The PDK's model sources at the commit kit.def builds the kit from
+      # The PDK's model sources and HBT library at the commit kit.def builds the kit from
       - name: PDK sources
         run: |
           c=$(sed -n 's/.*COMMIT)" = \([0-9a-f]*\)$/\1/p' kit.def)
           git clone -q --filter=blob:none --no-checkout https://github.com/IHP-GmbH/IHP-Open-PDK.git pdk
-          git -C pdk sparse-checkout set ihp-sg13g2/libs.tech/verilog-a
+          git -C pdk sparse-checkout set ihp-sg13g2/libs.tech/verilog-a ihp-sg13g2/libs.tech/ngspice/models
           git -C pdk checkout -q "$c"
 
       - name: OpenVAF and the linkers
@@ -59,8 +60,8 @@ jobs:
 
       - name: Build
         run: |
-          RIDS="${{ matrix.rids }}" OPENVAF="$PWD/ov/openvaf-r" PDK_VA="$PWD/pdk/ihp-sg13g2/libs.tech/verilog-a" \
-            generator/build-osdi.sh out
+          [ "$RUNNER_OS" = Windows ] && export PYTHON=python
+          RIDS="${{ matrix.rids }}" OPENVAF="$PWD/ov/openvaf-r" PDKPATH="$PWD/pdk/ihp-sg13g2" generator/build-osdi.sh out
           file out/*/*.osdi || true
 
       - name: Load on Windows

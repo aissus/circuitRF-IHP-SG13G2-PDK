@@ -20,11 +20,13 @@ network (Rsub || Csub from the substrate node to ground) built in.
   (the DUT is the kit's <device>.osdi with Nx, corner and temp; --zs, --zl and --pavl default to
    the Nx=8 starting point scaled to the size: Z by 8/Nx, drive by 10*log10(Nx/8))
 """
-import argparse, json, math, os, re, shutil, subprocess, sys, tempfile
+import argparse, json, math, os, platform, re, shutil, subprocess, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 VBIC_SRC = os.environ.get('VBIC_SRC', os.path.join(HERE, 'vbic'))
 OPENVAF = os.environ.get('OPENVAF', 'openvaf')
+# build-osdi.sh's target options (--target_cpu generic --target <triple>), for another platform's build
+OPENVAF_FLAGS = os.environ.get('OPENVAF_FLAGS', '').split()
 OSDI = os.path.join(HERE, '..', 'kit', 'IHP_SG13G2', 'models', 'osdi')
 
 
@@ -45,8 +47,8 @@ def build_osdi(out):
                       '    I(s) <+ ddt(csub*V(s));')]:
             assert src.count(a) == 1, a
             src = src.replace(a, b)
-        open(os.path.join(t, 'vbic_bce.va'), 'w').write(src)
-        subprocess.run([OPENVAF, 'vbic_bce.va', '-o', os.path.abspath(out)], cwd=t, check=True)
+        open(os.path.join(t, 'vbic_bce.va'), 'w', newline='\n').write(src)
+        subprocess.run([OPENVAF, *OPENVAF_FLAGS, 'vbic_bce.va', '-o', os.path.abspath(out)], cwd=t, check=True)
 
 
 def _va(expr):
@@ -144,7 +146,7 @@ def build_nx_osdi(device, out):
                                  lambda mm: '1' if mm[1].lower() in defaults else '0', s)
         m = os.path.join(t, 'cmcGeneralMacrosAndDefines.va')
         text = given(open(m).read())
-        open(m, 'w').write(text)
+        open(m, 'w', newline='\n').write(text)     # LF on Windows too: the macros continue lines with \
         src = given(open(os.path.join(t, 'vbic_1p3.va')).read())
         for a, b in [('module vbic13_4t(c,b,e,s);', f'module {device}(b,c,e);'),
                      ('inout       c,b,e,s;                         // external nodes',
@@ -176,8 +178,8 @@ def build_nx_osdi(device, out):
             return f'{mm[1]} {mm[2]};'
         src = re.sub(r'localparam (real|integer) (\w+)\s*=\s*([^;]+);', var, src)
         src = src.replace('analog begin : analogBlock\n', 'analog begin : analogBlock\n' + '\n'.join(sets) + '\n', 1)
-        open(os.path.join(t, f'{device}.va'), 'w').write(src)
-        subprocess.run([OPENVAF, f'{device}.va', '-o', os.path.abspath(out)], cwd=t, check=True)
+        open(os.path.join(t, f'{device}.va'), 'w', newline='\n').write(src)
+        subprocess.run([OPENVAF, *OPENVAF_FLAGS, f'{device}.va', '-o', os.path.abspath(out)], cwd=t, check=True)
         print(f'{out}: module {device}(b,c,e), parameters {", ".join(user)}, corner, temp')
 
 
@@ -186,8 +188,17 @@ def build_nx_osdi(device, out):
 ZS8, ZL8, PAVL8 = 17.1 + 35.8j, 42.7 - 7.6j, 4.0
 
 
+def platform_build(path):
+    """This machine's build of a compiled model, <dir>/<platform>/<name>, when there is one: circuitRF picks it
+    when a model is placed, but a .charm's DUT is loaded from the path it names."""
+    rid = {'Windows': 'win', 'Darwin': 'osx'}.get(platform.system(), 'linux') + \
+        ('-arm64' if platform.machine().lower() in ('arm64', 'aarch64') else '-x64')
+    p = os.path.join(os.path.dirname(path), rid, os.path.basename(path))
+    return p if os.path.exists(p) else path
+
+
 def charm(a):
-    osdi = os.path.abspath(a.osdi or f'{OSDI}/{a.device}.osdi')
+    osdi = platform_build(os.path.abspath(a.osdi or f'{OSDI}/{a.device}.osdi'))
     z = lambda s: complex(s.replace(' ', ''))
     zs = z(a.zs) if a.zs else ZS8 * 8 / a.nx
     zl = z(a.zl) if a.zl else ZL8 * 8 / a.nx

@@ -21,11 +21,11 @@ trap 'echo "kit build FAILED; the previous kit is kept" >&2; rm -rf "$K"; [ -e "
 
 mkdir -p "$K/models/osdi" "$K/models/ihp"
 # The compact models the cells run: CMC R3 and PSP 103, the PDK's own builds, and VBIC 1.3, compiled here by
-# build-vbic.sh (with harmonicaRF's devices); and the three built for each platform (osdi/<platform>/, made by
+# build-vbic.sh (with harmonicaRF's devices); and the same built for each platform (osdi/<platform>/, made by
 # build-osdi.sh), which circuitRF loads first.
 cp "$PDKPATH"/libs.tech/ngspice/osdi/{r3_cmc,psp103}.osdi "$K/models/osdi/"
 (cd "$PDKPATH/libs.tech/verilog-a" && sha256sum --quiet -c "$S/../osdi/SOURCES") ||
-    { echo "the PDK's PSP 103 or R3 source differs from osdi/SOURCES: rerun generator/build-osdi.sh" >&2; false; }
+    { echo "the PDK's PSP 103, R3 or HBT source differs from osdi/SOURCES: rerun generator/build-osdi.sh" >&2; false; }
 cp -r "$S"/../osdi/*/ "$K/models/osdi/"
 for d in npn13G2 npn13G2l npn13G2v; do for n in 1 2 4 8; do
     python3 "$S/ihp2va.py" "$M/sg13g2_hbt_mod.lib" $d --nx $n \
