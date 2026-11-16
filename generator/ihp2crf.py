@@ -602,12 +602,12 @@ Symbols are IHP's Qucs-S ones (qucs2csym.py, from the PDK's qucs-s/user_lib).
 **harmonicaRF** (interactive harmonic load-pull, Tools > harmonicaRF in
 circuitRF) takes a single compiled device, not a subcircuit cell, so the HBTs
 are also compiled whole: `models/osdi/npn13G2.osdi`, `npn13G2l.osdi` and
-`npn13G2v.osdi` are VBIC 1.3 as base, collector, emitter (what harmonicaRF
+`npn13G2v.osdi` (and each platform's in `models/osdi/<platform>/`) are VBIC 1.3 as base, collector, emitter (what harmonicaRF
 connects as gate, drain, source), thermal node internal, the PDK substrate
 network built in, and every VBIC parameter set inside from the PDK's own
 expressions. Their only parameters are Nx (and le on npn13G2l/v), corner and
-temp. Ready-to-pull documents are in the repository's examples/harmonica; make
-others with `generator/harmonica_ihp.py charm <out> --device npn13G2v --nx 4 ...`.
+temp. A build of the repository writes ready-to-pull documents into its
+examples/harmonica; make others with `generator/harmonica_ihp.py charm <out> --device npn13G2v --nx 4 ...`.
 
 **Layout.** IHP's own KLayout PCells (`sg13g2_pycell_lib`: HBTs, MOS,
 resistors, MIM, inductors, diodes, ESD, pads, seal ring, ...) come with the

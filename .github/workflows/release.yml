@@ -1,5 +1,7 @@
 # Builds and validates the kit in the base image on every push and pull request. Every push to main
 # also publishes it as the next release, v0.<n>.0, with its tag made on GitHub; nobody tags by hand.
+# A patch release (v0.8.1) is a run dispatched on main with that version, after a push whose last
+# commit says [skip ci], so the push itself publishes nothing.
 # ci/build-release.sh does the work, the same as locally:
 #     ./kit.sh ci/build-release.sh
 name: release
@@ -9,6 +11,10 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Publish as this version (vX.Y.Z); empty only builds'
+        default: ''
 
 # One run at a time on main, so two quick pushes cannot claim the same version.
 concurrency:
@@ -27,10 +33,19 @@ jobs:
         with:
           fetch-depth: 0   # with the tags, to number the release
 
-      # The next release on main: one past the highest v0.<n>.0 tag (v0.1.0 for the first).
+      # The next release on main: one past the highest v0.<n>.0 tag (v0.1.0 for the first), or the
+      # version a dispatched run names.
       - name: Next version
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.version != '')
+        env:
+          V: ${{ inputs.version }}
         run: |
+          if [ -n "$V" ]; then
+            [[ $V =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] && ! git rev-parse -q --verify "refs/tags/$V" >/dev/null ||
+              { echo "$V: not vX.Y.Z, or already tagged" >&2; exit 1; }
+            echo "KIT_VERSION=$V" >> "$GITHUB_ENV"
+            exit
+          fi
           n=$(git tag -l 'v0.*.0' | sed -n 's/^v0\.\([0-9]*\)\.0$/\1/p' | sort -n | tail -1)
           echo "KIT_VERSION=v0.$(( ${n:-0} + 1 )).0" >> "$GITHUB_ENV"
 
@@ -68,9 +83,9 @@ jobs:
           use (\`CLAUDE.md\`, a skill, \`.mcp.json\` for circuitRF's MCP server). Built from the IHP Open PDK
           and validated against the PDK's own models in ngspice and Xyce. The \`.sha256\` checks the archive.
 
-          Requires **circuitRF 1.8.4 or newer**. The PSP 103 (MOSFET), R3 (resistor) and VBIC 1.3 (HBT) models
-          come compiled for $(cd kit/IHP_SG13G2/models/osdi && echo */ | tr -d /). On any other platform the
-          HBTs need **OpenVAF** once, to compile the VBIC models.
+          Requires **circuitRF 1.8.4 or newer**. The PSP 103 (MOSFET), R3 (resistor) and VBIC 1.3 (HBT) models,
+          and harmonicaRF's HBTs, come compiled for $(cd kit/IHP_SG13G2/models/osdi && echo */ | tr -d /). On any
+          other platform the HBTs need **OpenVAF** once, to compile the VBIC models.
 
           $(sed 's/^/    /' kit/IHP_SG13G2/BUILD)
 

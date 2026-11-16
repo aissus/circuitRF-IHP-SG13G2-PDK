@@ -75,7 +75,7 @@ OpenVAF, the IHP PDK (`$PDKPATH`) and circuitRF 1.8.4.
 ## Licensing
 
 - The repository and its release are Apache-2.0, like the IHP PDK. `NOTICE` lists the sources.
-- VBIC builds ship: `osdi/<platform>/vbic_1p3_5t.osdi`, and in the kit and the release `vbic_1p3*.osdi` and
+- VBIC builds ship: `osdi/<platform>/` and, flat, the kit and the release hold `vbic_1p3*.osdi` and
   `npn13G2*.osdi` (harmonicaRF's devices). VBIC is public domain. `generator/vbic/` is a verbatim copy of
   Dietmar Warning's VA-Models at the commit NOTICE names. Never patch it in place: move the pin and update
   NOTICE. NOTICE must keep the VBIC credits (the public-domain statement, VA-Models, the CMC macros, the

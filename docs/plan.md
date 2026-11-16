@@ -8,6 +8,9 @@ Drafted 2026-11-05 (set aside). Revised 2026-11-07:
 
 ## Status (2026-11-16): PSP 103, R3 and VBIC 1.3 for each platform
 
+v0.8.1 adds harmonicaRF's HBTs (`vbic_1p3_bce`, `npn13G2{,l,v}`) to each platform folder: `build-osdi.sh` builds
+them through `harmonica_ihp.py`, and `osdi.yml` checks out the PDK's HBT library for it.
+
 As the circuitRF maintainer recommended (upstream issue #69), the kit ships its compiled models in the
 platform folders circuitRF looks in first (`models/osdi/<platform>/`); the flat `models/osdi/<name>.osdi` stays
 for older circuitRF versions. `generator/build-osdi.sh` compiles the PDK's `psp103.va` and `r3_cmc.va` with the

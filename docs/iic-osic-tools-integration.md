@@ -141,8 +141,8 @@ grep -qx "PDK commit $(cat PDKs/ihp-sg13g2/COMMIT)" kits/IHP_SG13G2/BUILD ||
 
 - **Pin the hash, don't download the `.sha256`.** A `.sha256` fetched from the same release only shows
   that the download is complete. A pinned hash also shows that it is the archive you checked.
-- **The archive's version is the release's.** The workflow numbers each push to `main` `v0.<n>.0` and names
-  the archive with it: `circuitRF-IHP-SG13G2-v0.1.0.zip`, with the `v`.
+- **The archive's version is the release's.** The workflow numbers each push to `main` `v0.<n>.0` (a patch release such as
+  `v0.8.1` is a run dispatched with that version) and names the archive with it: `circuitRF-IHP-SG13G2-v0.1.0.zip`, with the `v`.
 - **The release does not depend on the image build.** It no longer has to be redone when the image is
   rebuilt. Only the PDK commit ties the two together, and the `grep` above checks it.
 

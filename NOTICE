@@ -62,8 +62,8 @@ the statement below:
   CMC In-Code Statement Revision: 103.8.2 (PSP), 2022/06/21
                                   200.6.2 (JUNCAP), 2021/04/21
 
-The HBT cells run the VBIC 1.3 compiled model. This repository (osdi/<platform>/vbic_1p3_5t.osdi), the
-built kit (models/osdi/, with harmonicaRF's vbic_1p3_bce.osdi and npn13G2*.osdi) and the release archives
+The HBT cells run the VBIC 1.3 compiled model. This repository (osdi/<platform>/: vbic_1p3_5t.osdi,
+and harmonicaRF's vbic_1p3_bce.osdi and npn13G2*.osdi), the built kit (models/osdi/) and the release archives
 hold it compiled, and generator/vbic/ holds its source. VBIC is public domain, by its developers' own
 statement: "VBIC is public domain, and complete source code is publicly available." (C. C. McAndrew et
 al., the VBIC description on its home page, https://designers-guide.org/vbic/documents/VbicText.pdf). The
