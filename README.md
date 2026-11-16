@@ -132,7 +132,7 @@ no layout view of its own: design with the imported part, or place the PCell wit
 ```text
 📁 circuitRF-IHP-SG13G2-PDK/
 ├─ 📁 .claude/skills/ihp-sg13g2-kit/  Claude Code skill: designing with the kit
-├─ 📁 .github/workflows/              release.yml: build, validate and publish; osdi.yml: macOS and Arm models
+├─ 📁 .github/workflows/              release.yml: build, validate and publish; osdi.yml: the other platforms' models
 ├─ 📁 ci/                             build-release.sh: the release build
 ├─ 📁 docs/
 │  ├─ 📁 images/                      figures (white/: as used on these pages; gui/: circuitRF window)
@@ -143,8 +143,9 @@ no layout view of its own: design with the imported part, or place the PCell wit
 ├─ 📁 examples/                       example workspace (examples/README.md)
 ├─ 📁 generator/                      builds the kit from the PDK
 │  ├─ build.sh                        the complete build: generate, compile, validate, check
-│  ├─ build-osdi.sh                   compiles PSP 103 and R3 for each platform
+│  ├─ build-osdi.sh                   compiles PSP 103, R3 and VBIC 1.3 for each platform
 │  ├─ build-vbic.sh                   compiles the VBIC models with OpenVAF
+│  ├─ 📁 vbic/                        VBIC 1.3 Verilog-A source, from VA-Models (see NOTICE)
 │  ├─ ihp2crf.py                      cells, technology and the kit's .cws
 │  ├─ ihp2va.py                       VBIC parameter files per HBT and Nx
 │  ├─ qucs2csym.py                    symbols from the PDK's Qucs-S library
@@ -156,7 +157,7 @@ no layout view of its own: design with the imported part, or place the PCell wit
 │  ├─ va2cnl.py                       a parameter file as .cnl instance parameters
 │  └─ circuitrf-ihp-workspace         creates a workspace on the kit and the imported PDK
 ├─ 📁 kit/                            build output (not tracked)
-├─ 📁 osdi/                           PSP 103 and R3 compiled for each platform
+├─ 📁 osdi/                           PSP 103, R3 and VBIC 1.3 compiled for each platform
 ├─ 📁 release/                        README, CLAUDE.md and .mcp.json of the release archive
 ├─ CITATION.cff
 ├─ CLAUDE.md                          instructions for AI coding agents in this repository
@@ -180,17 +181,18 @@ Each [release](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/releases) prov
 
 1. **Unpack** the archive anywhere. The kit is relocatable: its cells name their models relative to
    `kit/IHP_SG13G2/.cws`.
-2. **Compile the VBIC models** once: `generator/build-vbic.sh` (OpenVAF on `PATH`, or `OPENVAF=`). With
-   the PDK at `$PDKPATH`, as in IIC-OSIC-TOOLS, it also builds the harmonicaRF devices.
+2. **Compile the VBIC models**, only if your platform has no VBIC build (below): `generator/build-vbic.sh`
+   (OpenVAF on `PATH`, or `OPENVAF=`). With the PDK at `$PDKPATH`, as in IIC-OSIC-TOOLS, it also builds the
+   harmonicaRF devices.
 3. **Open** `examples/.cws` in circuitRF, or create a workspace of your own (below).
 
 The resistors, the MIM capacitor, the MOSFETs and the technology can be used without step 2.
 
-The MOSFETs run PSP 103 and the resistors R3 (CMC), both compiled from the PDK's sources. The kit ships them
-for Linux on x86-64, in `kit/IHP_SG13G2/models/osdi/linux-x64/`, where circuitRF looks for the running
-platform's build first. Windows, macOS and Arm (`win-x64`, `win-arm64`, `osx-arm64`, `osx-x64`, `linux-arm64`)
-have no build yet. The HBTs' VBIC 1.3 models are compiled with OpenVAF on every platform (step 2),
-because their source states no license of its own (see NOTICE).
+The MOSFETs run PSP 103 and the resistors R3 (CMC), both compiled from the PDK's sources, and the HBTs
+VBIC 1.3, which is public domain (see NOTICE). The kit ships the three for Linux on x86-64, in
+`kit/IHP_SG13G2/models/osdi/linux-x64/`, where circuitRF looks for the running platform's build first.
+Windows, macOS and Arm (`win-x64`, `win-arm64`, `osx-arm64`, `osx-x64`, `linux-arm64`) have no build yet;
+there, step 2 compiles VBIC with OpenVAF.
 
 ### From source
 
@@ -235,9 +237,9 @@ local circuitRF installation.
 flowchart LR
     subgraph image["kit.sif: IIC-OSIC-TOOLS 2026.09 + circuitRF 1.8.4"]
         PDK["IHP SG13G2 PDK<br/>ngspice models, corner libraries,<br/>Qucs-S symbols, KLayout .lyp, ITF"]
-        VA["VBIC 1.3<br/>Verilog-A source"]
         TOOLS["OpenVAF · ngspice · Xyce"]
     end
+    VA["generator/vbic/<br/>VBIC 1.3 Verilog-A source"]
     PDK --> V["ihp2va.py"] --> PF["models/ihp/*.va"]
     PDK --> C["ihp2crf.py"] --> CELLS["cells, technology, .cws"]
     PDK --> Q["qucs2csym.py"] --> SYM["symbols"]
@@ -254,11 +256,11 @@ version and the validation result.
 
 | Step | Reads | Writes |
 |---|---|---|
-| R3 and PSP 103 models | the PDK's `r3_cmc.osdi` and `psp103.osdi`; `osdi/<platform>/`, made by `build-osdi.sh` from the PDK's `psp103.va` and `r3_cmc.va` | `models/osdi/`, `models/osdi/<platform>/` |
+| R3, PSP 103 and VBIC 1.3 models | the PDK's `r3_cmc.osdi` and `psp103.osdi`; `osdi/<platform>/`, made by `build-osdi.sh` from the PDK's `psp103.va` and `r3_cmc.va` and from `generator/vbic/` | `models/osdi/`, `models/osdi/<platform>/` |
 | `ihp2va.py` | `sg13g2_hbt_mod.lib`, `cornerHBT.lib` | `models/ihp/<hbt>_nx<N>.va`: VBIC parameter files |
 | `ihp2crf.py` | the PDK's model and corner libraries, `sg13g2.lyp`, the ITF | one cell per device; `tech/IHP_SG13G2.ctech`; the kit's `.cws` and `README.md` |
 | `qucs2csym.py` | the PDK's Qucs-S `user_lib` | each cell's symbol, pins in the PDK's terminal order |
-| `build-vbic.sh` | VBIC 1.3 Verilog-A source; the PDK's HBT library | `vbic_1p3_5t.osdi`; harmonicaRF's `vbic_1p3_bce.osdi` and `npn13G2{,l,v}.osdi` |
+| `build-vbic.sh` | `generator/vbic/`; the PDK's HBT library | `vbic_1p3_5t.osdi`; harmonicaRF's `vbic_1p3_bce.osdi` and `npn13G2{,l,v}.osdi` |
 | `validate_ihp_kit.py` | the kit; the PDK as circuitRF imports it; ngspice, Xyce | `VALIDATION` |
 | `circuitrf check` | the kit | stops the build on an error |
 | `check_ihp_pcells.py` | IHP's KLayout PCells as circuitRF imports them; KLayout | `PCELLS`: each PCell against KLayout |
@@ -401,8 +403,11 @@ IIC-OSIC-TOOLS Docker image (`hpretl/iic-osic-tools`) can take the released kit.
   circuitRF 1.8.0.
 - [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS), Institute for Integrated Circuits and Quantum
   Computing, Johannes Kepler University Linz, the environment in which the kit is built and validated.
-- [VACASK](https://codeberg.org/arpadbuermen/VACASK), for its distribution of the VBIC 1.3 Verilog-A
-  source, and OpenVAF, the Verilog-A compiler.
+- The VBIC developers (C. C. McAndrew and co-authors), who made the model public domain, and Dietmar
+  Warning's [VA-Models](https://github.com/dwarning/VA-Models), the source of the kit's VBIC 1.3 Verilog-A
+  code with his ngspice changes.
+- [VACASK](https://codeberg.org/arpadbuermen/VACASK), whose copy of the VBIC 1.3 source the kit first used,
+  and OpenVAF, the Verilog-A compiler.
 
 Parts of this repository, including code, documentation and figures, were developed with the assistance of
 an AI coding agent (Claude Code, Anthropic). All contributions were reviewed by the maintainer, and the
@@ -415,5 +420,5 @@ Citation metadata is provided in [CITATION.cff](CITATION.cff).
 ## License
 
 Licensed under the Apache License, Version 2.0, as the IHP Open PDK; see [LICENSE](LICENSE) and
-[NOTICE](NOTICE). Neither the repository nor its releases contain the VBIC models: `generator/build-vbic.sh`
-compiles them from their source where the kit is used.
+[NOTICE](NOTICE). VBIC 1.3, which the kit ships compiled, is public domain; NOTICE credits its Verilog-A
+source (VA-Models) and the CMC and Accellera files that source includes.

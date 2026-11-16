@@ -7,16 +7,16 @@ workspace. Built and validated from the PDK by
 the PDK commit, the circuitRF version and the validation result.
 
 > [!IMPORTANT]
-> Requires **circuitRF 1.8.4 or newer**. The HBT cells also need their VBIC model compiled once (step 2),
-> which takes **OpenVAF**. The [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container has
-> OpenVAF and the PDK.
+> Requires **circuitRF 1.8.4 or newer**. On a platform the kit has no VBIC build for, the HBT cells also
+> need their VBIC model compiled once (step 2), which takes **OpenVAF**. The
+> [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container has OpenVAF and the PDK.
 
 ## Contents
 
 ```text
-kit/IHP_SG13G2/       the kit: cells, technology (tech/IHP_SG13G2.ctech), compiled R3 and PSP 103 models
+kit/IHP_SG13G2/       the kit: cells, technology (tech/IHP_SG13G2.ctech), compiled R3, PSP 103 and VBIC models
 examples/             an example workspace on the kit (open examples/.cws)
-generator/            the generator; build-vbic.sh compiles the VBIC models
+generator/            the generator; build-vbic.sh compiles the VBIC models from generator/vbic/
 .claude/, CLAUDE.md   instructions and a skill for AI coding agents
 .mcp.json             circuitRF's MCP server, for agents that use it
 LICENSE, NOTICE       Apache-2.0, as the IHP PDK
@@ -36,23 +36,24 @@ The corner parameter is 0 for typ, 1 for bcs and 2 for wcs (MOSFETs: tt, ff, ss)
 
 1. Unpack the archive anywhere. The kit is relocatable: its cells name their models relative to
    `kit/IHP_SG13G2/.cws`.
-2. Compile the VBIC models, once:
+2. Only if your platform has no VBIC build (below), compile the VBIC models once:
 
    ```bash
    generator/build-vbic.sh          # needs openvaf on PATH (or OPENVAF=/path/to/openvaf)
    ```
 
-   It writes `kit/IHP_SG13G2/models/osdi/vbic_1p3_5t.osdi` from VBIC 1.3's public Verilog-A source. With
-   the IHP PDK at `$PDKPATH`, as in IIC-OSIC-TOOLS, it also builds the harmonicaRF devices.
+   It writes `kit/IHP_SG13G2/models/osdi/vbic_1p3_5t.osdi` from VBIC 1.3's Verilog-A source in
+   `generator/vbic/`. With the IHP PDK at `$PDKPATH`, as in IIC-OSIC-TOOLS, it also builds the harmonicaRF
+   devices.
 3. Open `examples/.cws` in circuitRF, or start a workspace of your own:
 
    ```bash
    generator/circuitrf-ihp-workspace my_project
    ```
 
-The resistors, the MIM capacitor, the MOSFETs and the technology work without step 2. The MOSFETs' PSP 103
-and the resistors' R3 come compiled for Linux on x86-64 (`kit/IHP_SG13G2/models/osdi/linux-x64/`); there is no build
-for Windows, macOS or Arm yet.
+The resistors, the MIM capacitor, the MOSFETs and the technology work without step 2. The MOSFETs' PSP 103,
+the resistors' R3 and the HBTs' VBIC 1.3 come compiled for Linux on x86-64
+(`kit/IHP_SG13G2/models/osdi/linux-x64/`); there is no build for Windows, macOS or Arm yet.
 
 IHP's KLayout PCells (38 devices; `kit/IHP_SG13G2/PCELLS`) come with circuitRF's import of the IHP PDK,
 which `examples/` records at `/foss/pdks/ihp-sg13g2`, the IIC-OSIC-TOOLS location (with the PDK elsewhere:
@@ -60,10 +61,10 @@ which `examples/` records at `/foss/pdks/ihp-sg13g2`, the IIC-OSIC-TOOLS locatio
 it runs them (headless: `--trust-kit examples/ihp-sg13g2-pcells`).
 
 A workspace of your own from `generator/circuitrf-ihp-workspace` imports the PDK too: the PDK's own parts
-(`pdk://ihp-sg13g2/<part>`) simulate there, its HBTs on the kit's VBIC 1.3 (step 2), which the script
+(`pdk://ihp-sg13g2/<part>`) simulate there, its HBTs on the kit's VBIC 1.3, which the script
 declares to stand in for ngspice's built-in VBIC.
 
 ## License
 
-Apache-2.0, as the IHP Open PDK; see LICENSE and NOTICE. The VBIC models are not distributed: step 2
-compiles them from their source.
+Apache-2.0, as the IHP Open PDK; see LICENSE and NOTICE. VBIC 1.3 is public domain; NOTICE credits its
+Verilog-A source (VA-Models) and the CMC and Accellera files that source includes.
