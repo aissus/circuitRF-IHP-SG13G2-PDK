@@ -19,6 +19,30 @@
 			"TechIdentity": "tech/IHP_SG13G2.ctech"
 		}
 	},
+	"Pins": [
+		{
+			"Name": "LA",
+			"X": -4750,
+			"Y": 0,
+			"WidthDbu": 2000,
+			"OutwardDeg": 0,
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 2
+			}
+		},
+		{
+			"Name": "LB",
+			"X": 4750,
+			"Y": 0,
+			"WidthDbu": 2000,
+			"OutwardDeg": 0,
+			"Layer": {
+				"Layer": 126,
+				"Datatype": 2
+			}
+		}
+	],
 	"Shapes": [
 		{
 			"$type": "Label",

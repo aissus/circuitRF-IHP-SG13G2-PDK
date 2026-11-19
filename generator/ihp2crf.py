@@ -234,15 +234,28 @@ def symbol(path, kind, ports):
                "Primitives": prims, "Pins": pins}, open(path, 'w'), indent=1)
 
 
+# Each cell's layout: IHP's own PCell (sg13g2_pycell_lib, imported with the PDK), and which of its pins each of the
+# cell's ports is. The substrate or bulk port has no pin in the PCell's artwork (''). The cells' parameters already
+# carry the PCell's names (Nx, le, w, l, b, ng), so they reach it as they are.
+BJT, RES, MOS = {'c': 'C', 'b': 'B', 'e': 'E', 'bn': ''}, {'1': 'PLUS0', '2': 'MINUS0', 'bn': ''}, \
+    {'d': 'D', 'g': 'G', 's': 'S', 'b': ''}
+LAYOUT = {'npn13G2': ('npn13G2', BJT), 'npn13G2l': ('npn13G2L', BJT), 'npn13G2v': ('npn13G2V', BJT),
+          'rsil': ('rsil', RES), 'rppd': ('rppd', RES), 'rhigh': ('rhigh', RES),
+          'cap_cmim': ('cmim', {'PLUS': 'PLUS', 'MINUS': 'MINUS'}),
+          'sg13_lv_nmos': ('nmos', MOS), 'sg13_lv_pmos': ('pmos', MOS),
+          'sg13_hv_nmos': ('nmosHV', MOS), 'sg13_hv_pmos': ('pmosHV', MOS)}
+
+
 def write_cell(lib, name, ports, cell_params, sheet, kind, doc):
     d = os.path.join(lib, name)
     os.makedirs(os.path.join(d, 'schematic'), exist_ok=True)
     os.makedirs(os.path.join(d, 'symbol'), exist_ok=True)
+    generator, pins = LAYOUT[name]
     json.dump({"FormatVersion": 1,
                "Parameters": [{"Name": n, "DefaultExpression": v, "Unit": "", "Dimension": "None",
                                "ShowOnSchematic": show} for n, v, show in cell_params],
-               "IsTestBench": False, "FlattenForLvs": True,
-               "Terminals": [{"Port": i + 1, "Name": p, "LayoutPin": p} for i, p in enumerate(ports)],
+               "IsTestBench": False, "LayoutGenerator": generator,
+               "Terminals": [{"Port": i + 1, "Name": p, "LayoutPin": pins[p]} for i, p in enumerate(ports)],
                "NumPorts": len(ports)}, open(os.path.join(d, '.ccell'), 'w'), indent=1)
     sheet.write(os.path.join(d, 'schematic', name + '.csch'))
     symbol(os.path.join(d, 'symbol', name + '.csym'), kind, ports)

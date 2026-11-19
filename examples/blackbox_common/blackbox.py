@@ -79,18 +79,29 @@ def inst(ref, x, y, sid):
             "Rows": 1, "Cols": 1, "PitchX": 0, "PitchY": 0, "SchematicId": sid}
 
 
-def clay(cell, shapes, instances):
+def clay(cell, shapes, instances, pins=()):
     os.makedirs(f'{_WS}/{cell}/layout', exist_ok=True)
     refs = {i['CellRef'].rsplit('/', 1)[1] for i in instances}
     json.dump({"FormatVersion": 1, "DbuPerMicron": 1000, "DisplayUnit": "Um", "SnapDbu": 5, "AngleMode": "AnyAngle",
                "TechRef": TECH, "PCellSnapshots": {k: v for k, v in SNAPS.items() if k in refs},
-               "Shapes": shapes, "Instances": instances}, open(f'{_WS}/{cell}/layout/{cell}.clay', 'w'), indent=1)
+               "Shapes": shapes, "Instances": instances, **({"Pins": list(pins)} if pins else {})},
+              open(f'{_WS}/{cell}/layout/{cell}.clay', 'w'), indent=1)
 
 
-def ccell(cell):
+def ccell(cell, extra=None):
     os.makedirs(f'{_WS}/{cell}', exist_ok=True)
-    json.dump({"FormatVersion": 1, "Parameters": [], "IsTestBench": False, "Terminals": [], "NumPorts": 0},
-              open(f'{_WS}/{cell}/.ccell', 'w'), indent=1)
+    json.dump({"FormatVersion": 1, "Parameters": [], "IsTestBench": False, "Terminals": [], "NumPorts": 0,
+               **(extra or {})}, open(f'{_WS}/{cell}/.ccell', 'w'), indent=1)
+
+
+def coil_ccell(ref):
+    """A coil cell is drawn by IHP's inductor2 PCell at its own size, so a design placing it gets the PCell
+    (Update Layout from Schematic) and LVS pairs the two as one device; its own layout stays for its own EM run."""
+    par = lambda n, v: {"Name": n, "DefaultExpression": v, "Unit": "", "Dimension": "None", "ShowOnSchematic": False}
+    p = SNAPS[ref]["Parameters"]
+    return {"Parameters": [par(n, p[n]) for n in ('w', 's', 'd')] + [par('nr_r', str(p['nr_r']['int']))],
+            "LayoutGenerator": "inductor2", "Terminals": [{"Port": 1, "Name": "LA", "LayoutPin": "LA"},
+                                                         {"Port": 2, "Name": "LB", "LayoutPin": "LB"}]}
 
 
 def write_sheet(s, cell):
@@ -140,9 +151,12 @@ def coil_cells():
     """IND_BIG and IND_SMALL: layout = the PCell alone with a drawn port on each lead's end (its own EM run, ind_big /
     ind_small); schematic = that run's 2-port between pins LA and LB, the model a cut puts back."""
     for cell, ref, em in (('IND_BIG', BIG, 'ind_big'), ('IND_SMALL', SMALL, 'ind_small')):
-        ccell(cell)
+        ccell(cell, coil_ccell(ref))
         xl, _ = LEAD[ref]
-        clay(cell, [port('1', -xl, -1, 'R90', TM1), port('2', xl, -1, 'R90', TM1)], [inst(ref, 0, 0, 'L')])
+        # LA and LB at the PCell's own pins (the lead ends), so the cell's layout pins match its schematic's
+        pins = [{"Name": n, "X": d(x), "Y": 0, "WidthDbu": 2000, "OutwardDeg": 0, "Layer": {"Layer": TM1, "Datatype": 2}}
+                for n, x in (('LA', -xl), ('LB', xl))]
+        clay(cell, [port('1', -xl, -1, 'R90', TM1), port('2', xl, -1, 'R90', TM1)], [inst(ref, 0, 0, 'L')], pins)
         cem(cell, em, TOP, None, snp=False)
         s = Sheet(cell)
         s.comp('S1', 'Snp', 0, 0, [par('NumPorts', '2'), par('File', f'"results/{em}.s2p"')])

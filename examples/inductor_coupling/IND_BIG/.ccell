@@ -1,7 +1,48 @@
 {
  "FormatVersion": 1,
- "Parameters": [],
+ "Parameters": [
+  {
+   "Name": "w",
+   "DefaultExpression": "5.4u",
+   "Unit": "",
+   "Dimension": "None",
+   "ShowOnSchematic": false
+  },
+  {
+   "Name": "s",
+   "DefaultExpression": "4.1u",
+   "Unit": "",
+   "Dimension": "None",
+   "ShowOnSchematic": false
+  },
+  {
+   "Name": "d",
+   "DefaultExpression": "62.63u",
+   "Unit": "",
+   "Dimension": "None",
+   "ShowOnSchematic": false
+  },
+  {
+   "Name": "nr_r",
+   "DefaultExpression": "2",
+   "Unit": "",
+   "Dimension": "None",
+   "ShowOnSchematic": false
+  }
+ ],
  "IsTestBench": false,
- "Terminals": [],
- "NumPorts": 0
+ "Terminals": [
+  {
+   "Port": 1,
+   "Name": "LA",
+   "LayoutPin": "LA"
+  },
+  {
+   "Port": 2,
+   "Name": "LB",
+   "LayoutPin": "LB"
+  }
+ ],
+ "NumPorts": 0,
+ "LayoutGenerator": "inductor2"
 }
