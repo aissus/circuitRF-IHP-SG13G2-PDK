@@ -3,8 +3,8 @@
 Test benches on the IHP SG13G2 kit. This folder is one circuitRF workspace; its benches place the cells
 of `../kit/IHP_SG13G2`.
 
-- **From a release:** on a platform the kit has no VBIC build for (any but Linux x86-64), run
-  `generator/build-vbic.sh` once, for the HBTs' VBIC model.
+- **From a release:** on a platform the kit has no VBIC build for (Arm; the kit has builds for x86-64 Linux,
+  Windows and Intel macOS), run `generator/build-vbic.sh` once, for the HBTs' VBIC model.
 - **From the repository:** build the kit with `./kit.sh generator/build.sh`. The build also writes this
   workspace's copy of the technology (`tech/`), its harmonicaRF documents (`harmonica/`) and the workspaces of
   the two EM black-boxing examples.

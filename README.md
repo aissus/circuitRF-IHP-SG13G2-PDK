@@ -11,6 +11,9 @@
 open 130 nm SiGe BiCMOS process as a device kit for [circuitRF](https://github.com/potatobeanradio/circuitRF),
 together with the generator that builds it from the PDK and an example workspace.
 
+**New to the kit?** Start with the [getting-started guide](docs/guide.md). It covers installing, running the
+examples and starting a design of your own, step by step with pictures.
+
 circuitRF imports the IHP Open PDK directly: its parts simulate as imported, and its KLayout PCells
 draw unmodified. The PDK's bipolar transistors are the exception, because they are written for ngspice's
 built-in VBIC model, which circuitRF does not have. This kit compiles VBIC 1.3 and declares it to stand in,

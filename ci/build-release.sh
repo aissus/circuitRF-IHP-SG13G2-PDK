@@ -35,12 +35,12 @@ generator/build.sh
 
 # The kit ships with every compiled model it runs (see NOTICE): VBIC 1.3 too, flat and in each platform
 # folder, and harmonicaRF's devices. The example workspace comes with its technology copy; its harmonicaRF
-# documents name this machine's paths, so they stay out.
+# documents name this machine's paths, so they stay out. The getting-started guide comes along.
 n=circuitRF-IHP-SG13G2-$v
 R=dist/$n
 rm -rf dist && mkdir -p "$R/kit" "$R/examples/tech"
 cp -r kit/IHP_SG13G2 "$R/kit/"
-git ls-files -z generator examples .claude | xargs -0 cp --parents -t "$R"
+git ls-files -z generator examples .claude docs/guide.md docs/images/guide | xargs -0 cp --parents -t "$R"
 cp examples/tech/*.ctech "$R/examples/tech/"
 cp LICENSE NOTICE "$R/"
 cp release/README.md release/CLAUDE.md release/.mcp.json "$R/"

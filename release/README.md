@@ -11,12 +11,17 @@ the PDK commit, the circuitRF version and the validation result.
 > need their VBIC model compiled once (step 2), which takes **OpenVAF**. The
 > [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container has OpenVAF and the PDK.
 
+**New to the kit?** Start with `docs/guide.md` in this archive (also
+[online](https://github.com/aissus/circuitRF-IHP-SG13G2-PDK/blob/main/docs/guide.md)). It covers installing,
+running the examples and starting a design of your own, step by step with pictures.
+
 ## Contents
 
 ```text
 kit/IHP_SG13G2/       the kit: cells, technology (tech/IHP_SG13G2.ctech), compiled R3, PSP 103 and VBIC models
 examples/             an example workspace on the kit (open examples/.cws)
 generator/            the generator; build-vbic.sh compiles the VBIC models from generator/vbic/
+docs/guide.md         the getting-started guide
 .claude/, CLAUDE.md   instructions and a skill for AI coding agents
 .mcp.json             circuitRF's MCP server, for agents that use it
 LICENSE, NOTICE       Apache-2.0, as the IHP PDK
