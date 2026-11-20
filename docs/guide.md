@@ -126,7 +126,32 @@ This one command:
 It needs `circuitrf` on `PATH` (check with `circuitrf --version`) and `python3`. It finds the PDK in this order:
 `$IHP_PDK`, `$PDKPATH`, then `/foss/pdks/ihp-sg13g2`.
 
-## 4. Which Part for What
+## 4. From Schematic to Layout
+
+The same kit cells you simulate are drawn by IHP's own PCells, at each instance's values. This needs the
+circuitRF release after 1.9.2, and the PDK imported into your workspace with its artwork allowed (section 3,
+step 4, or the script).
+
+1. **Update Layout from Schematic** (**Design** menu, or Ctrl+U) in the cell's schematic. Each kit cell is
+   placed as its IHP PCell: an `npn13G2` at its Nx, a `cap_cmim` at its w and l, an `rsil` at its w and l.
+   Move the parts where you want them.
+
+   ![Update Layout from Schematic: an npn13G2 at Nx = 4, a cap_cmim and an rsil, each placed as IHP's PCell](images/guide/update-layout.png)
+
+2. **Draw the connections** in metal: traces between the pins, and via stacks between metal levels. The
+   technology from section 3 step 3 has the layers.
+3. **LVS:** open the layout, then **LVS ▸ Compare**. It pairs each kit cell with the PCell drawn for it and
+   checks every net. The HBTs' substrate pin `bn` and the MOSFETs' bulk pin `b` are not in the PCells' artwork,
+   so LVS notes them and leaves them out.
+
+   ![The hbt_core_matching example's CORE cell: LVS matches, 5 devices and 6 nets](images/guide/lvs-core.png)
+
+4. **EM:** an EM setup can cut the devices out and put their models back on the cut ports. The
+   `examples/hbt_core_matching` README walks through this on a matched HBT stage.
+
+Changing a value in the schematic and running Update Layout again redraws that part at the new value.
+
+## 5. Which Part for What
 
 | You need | Use | From |
 |---|---|---|
@@ -134,7 +159,7 @@ It needs `circuitrf` on `PATH` (check with `circuitrf --version`) and `python3`.
 | A MOSFET | `sg13_lv_nmos`, `sg13_lv_pmos` (1.2 V), `sg13_hv_nmos`, `sg13_hv_pmos` (3.3 V) | the same |
 | A resistor or MIM capacitor | `rsil`, `rppd`, `rhigh`, `cap_cmim` | the same |
 | An inductor, diode, pad or other PDK device | the PDK's parts | the Library panel, after **Import ▸ PDK…** |
-| Layout | IHP's PCells | after **Import ▸ PDK…** and **Allow** |
+| Layout | the same kit cells, drawn as IHP's PCells | **Update Layout from Schematic** (section 4) |
 | EM | `IHP_SG13G2.ctech` | section 3, step 3 |
 
 **Parameters:**
@@ -143,14 +168,16 @@ It needs `circuitrf` on `PATH` (check with `circuitrf --version`) and `python3`.
 - `T` is the temperature in °C. 27 is the PDK's nominal.
 - Lengths are in metres, as in the PDK.
 
-## 5. If Something Goes Wrong
+## 6. If Something Goes Wrong
 
 - **An HBT bench fails and names `vbic_1p3_5t.osdi`.** Your computer has no compiled VBIC model, which is the
   case on Arm. Run `generator/build-vbic.sh` once.
 - **Layouts draw as grey placeholders.** The kit's artwork was not allowed. Change that in
   **Settings ▸ Security & Permissions**.
-- **The PDK's `npn13G2` from the Library does not simulate.** Use the kit's cell (section 4), or make the
+- **The PDK's `npn13G2` from the Library does not simulate.** Use the kit's cell (section 5), or make the
   workspace with the script, on Linux.
+- **Update Layout skips a kit cell,** saying it "is drawn by the generator …, which is not registered in this
+  workspace". The PDK is not imported here, or its artwork was not allowed: section 3, step 4.
 - **On Windows, a model fails to load with a missing `VCRUNTIME140.dll`.** Install Microsoft's Visual C++
   Redistributable (x64).
 - **circuitRF 1.9 warns about a thermal node** that "reaches its reference only through 1.14E+04 °C/W, which is
