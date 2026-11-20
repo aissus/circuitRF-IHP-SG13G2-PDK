@@ -6,6 +6,12 @@ Drafted 2026-11-05 (set aside). Revised 2026-11-07:
 - the inductor is also checked with circuitRF's planar MoM;
 - the README documents the flow.
 
+## Status (2026-11-20): kit cells in layout
+
+v0.8.2 adds the getting-started guide (`docs/guide.md`), and names in each cell the IHP PCell that draws it and its
+pin map (`LayoutGenerator`, `Terminals`), so a circuitRF release newer than 1.9.3 places the cells in layout and
+pairs them in LVS. Older circuitRF versions ignore those fields.
+
 ## Status (2026-11-16): PSP 103, R3 and VBIC 1.3 for each platform
 
 v0.8.1 adds harmonicaRF's HBTs (`vbic_1p3_bce`, `npn13G2{,l,v}`) to each platform folder: `build-osdi.sh` builds

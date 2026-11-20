@@ -1,7 +1,7 @@
 # Getting Started: the IHP SG13G2 Kit in circuitRF
 
 This guide takes you from an empty computer to a simulated SiGe HBT in a workspace of your own. Each step was
-checked on circuitRF 1.9.2 with kit v0.8.1.
+checked on circuitRF 1.9.2 with kit v0.8.1, and the examples run unchanged on 1.9.3 with v0.8.2.
 
 ## What You Get
 
@@ -128,8 +128,8 @@ It needs `circuitrf` on `PATH` (check with `circuitrf --version`) and `python3`.
 
 ## 4. From Schematic to Layout
 
-The same kit cells you simulate are drawn by IHP's own PCells, at each instance's values. This needs the
-circuitRF release after 1.9.2, and the PDK imported into your workspace with its artwork allowed (section 3,
+The same kit cells you simulate are drawn by IHP's own PCells, at each instance's values. This needs a
+circuitRF release newer than 1.9.3, and the PDK imported into your workspace with its artwork allowed (section 3,
 step 4, or the script).
 
 1. **Update Layout from Schematic** (**Design** menu, or Ctrl+U) in the cell's schematic. Each kit cell is
@@ -185,7 +185,7 @@ Changing a value in the schematic and running Update Layout again redraws that p
   - 1.14E+04 °C/W is the PDK's own self-heating resistance for one `npn13G2` at Nx = 1;
   - it is just above the limit circuitRF 1.9 checks against;
   - the results are the same as on 1.8.4.
-- **Folder pickers in circuitRF 1.9.2:**
+- **Folder pickers in circuitRF 1.9.2 and 1.9.3:**
   - Click through the folders rather than typing a path. The picker completes names as you type, and a path
     that ends up not existing can close circuitRF.
   - **File ▸ Add Cell to Workspace…** copies the cell next to the workspace, not into it. Copy bench folders
